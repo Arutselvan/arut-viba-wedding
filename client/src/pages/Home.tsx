@@ -111,26 +111,43 @@ function HeroSection() {
     <section id="top" className="relative overflow-hidden bg-white" style={{ minHeight: "100svh" }}>
       {/* Layout: top ~45% = text zone (white), bottom ~55% = art */}
       
-      {/* Art image — fills full width, positioned at bottom, height auto to avoid cropping */}
-      <div className="absolute inset-x-0 bottom-0" style={{ top: "clamp(380px, 54%, 58%)" }}>
+      {/* Art image — full width, sits at bottom, always shows heads.
+           We use a fixed pixel offset from the bottom so the art scales
+           naturally and the couple's heads are never clipped regardless of
+           viewport width or height. */}
+      <div
+        className="absolute inset-x-0 bottom-0"
+        style={{
+          /* Start the art zone at 52% of the viewport height on large screens,
+             but never start later than 340px from the top so there's always
+             enough room for the art on small phones. */
+          top: "min(52vh, calc(100svh - clamp(320px, 48vw, 520px)))",
+        }}
+      >
         <img
           src={HERO_ART}
           alt="Arut & Viba wedding ceremony"
-          className="w-full h-full object-contain object-bottom"
-          style={{ objectPosition: "center bottom" }}
+          className="w-full h-full"
+          style={{
+            objectFit: "contain",
+            objectPosition: "center bottom",
+            /* Ensure the image is never taller than its container so it
+               doesn't overflow and crop the top (where the heads are). */
+            maxHeight: "100%",
+          }}
         />
         {/* Soft fade at the top edge of art to blend with white */}
-        <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-white to-transparent" />
+        <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-white to-transparent" />
       </div>
 
       {/* Text content — sits in the white top zone */}
       <div className="relative z-10 flex flex-col items-center justify-start pt-20 md:pt-24 px-6 text-center pb-8">
         {/* Large Logo */}
-        <div className="mb-2 animate-fade-in">
+        <div className="mb-0.5 animate-fade-in">
           <img src={LOGO_URL} alt="A&V monogram" className="w-24 h-24 md:w-32 md:h-32 mx-auto drop-shadow-sm" />
         </div>
-        {/* Hashtag directly below logo */}
-        <p className="font-display text-xl italic text-saffron/80 mb-3 animate-fade-up delay-100">#aruvi</p>
+        {/* Hashtag directly below logo — tight gap */}
+        <p className="font-display text-xl italic text-saffron/80 mb-3 -mt-1 animate-fade-up delay-100">#aruvi</p>
         <p className="font-body text-taupe tracking-[0.45em] uppercase text-xs mb-3 animate-fade-up delay-200">
           Together with their families
         </p>
@@ -298,12 +315,13 @@ function StorySection() {
                 className={`absolute inset-0 bg-gradient-to-b ${chapter.bg} flex flex-col transition-opacity duration-500`}
                 style={{ opacity: i === activeIdx ? 1 : 0, pointerEvents: i === activeIdx ? "auto" : "none" }}
               >
-                {/* Image top half */}
-                <div className="relative flex-shrink-0" style={{ height: "45%" }}>
-                  <img src={chapter.img} alt={chapter.title} className="w-full h-full object-cover" />
+                {/* Image top half — padded by nav bar height (64px) so image is never hidden */}
+                <div className="relative flex-shrink-0" style={{ height: "45%", paddingTop: "64px" }}>
+                  <img src={chapter.img} alt={chapter.title} className="w-full h-full object-cover" style={{ height: "calc(100% - 0px)" }} />
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/30" />
-                  <div className="absolute top-10 left-4 px-3 py-1 text-white text-xs font-body tracking-widest uppercase rounded-full"
-                    style={{ background: chapter.accent }}>
+                  {/* Year badge — positioned below the nav bar padding */}
+                  <div className="absolute left-4 px-3 py-1 text-white text-xs font-body tracking-widest uppercase rounded-full"
+                    style={{ background: chapter.accent, top: "72px" }}>
                     {chapter.year}
                   </div>
                   {/* Chapter number watermark */}
@@ -343,7 +361,7 @@ function StorySection() {
           {/* ── DESKTOP: horizontal pan ── */}
           <div ref={trackRef} className="hidden md:flex h-full will-change-transform" style={{ transition: "transform 0.08s linear", width: `${storyChapters.length * 100}vw` }}>
             {storyChapters.map((chapter, i) => (
-              <div key={i} className={`relative flex-shrink-0 w-screen h-screen bg-gradient-to-br ${chapter.bg} flex items-center`}>
+              <div key={i} className={`relative flex-shrink-0 w-screen h-screen bg-gradient-to-br ${chapter.bg} flex items-center pt-16`}>
                 <div className="max-w-6xl mx-auto px-8 md:px-16 w-full grid md:grid-cols-2 gap-8 md:gap-16 items-center">
                   <div className={`${i % 2 === 0 ? "md:order-2" : "md:order-1"} flex justify-center`}>
                     <div className="relative">
