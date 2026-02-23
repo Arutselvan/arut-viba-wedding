@@ -367,15 +367,15 @@ function StorySection() {
                   </div>
                 </div>
                 {/* Text bottom half */}
-                <div className="flex-1 px-6 pt-5 pb-20 overflow-auto">
+                <div className="flex-1 px-6 pt-5 pb-16 overflow-auto">
                   <p className="font-body text-xs tracking-[0.2em] uppercase text-taupe mb-1">{chapter.city}</p>
                   <h3 className="font-display text-3xl text-ink font-light mb-3 leading-tight">{chapter.title}</h3>
                   <div className="h-px w-10 mb-3" style={{ background: chapter.accent }} />
                   <p className="font-body text-taupe text-sm leading-relaxed">{chapter.desc}</p>
                 </div>
-                {/* Nav buttons — only on active card to avoid tap conflicts */}
+                {/* Nav buttons — fixed to bottom of viewport so they never go off-screen */}
                 {i === activeIdx && (
-                  <div className="absolute bottom-0 inset-x-0 flex items-center justify-center gap-4 pb-5">
+                  <div className="fixed bottom-0 inset-x-0 flex items-center justify-center gap-4 pb-safe pb-4 z-40" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 12px)' }}>
                     {/* Up arrow — prev chapter (hidden on first) */}
                     {activeIdx > 0 && (
                       <button
