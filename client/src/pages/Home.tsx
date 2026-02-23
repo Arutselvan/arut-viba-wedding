@@ -336,24 +336,27 @@ function StorySection() {
                   <div className="h-px w-10 mb-3" style={{ background: chapter.accent }} />
                   <p className="font-body text-taupe text-sm leading-relaxed">{chapter.desc}</p>
                 </div>
-                {/* Persistent animated scroll cue at the very bottom of every card */}
-                <div className="absolute bottom-0 inset-x-0 flex flex-col items-center pb-4 pointer-events-none">
-                  <p className="font-body text-[10px] tracking-[0.3em] uppercase mb-1" style={{ color: chapter.accent, opacity: 0.7 }}>
-                    {i < storyChapters.length - 1 ? `${i + 1} of ${storyChapters.length} · Tap to continue` : "End of story · Tap to continue"}
-                  </p>
-                  {/* Tappable animated chevron */}
-                  <button
-                    onClick={() => scrollToChapter(i + 1)}
-                    className="p-2 rounded-full transition-all duration-200 hover:scale-125 active:scale-95"
-                    style={{ pointerEvents: "auto", background: "transparent" }}
-                    aria-label={i < storyChapters.length - 1 ? "Next chapter" : "Continue to Celebrations"}
-                  >
-                    <svg className="animate-bounce" width="28" height="28" viewBox="0 0 28 28" fill="none">
-                      <circle cx="14" cy="14" r="13" stroke={chapter.accent} strokeWidth="1" opacity="0.3"/>
-                      <path d="M9 12L14 17L19 12" stroke={chapter.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </button>
-                </div>
+                {/* Persistent animated scroll cue — only render the interactive button on the ACTIVE card
+                     to avoid all stacked absolute cards competing for the same tap */}
+                {i === activeIdx && (
+                  <div className="absolute bottom-0 inset-x-0 flex flex-col items-center pb-4">
+                    <p className="font-body text-[10px] tracking-[0.3em] uppercase mb-1" style={{ color: chapter.accent, opacity: 0.7 }}>
+                      {activeIdx < storyChapters.length - 1 ? `${activeIdx + 1} of ${storyChapters.length} · Tap to continue` : "End of story · Tap to continue"}
+                    </p>
+                    {/* Tappable animated chevron — always uses activeIdx so it's always correct */}
+                    <button
+                      onClick={() => scrollToChapter(activeIdx + 1)}
+                      className="p-2 rounded-full transition-all duration-200 hover:scale-125 active:scale-95"
+                      style={{ background: "transparent" }}
+                      aria-label={activeIdx < storyChapters.length - 1 ? "Next chapter" : "Continue to Celebrations"}
+                    >
+                      <svg className="animate-bounce" width="28" height="28" viewBox="0 0 28 28" fill="none">
+                        <circle cx="14" cy="14" r="13" stroke={chapter.accent} strokeWidth="1" opacity="0.3"/>
+                        <path d="M9 12L14 17L19 12" stroke={chapter.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                  </div>
+                )}
               </div>
             ))}
           </div>
