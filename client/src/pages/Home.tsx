@@ -242,19 +242,38 @@ function StorySection() {
         Both use the same tall scroll container so the user naturally passes
         through every chapter before reaching the next section.
       */}
-      <div id="story-scroll-section" style={{ height: `${storyChapters.length * 120}vh` }} className="relative">
-        <div className="sticky top-0 h-screen overflow-hidden">
+      {/* ── FIXED side progress rail — sits OUTSIDE the sticky/overflow container so it's always visible ── */}
+      <div className="sticky top-1/2 -translate-y-1/2 z-30 pointer-events-none" style={{ marginLeft: "calc(100% - 2.5rem)", height: 0 }}>
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 flex flex-col items-end gap-3 pr-3">
+          {storyChapters.map((ch, i) => (
+            <div key={i} className="flex items-center gap-2">
+              {/* Label — desktop only */}
+              <span
+                className={`hidden md:block font-body text-[10px] tracking-widest uppercase transition-all duration-400 whitespace-nowrap ${
+                  i === activeIdx ? "opacity-100" : "opacity-0"
+                }`}
+                style={{ color: ch.accent }}
+              >
+                {ch.city}
+              </span>
+              {/* Dot */}
+              <div
+                className={`rounded-full transition-all duration-500 shadow-sm ${
+                  i === activeIdx ? "w-3 h-3" : "w-2 h-2 opacity-40"
+                }`}
+                style={{ background: i === activeIdx ? ch.accent : "#D4A853", boxShadow: i === activeIdx ? `0 0 8px ${ch.accent}80` : "none" }}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
 
-          {/* Progress dots — visible on both */}
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
-            {storyChapters.map((ch, i) => (
-              <div key={i} className={`rounded-full transition-all duration-500 ${i === activeIdx ? "w-8 h-2.5" : "w-2.5 h-2.5 opacity-40"}`}
-                style={{ background: i === activeIdx ? ch.accent : "#D4A853" }} />
-            ))}
-          </div>
+      <div id="story-scroll-section" style={{ height: `${storyChapters.length * 120}vh` }} className="relative">
+        <div className="sticky top-0 h-screen" style={{ overflow: "visible" }}>
+          {/* overflow:visible so the fixed side rail isn't clipped */}
 
           {/* ── MOBILE: cross-fade cards in place ── */}
-          <div className="md:hidden relative w-full h-full">
+          <div className="md:hidden relative w-full h-full overflow-hidden">
             {storyChapters.map((chapter, i) => (
               <div
                 key={i}
@@ -275,15 +294,21 @@ function StorySection() {
                   </div>
                 </div>
                 {/* Text bottom half */}
-                <div className="flex-1 px-6 pt-5 pb-10 overflow-auto">
+                <div className="flex-1 px-6 pt-5 pb-16 overflow-auto">
                   <p className="font-body text-xs tracking-[0.2em] uppercase text-taupe mb-1">{chapter.city}</p>
                   <h3 className="font-display text-3xl text-ink font-light mb-3 leading-tight">{chapter.title}</h3>
                   <div className="h-px w-10 mb-3" style={{ background: chapter.accent }} />
                   <p className="font-body text-taupe text-sm leading-relaxed">{chapter.desc}</p>
-                  {/* Scroll nudge on last card */}
-                  {i === storyChapters.length - 1 && (
-                    <p className="mt-6 font-body text-taupe/40 text-xs tracking-widest animate-pulse">↓ Keep scrolling</p>
-                  )}
+                </div>
+                {/* Persistent animated scroll cue at the very bottom of every card */}
+                <div className="absolute bottom-0 inset-x-0 flex flex-col items-center pb-4 pointer-events-none">
+                  <p className="font-body text-[10px] tracking-[0.3em] uppercase mb-1" style={{ color: chapter.accent, opacity: 0.7 }}>
+                    {i < storyChapters.length - 1 ? `${i + 1} of ${storyChapters.length} · Keep scrolling` : "End of story · Keep scrolling"}
+                  </p>
+                  {/* Animated chevron */}
+                  <svg className="animate-bounce" width="18" height="18" viewBox="0 0 18 18" fill="none" style={{ opacity: 0.5 }}>
+                    <path d="M4 6.5L9 11.5L14 6.5" stroke={chapter.accent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
                 </div>
               </div>
             ))}
@@ -292,7 +317,7 @@ function StorySection() {
           {/* ── DESKTOP: horizontal pan ── */}
           <div ref={trackRef} className="hidden md:flex h-full will-change-transform" style={{ transition: "transform 0.08s linear", width: `${storyChapters.length * 100}vw` }}>
             {storyChapters.map((chapter, i) => (
-              <div key={i} className={`flex-shrink-0 w-screen h-screen bg-gradient-to-br ${chapter.bg} flex items-center`}>
+              <div key={i} className={`relative flex-shrink-0 w-screen h-screen bg-gradient-to-br ${chapter.bg} flex items-center`}>
                 <div className="max-w-6xl mx-auto px-8 md:px-16 w-full grid md:grid-cols-2 gap-8 md:gap-16 items-center">
                   <div className={`${i % 2 === 0 ? "md:order-2" : "md:order-1"} flex justify-center`}>
                     <div className="relative">
@@ -312,6 +337,15 @@ function StorySection() {
                     <div className="h-px w-12 mb-5" style={{ background: chapter.accent }} />
                     <p className="font-body text-taupe text-sm md:text-base leading-relaxed">{chapter.desc}</p>
                   </div>
+                </div>
+                {/* Bottom scroll cue */}
+                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 pointer-events-none">
+                  <p className="font-body text-[10px] tracking-[0.3em] uppercase" style={{ color: chapter.accent, opacity: 0.6 }}>
+                    {i < storyChapters.length - 1 ? `${i + 1} of ${storyChapters.length} · Scroll to continue` : "End of story · Scroll to continue"}
+                  </p>
+                  <svg className="animate-bounce" width="18" height="18" viewBox="0 0 18 18" fill="none" style={{ opacity: 0.45 }}>
+                    <path d="M4 6.5L9 11.5L14 6.5" stroke={chapter.accent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
                 </div>
               </div>
             ))}
