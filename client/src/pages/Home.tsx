@@ -221,19 +221,29 @@ function StorySection() {
   const activeIdxRef = useRef(0);
   activeIdxRef.current = activeIdx;
 
+  // Stable viewport height — visualViewport is more reliable on mobile
+  // (doesn't shrink when the browser chrome hides)
+  const getVH = () =>
+    (window.visualViewport ? window.visualViewport.height : window.innerHeight);
+
   // Scroll to a specific chapter index within the story, or exit to events section
   const scrollToChapter = (idx: number) => {
     const section = document.getElementById("story-scroll-section");
     if (!section) return;
+    const vh = getVH();
     const sectionTop = section.getBoundingClientRect().top + window.scrollY;
-    const totalScroll = section.offsetHeight - window.innerHeight;
+    const totalScroll = section.offsetHeight - vh;
     if (idx >= storyChapters.length) {
       // Past last chapter — scroll to events section
-      const target = sectionTop + totalScroll + window.innerHeight + 10;
+      const target = sectionTop + totalScroll + vh + 10;
       window.scrollTo({ top: target, behavior: "smooth" });
     } else if (idx < 0) {
       // Before first chapter — scroll above story section
-      window.scrollTo({ top: sectionTop - window.innerHeight, behavior: "smooth" });
+      window.scrollTo({ top: sectionTop - vh, behavior: "smooth" });
+    } else if (idx === storyChapters.length - 1) {
+      // Last chapter: scroll to exactly totalScroll so progress === 1.0
+      // Add a small buffer (4px) to ensure we clear the rounding threshold
+      window.scrollTo({ top: sectionTop + totalScroll + 4, behavior: "smooth" });
     } else {
       // Scroll to the exact position that shows chapter idx
       const progress = idx / (storyChapters.length - 1);
