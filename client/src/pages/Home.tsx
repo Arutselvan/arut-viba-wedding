@@ -316,7 +316,7 @@ function StorySection() {
 
             {/* ── Bottom bar: prev arrow | dots | next arrow ── */}
             <div
-              className="absolute bottom-0 inset-x-0 flex items-center justify-between px-4 z-20"
+              className="absolute bottom-0 inset-x-0 flex items-center justify-center gap-3 z-20"
               style={{ paddingBottom: "max(env(safe-area-inset-bottom, 0px), 16px)", paddingTop: "8px" }}
             >
               {/* Prev arrow */}
