@@ -319,54 +319,62 @@ function StorySection() {
               </div>
             </div>
 
-            {/* ── Nav: dots + prev/next (shared mobile + desktop) ── */}
+            {/* ── Left arrow (prev) ── */}
+            {i > 0 && (
+              <button
+                onClick={() => goTo(i - 1)}
+                className="absolute left-3 top-1/2 -translate-y-1/2 z-20 p-2 transition-all duration-200 hover:scale-110 active:scale-95"
+                aria-label="Previous chapter"
+              >
+                <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+                  <circle cx="18" cy="18" r="17" stroke={ch.accent} strokeWidth="1" opacity="0.35" />
+                  <path d="M21 11L14 18L21 25" stroke={ch.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+            )}
+
+            {/* ── Right arrow (next) or Continue ── */}
+            {i < storyChapters.length - 1 ? (
+              <button
+                onClick={() => goTo(i + 1)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 z-20 p-2 transition-all duration-200 hover:scale-110 active:scale-95"
+                aria-label="Next chapter"
+              >
+                <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+                  <circle cx="18" cy="18" r="17" stroke={ch.accent} strokeWidth="1" opacity="0.35" />
+                  <path d="M15 11L22 18L15 25" stroke={ch.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+            ) : (
+              <a
+                href="#events"
+                className="absolute right-3 top-1/2 -translate-y-1/2 z-20 p-2 flex items-center gap-1 font-body text-xs tracking-widest uppercase transition-all duration-200 hover:scale-110"
+                style={{ color: ch.accent }}
+              >
+                <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+                  <circle cx="18" cy="18" r="17" stroke={ch.accent} strokeWidth="1" opacity="0.35" />
+                  <path d="M15 11L22 18L15 25" stroke={ch.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </a>
+            )}
+
+            {/* ── Dot indicators (bottom centre) ── */}
             <div
-              className="absolute bottom-0 inset-x-0 flex items-center justify-between px-6 z-20"
-              style={{ paddingBottom: "max(env(safe-area-inset-bottom, 0px), 16px)", paddingTop: "8px" }}
+              className="absolute bottom-0 inset-x-0 flex justify-center items-center gap-2 z-20"
+              style={{ paddingBottom: "max(env(safe-area-inset-bottom, 0px), 14px)" }}
             >
-              {/* Dot indicators */}
-              <div className="flex gap-2 items-center">
-                {storyChapters.map((_, di) => (
-                  <button
-                    key={di}
-                    onClick={() => goTo(di)}
-                    aria-label={`Go to chapter ${di + 1}`}
-                    className="rounded-full transition-all duration-300"
-                    style={{
-                      width: di === activeIdx ? 20 : 8,
-                      height: 8,
-                      background: di === activeIdx ? ch.accent : `${ch.accent}40`,
-                    }}
-                  />
-                ))}
-              </div>
-              {/* Prev / Next / Continue */}
-              <div className="flex gap-2 items-center">
-                {i > 0 && (
-                  <button onClick={() => goTo(i - 1)} className="p-2" aria-label="Previous chapter">
-                    <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
-                      <circle cx="15" cy="15" r="14" stroke={ch.accent} strokeWidth="1" opacity="0.4" />
-                      <path d="M10 17L15 12L20 17" stroke={ch.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </button>
-                )}
-                {i < storyChapters.length - 1 ? (
-                  <button onClick={() => goTo(i + 1)} className="p-2" aria-label="Next chapter">
-                    <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
-                      <circle cx="15" cy="15" r="14" stroke={ch.accent} strokeWidth="1" opacity="0.4" />
-                      <path d="M10 13L15 18L20 13" stroke={ch.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </button>
-                ) : (
-                  <a
-                    href="#events"
-                    className="flex items-center gap-1 font-body text-xs tracking-widest uppercase px-3 py-2"
-                    style={{ color: ch.accent }}
-                  >
-                    Continue ↓
-                  </a>
-                )}
-              </div>
+              {storyChapters.map((_, di) => (
+                <div
+                  key={di}
+                  aria-label={`Chapter ${di + 1}`}
+                  className="rounded-full transition-all duration-300"
+                  style={{
+                    width: di === activeIdx ? 20 : 8,
+                    height: 8,
+                    background: di === activeIdx ? ch.accent : `${ch.accent}40`,
+                  }}
+                />
+              ))}
             </div>
           </div>
         ))}
