@@ -420,10 +420,7 @@ function StorySection() {
                 </button>
               ) : (
                 <button
-                  onClick={() => {
-                    setInStory(false);
-                    document.getElementById('celebrations')?.scrollIntoView({ behavior: 'smooth' });
-                  }}
+                  onClick={() => scrollToChapter(storyChapters.length)}
                   className="px-5 py-2 text-xs font-body tracking-widest uppercase transition-all duration-200 active:scale-95 rounded-full"
                   style={{ background: chapter.accent, color: '#fff' }}
                   aria-label="Continue to Celebrations"
