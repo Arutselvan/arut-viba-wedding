@@ -360,73 +360,87 @@ function StorySection() {
         </div>
       </div>
 
+      {/* ── MOBILE: fixed fullscreen panel — completely immune to scroll/chrome toggling ── */}
+      {/* This is rendered outside the scroll container so it never shifts with the page */}
+      <div className="md:hidden fixed inset-0 z-20 pointer-events-none">
+        {storyChapters.map((chapter, i) => (
+          <div
+            key={i}
+            className={`absolute inset-0 bg-gradient-to-b ${chapter.bg} flex flex-col transition-opacity duration-500`}
+            style={{
+              opacity: inStory && i === activeIdx ? 1 : 0,
+              pointerEvents: inStory && i === activeIdx ? "auto" : "none"
+            }}
+          >
+            {/* Image top half — padded by nav bar height (72px) */}
+            <div className="relative flex-shrink-0" style={{ height: "45%", paddingTop: "72px" }}>
+              <img src={chapter.img} alt={chapter.title} className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/30" />
+              <div className="absolute left-4 px-3 py-1 text-white text-xs font-body tracking-widest uppercase rounded-full"
+                style={{ background: chapter.accent, top: "80px" }}>
+                {chapter.year}
+              </div>
+              <div className="absolute bottom-3 right-4 font-display text-6xl font-light leading-none select-none opacity-20 text-white">
+                {String(i + 1).padStart(2, "0")}
+              </div>
+            </div>
+            {/* Text bottom half */}
+            <div className="flex-1 px-6 pt-5 pb-20 overflow-auto">
+              <p className="font-body text-xs tracking-[0.2em] uppercase text-taupe mb-1">{chapter.city}</p>
+              <h3 className="font-display text-3xl text-ink font-light mb-3 leading-tight">{chapter.title}</h3>
+              <div className="h-px w-10 mb-3" style={{ background: chapter.accent }} />
+              <p className="font-body text-taupe text-sm leading-relaxed">{chapter.desc}</p>
+            </div>
+            {/* Nav buttons — inside the fixed panel, always at the bottom */}
+            <div className="flex items-center justify-center gap-4 pb-4" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 16px)' }}>
+              {activeIdx > 0 ? (
+                <button
+                  onClick={() => setActiveIdx(a => a - 1)}
+                  className="p-2 rounded-full transition-all duration-200 active:scale-95"
+                  style={{ background: "transparent" }}
+                  aria-label="Previous chapter"
+                >
+                  <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                    <circle cx="14" cy="14" r="13" stroke={chapter.accent} strokeWidth="1" opacity="0.3"/>
+                    <path d="M9 16L14 11L19 16" stroke={chapter.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+              ) : <div className="w-12" />}
+              {activeIdx < storyChapters.length - 1 ? (
+                <button
+                  onClick={() => setActiveIdx(a => a + 1)}
+                  className="p-2 rounded-full transition-all duration-200 active:scale-95"
+                  style={{ background: "transparent" }}
+                  aria-label="Next chapter"
+                >
+                  <svg className="animate-bounce" width="28" height="28" viewBox="0 0 28 28" fill="none">
+                    <circle cx="14" cy="14" r="13" stroke={chapter.accent} strokeWidth="1" opacity="0.3"/>
+                    <path d="M9 12L14 17L19 12" stroke={chapter.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    setInStory(false);
+                    document.getElementById('celebrations')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className="px-5 py-2 text-xs font-body tracking-widest uppercase transition-all duration-200 active:scale-95 rounded-full"
+                  style={{ background: chapter.accent, color: '#fff' }}
+                  aria-label="Continue to Celebrations"
+                >
+                  Continue ↓
+                </button>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
       <div id="story-scroll-section" style={{ height: `${storyChapters.length * 120}dvh` }} className="relative">
         <div className="sticky top-0" style={{ height: `${stableVH.current}px`, overflow: 'visible' }}>
           {/* overflow:visible so the fixed side rail isn't clipped */}
-
-          {/* ── MOBILE: cross-fade cards in place ── */}
-          <div className="md:hidden relative w-full h-full overflow-hidden">
-            {storyChapters.map((chapter, i) => (
-              <div
-                key={i}
-                className={`absolute inset-0 bg-gradient-to-b ${chapter.bg} flex flex-col transition-opacity duration-500`}
-                style={{ opacity: i === activeIdx ? 1 : 0, pointerEvents: i === activeIdx ? "auto" : "none" }}
-              >
-                {/* Image top half — padded by nav bar height (72px) so image is never hidden */}
-                <div className="relative flex-shrink-0" style={{ height: "45%", paddingTop: "72px" }}>
-                  <img src={chapter.img} alt={chapter.title} className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/30" />
-                  {/* Year badge — positioned below the nav bar padding */}
-                  <div className="absolute left-4 px-3 py-1 text-white text-xs font-body tracking-widest uppercase rounded-full"
-                    style={{ background: chapter.accent, top: "80px" }}>
-                    {chapter.year}
-                  </div>
-                  {/* Chapter number watermark */}
-                  <div className="absolute bottom-3 right-4 font-display text-6xl font-light leading-none select-none opacity-20 text-white">
-                    {String(i + 1).padStart(2, "0")}
-                  </div>
-                </div>
-                {/* Text bottom half */}
-                <div className="flex-1 px-6 pt-5 pb-16 overflow-auto">
-                  <p className="font-body text-xs tracking-[0.2em] uppercase text-taupe mb-1">{chapter.city}</p>
-                  <h3 className="font-display text-3xl text-ink font-light mb-3 leading-tight">{chapter.title}</h3>
-                  <div className="h-px w-10 mb-3" style={{ background: chapter.accent }} />
-                  <p className="font-body text-taupe text-sm leading-relaxed">{chapter.desc}</p>
-                </div>
-                {/* Nav buttons — fixed to bottom of viewport so they never go off-screen */}
-                {i === activeIdx && (
-                  <div className="fixed bottom-0 inset-x-0 flex items-center justify-center gap-4 pb-safe pb-4 z-40" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 12px)' }}>
-                    {/* Up arrow — prev chapter (hidden on first) */}
-                    {activeIdx > 0 && (
-                      <button
-                        onClick={() => scrollToChapter(activeIdx - 1)}
-                        className="p-2 rounded-full transition-all duration-200 hover:scale-125 active:scale-95"
-                        style={{ background: "transparent" }}
-                        aria-label="Previous chapter"
-                      >
-                        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-                          <circle cx="14" cy="14" r="13" stroke={chapter.accent} strokeWidth="1" opacity="0.3"/>
-                          <path d="M9 16L14 11L19 16" stroke={chapter.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      </button>
-                    )}
-                    {/* Down arrow — next chapter or celebrations */}
-                    <button
-                      onClick={() => scrollToChapter(activeIdx + 1)}
-                      className="p-2 rounded-full transition-all duration-200 hover:scale-125 active:scale-95"
-                      style={{ background: "transparent" }}
-                      aria-label={activeIdx < storyChapters.length - 1 ? "Next chapter" : "Continue to Celebrations"}
-                    >
-                      <svg className="animate-bounce" width="28" height="28" viewBox="0 0 28 28" fill="none">
-                        <circle cx="14" cy="14" r="13" stroke={chapter.accent} strokeWidth="1" opacity="0.3"/>
-                        <path d="M9 12L14 17L19 12" stroke={chapter.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </button>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
+          {/* Mobile placeholder — the actual mobile UI is the fixed panel above */}
+          <div className="md:hidden w-full h-full" />
 
           {/* ── DESKTOP: horizontal pan ── */}
           <div ref={trackRef} className="hidden md:flex h-full will-change-transform" style={{ transition: "transform 0.08s linear", width: `${storyChapters.length * 100}vw` }}>
