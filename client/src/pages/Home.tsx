@@ -187,17 +187,16 @@ const storyChapters = [
   },
 ];
 
-// ─── Story Section: CSS scroll-snap carousel ─────────────────────────────────
-// One component, all devices. The browser handles everything natively:
-//   • Touch: native swipe + momentum (iOS/Android)
-//   • Trackpad: two-finger swipe
-//   • Mouse wheel: scroll
-//   • Keyboard: arrow keys via scrollIntoView on prev/next buttons
-// Zero window.scrollY math. Zero scroll-hijacking. Zero viewport hacks.
+// ─── Story Section: CSS scroll-snap carousel with auto-scroll ────────────────
+// One component, all devices. Browser handles touch/trackpad/wheel natively.
+// Auto-scrolls every 4 s; pauses on hover or touch; loops back to start.
 function StorySection() {
   const [activeIdx, setActiveIdx] = useState(0);
   const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
   const trackRef = useRef<HTMLDivElement>(null);
+  const pausedRef = useRef(false);
+  const activeIdxRef = useRef(0);
+  activeIdxRef.current = activeIdx;
 
   // Track which slide is visible using IntersectionObserver on the track
   useEffect(() => {
@@ -218,9 +217,26 @@ function StorySection() {
     return () => observer.disconnect();
   }, []);
 
+  // Auto-scroll: advance every 4 s, loop back to 0, pause on hover/touch
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (pausedRef.current) return;
+      const next = (activeIdxRef.current + 1) % storyChapters.length;
+      const el = slideRefs.current[next];
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const pause = () => { pausedRef.current = true; };
+  const resume = () => { pausedRef.current = false; };
+
   const goTo = (i: number) => {
+    pause();
     const el = slideRefs.current[i];
     if (el) el.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
+    // Resume auto-scroll after 8 s of inactivity
+    setTimeout(resume, 8000);
   };
 
   return (
@@ -243,6 +259,10 @@ function StorySection() {
       <div
         ref={trackRef}
         className="relative story-snap-track"
+        onMouseEnter={pause}
+        onMouseLeave={resume}
+        onTouchStart={pause}
+        onTouchEnd={() => setTimeout(resume, 6000)}
         style={{
           display: "flex",
           overflowX: "auto",
@@ -319,62 +339,63 @@ function StorySection() {
               </div>
             </div>
 
-            {/* ── Left arrow (prev) ── */}
-            {i > 0 && (
+            {/* ── Bottom bar: prev arrow | dots | next arrow ── */}
+            <div
+              className="absolute bottom-0 inset-x-0 flex items-center justify-between px-4 z-20"
+              style={{ paddingBottom: "max(env(safe-area-inset-bottom, 0px), 16px)", paddingTop: "8px" }}
+            >
+              {/* Prev arrow */}
               <button
-                onClick={() => goTo(i - 1)}
-                className="absolute left-3 top-1/2 -translate-y-1/2 z-20 p-2 transition-all duration-200 hover:scale-110 active:scale-95"
+                onClick={() => goTo(i > 0 ? i - 1 : storyChapters.length - 1)}
+                className="p-1 transition-all duration-200 hover:scale-110 active:scale-95"
                 aria-label="Previous chapter"
               >
-                <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-                  <circle cx="18" cy="18" r="17" stroke={ch.accent} strokeWidth="1" opacity="0.35" />
-                  <path d="M21 11L14 18L21 25" stroke={ch.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+                  <circle cx="22" cy="22" r="21" stroke={ch.accent} strokeWidth="1.2" opacity="0.4" />
+                  <path d="M26 14L18 22L26 30" stroke={ch.accent} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
-            )}
 
-            {/* ── Right arrow (next) or Continue ── */}
-            {i < storyChapters.length - 1 ? (
-              <button
-                onClick={() => goTo(i + 1)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 z-20 p-2 transition-all duration-200 hover:scale-110 active:scale-95"
-                aria-label="Next chapter"
-              >
-                <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-                  <circle cx="18" cy="18" r="17" stroke={ch.accent} strokeWidth="1" opacity="0.35" />
-                  <path d="M15 11L22 18L15 25" stroke={ch.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-            ) : (
-              <a
-                href="#events"
-                className="absolute right-3 top-1/2 -translate-y-1/2 z-20 p-2 flex items-center gap-1 font-body text-xs tracking-widest uppercase transition-all duration-200 hover:scale-110"
-                style={{ color: ch.accent }}
-              >
-                <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-                  <circle cx="18" cy="18" r="17" stroke={ch.accent} strokeWidth="1" opacity="0.35" />
-                  <path d="M15 11L22 18L15 25" stroke={ch.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </a>
-            )}
+              {/* Dot indicators */}
+              <div className="flex gap-2 items-center">
+                {storyChapters.map((_, di) => (
+                  <div
+                    key={di}
+                    className="rounded-full transition-all duration-300"
+                    style={{
+                      width: di === activeIdx ? 22 : 8,
+                      height: 8,
+                      background: di === activeIdx ? ch.accent : `${ch.accent}40`,
+                    }}
+                  />
+                ))}
+              </div>
 
-            {/* ── Dot indicators (bottom centre) ── */}
-            <div
-              className="absolute bottom-0 inset-x-0 flex justify-center items-center gap-2 z-20"
-              style={{ paddingBottom: "max(env(safe-area-inset-bottom, 0px), 14px)" }}
-            >
-              {storyChapters.map((_, di) => (
-                <div
-                  key={di}
-                  aria-label={`Chapter ${di + 1}`}
-                  className="rounded-full transition-all duration-300"
-                  style={{
-                    width: di === activeIdx ? 20 : 8,
-                    height: 8,
-                    background: di === activeIdx ? ch.accent : `${ch.accent}40`,
-                  }}
-                />
-              ))}
+              {/* Next arrow or Continue */}
+              {i < storyChapters.length - 1 ? (
+                <button
+                  onClick={() => goTo(i + 1)}
+                  className="p-1 transition-all duration-200 hover:scale-110 active:scale-95"
+                  aria-label="Next chapter"
+                >
+                  <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+                    <circle cx="22" cy="22" r="21" stroke={ch.accent} strokeWidth="1.2" opacity="0.4" />
+                    <path d="M18 14L26 22L18 30" stroke={ch.accent} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+              ) : (
+                <a
+                  href="#events"
+                  onClick={resume}
+                  className="p-1 flex items-center transition-all duration-200 hover:scale-110"
+                  aria-label="Continue to celebrations"
+                >
+                  <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+                    <circle cx="22" cy="22" r="21" stroke={ch.accent} strokeWidth="1.2" opacity="0.4" />
+                    <path d="M18 14L26 22L18 30" stroke={ch.accent} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </a>
+              )}
             </div>
           </div>
         ))}
