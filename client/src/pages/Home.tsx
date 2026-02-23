@@ -134,7 +134,17 @@ function HeroSection() {
         style={{ height: "72px", background: "linear-gradient(to bottom, rgba(255,252,245,0.55) 0%, transparent 100%)" }}
       />
 
-      {/* ── TEXT BLOCK: absolutely positioned in the sky zone (top 8vh–38vh) ── */}
+      {/* Soft sky-zone overlay — ensures text is always readable regardless of viewport aspect ratio */}
+      <div
+        className="absolute inset-x-0 top-0"
+        style={{
+          height: "65%",
+          background: "linear-gradient(to bottom, rgba(255,253,250,0.88) 0%, rgba(255,253,250,0.82) 30%, rgba(255,253,250,0.60) 55%, rgba(255,253,250,0.15) 75%, transparent 100%)",
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* ── TEXT BLOCK: absolutely positioned in the sky zone (top 8vh) ── */}
       <div
         className="absolute inset-x-0 z-10 flex flex-col items-center text-center px-4"
         style={{ top: "8vh" }}
@@ -162,8 +172,8 @@ function HeroSection() {
         {/* Date & venue */}
         <p className="font-body text-ink/65 tracking-[0.28em] uppercase text-[10px] md:text-xs mb-0.5 animate-fade-up delay-500">23rd – 24th January 2027</p>
         <p className="font-body text-ink/55 tracking-[0.18em] uppercase text-[10px] md:text-xs mb-4 animate-fade-up delay-500">MGM Beach Resorts · Chennai, Tamil Nadu</p>
-        {/* Countdown — frosted glass pill, sits at the bottom of the sky zone */}
-        <div className="animate-fade-up delay-600 bg-white/70 backdrop-blur-md px-6 md:px-8 py-3 md:py-4 border border-white/60 shadow-md">
+        {/* Countdown — frosted glass pill */}
+        <div className="animate-fade-up delay-600 bg-white/75 backdrop-blur-md px-6 md:px-8 py-3 md:py-4 border border-white/60 shadow-md">
           <Countdown />
         </div>
       </div>
