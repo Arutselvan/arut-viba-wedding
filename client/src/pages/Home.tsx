@@ -253,13 +253,15 @@ function StorySection() {
     return () => el.removeEventListener('touchmove', preventScroll);
   }, []);
 
-  // Mobile: scroll the mobile-story-scroll container to a specific chapter.
-  // Each chapter occupies exactly 100svh of the container.
+  // Mobile: scroll to a specific chapter.
+  // The container is N*100svh tall, so chapter i starts at sectionTop + i*vh.
   const mobileScrollToChapter = (idx: number) => {
     const el = mobileStoryRef.current;
     if (!el) return;
     const vh = window.innerHeight;
-    const target = el.getBoundingClientRect().top + window.scrollY + idx * vh;
+    // Use offsetTop for a stable absolute position (not getBoundingClientRect which changes with scroll)
+    const sectionTop = el.getBoundingClientRect().top + window.scrollY;
+    const target = sectionTop + idx * vh;
     window.scrollTo({ top: target, behavior: 'smooth' });
   };
 
@@ -292,14 +294,23 @@ function StorySection() {
   // Unified scroll-driven approach: works on both mobile and desktop.
   useEffect(() => {
     const section = document.getElementById("story-scroll-section");
+    // Cache mobile section top once after mount (absolute page offset, stable)
+    let mobileSectionTop: number | null = null;
+    const getMobileSectionTop = () => {
+      if (mobileSectionTop !== null) return mobileSectionTop;
+      const el = mobileStoryRef.current;
+      if (!el) return null;
+      mobileSectionTop = el.getBoundingClientRect().top + window.scrollY;
+      return mobileSectionTop;
+    };
     const onScroll = () => {
-      // ─ MOBILE: look up element fresh each time (md:hidden means it may not exist at mount) ─
-      const mobileSection = mobileStoryRef.current;
-      if (mobileSection && window.matchMedia('(max-width: 767px)').matches) {
-        const mTop = mobileSection.getBoundingClientRect().top + window.scrollY;
-        const scrolled = window.scrollY - mTop;
+      // ─ MOBILE: use cached section top so scrolled increases correctly ─
+      if (mobileStoryRef.current && window.matchMedia('(max-width: 767px)').matches) {
+        const mTop = getMobileSectionTop();
+        if (mTop === null) return;
         const vh = window.innerHeight;
-        const totalScroll = mobileSection.offsetHeight - vh;
+        const totalScroll = (storyChapters.length - 1) * vh; // each chapter = 1 vh step
+        const scrolled = window.scrollY - mTop;
         if (scrolled >= -10 && scrolled <= totalScroll + 10) {
           const progress = Math.max(0, Math.min(1, scrolled / totalScroll));
           const newIdx = Math.round(progress * (storyChapters.length - 1));
