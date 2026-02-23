@@ -13,7 +13,7 @@ const LOGO_URL = "https://files.manuscdn.com/user_upload_by_module/session_file/
 const VENUE_PHOTO = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/UKFTelsfibbZjvzA.jpg";
 
 // Hero
-const HERO_ART = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/rRtojaZAWQqrXzNh.jpg";
+const HERO_ART = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/TYtScVlRoVGrefMX.jpg";
 
 // Story chapter images
 const IMG_ASU = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/VJIXDMrqMmnSpTLU.jpg";
@@ -328,16 +328,7 @@ function StorySection() {
         <div className="absolute right-0 top-1/2 -translate-y-1/2 flex flex-col items-end gap-3 pr-3">
           {storyChapters.map((ch, i) => (
             <div key={i} className="flex items-center gap-2">
-              {/* Label — desktop only */}
-              <span
-                className={`hidden md:block font-body text-[10px] tracking-widest uppercase transition-all duration-400 whitespace-nowrap ${
-                  i === activeIdx ? "opacity-100" : "opacity-0"
-                }`}
-                style={{ color: ch.accent }}
-              >
-                {ch.city}
-              </span>
-              {/* Dot */}
+              {/* Dot only — no text label on any screen */}
               <div
                 className={`rounded-full transition-all duration-500 shadow-sm ${
                   i === activeIdx ? "w-3 h-3" : "w-2 h-2 opacity-40"
