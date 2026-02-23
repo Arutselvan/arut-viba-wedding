@@ -216,10 +216,13 @@ function StorySection() {
   const trackRef = useRef<HTMLDivElement>(null);
   const [activeIdx, setActiveIdx] = useState(0);
   const [inStory, setInStory] = useState(false);
-  // Ref to debounce wheel snapping so one wheel tick = one chapter
-  const wheelCooldown = useRef(false);
   const activeIdxRef = useRef(0);
   activeIdxRef.current = activeIdx;
+  // Wheel accumulator: sum deltaY across a gesture; fire when threshold crossed.
+  // Resets after each chapter advance. This correctly handles both mouse wheels
+  // (large deltaY per event) and trackpads (many small deltaY events per gesture).
+  const wheelAccum = useRef(0);
+  const wheelLocked = useRef(false); // true while smooth-scrolling to next chapter
   // Track the chapter we're programmatically scrolling TO so onScroll
   // doesn't update activeIdx mid-animation and confuse the next wheel event
   const targetIdxRef = useRef<number | null>(null);
@@ -288,29 +291,38 @@ function StorySection() {
     };
     window.addEventListener("scroll", onScroll, { passive: true });
 
-    // Desktop wheel snap: intercept wheel events while inside the story section
-    // so one scroll tick advances exactly one chapter.
+    // Desktop wheel snap using deltaY accumulator.
+    // Trackpads fire many small events per gesture; we accumulate them and
+    // only advance one chapter when the total crosses THRESHOLD.
+    // Mouse wheels fire one large event; they cross THRESHOLD immediately.
+    const THRESHOLD = 80;
     const onWheel = (e: WheelEvent) => {
-      // Only intercept on desktop (pointer: fine)
+      // Only intercept on pointer:fine devices (mouse / trackpad)
       if (!window.matchMedia("(pointer: fine)").matches) return;
       const sectionTop = section.getBoundingClientRect().top + window.scrollY;
       const scrolled = window.scrollY - sectionTop;
       const totalScroll = section.offsetHeight - getVH();
       const vh = getVH();
-      // Only intercept when we're inside the story scroll zone
+      // Only intercept while inside the story scroll zone
       if (scrolled < -vh * 0.1 || scrolled > totalScroll + vh * 0.1) return;
-      // If at boundaries and scrolling out, let native scroll handle it
+      // At boundaries: let native scroll handle exit
       const cur = activeIdxRef.current;
       if (e.deltaY < 0 && cur === 0 && scrolled <= 0) return;
       if (e.deltaY > 0 && cur === storyChapters.length - 1 && scrolled >= totalScroll) return;
-      // Prevent native scroll and snap to next/prev chapter
+      // We're inside — prevent native scroll
       e.preventDefault();
-      // Check AND set cooldown atomically before any async work
-      if (wheelCooldown.current) return;
-      wheelCooldown.current = true;
-      const next = e.deltaY > 0 ? cur + 1 : cur - 1;
-      scrollToChapter(next);
-      setTimeout(() => { wheelCooldown.current = false; }, 900);
+      // While a programmatic scroll is in flight, eat all wheel events
+      if (wheelLocked.current) return;
+      // Accumulate delta
+      wheelAccum.current += e.deltaY;
+      if (Math.abs(wheelAccum.current) < THRESHOLD) return;
+      // Threshold crossed — advance one chapter and reset
+      const direction = wheelAccum.current > 0 ? 1 : -1;
+      wheelAccum.current = 0;
+      wheelLocked.current = true;
+      scrollToChapter(cur + direction);
+      // Unlock after animation completes (~600ms smooth scroll)
+      setTimeout(() => { wheelLocked.current = false; }, 800);
     };
     window.addEventListener("wheel", onWheel, { passive: false });
 
