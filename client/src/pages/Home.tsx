@@ -108,45 +108,13 @@ function Navigation() {
 // ─── Hero ──────────────────────────────────────────────────────────────────────
 function HeroSection() {
   return (
-    <section id="top" className="relative overflow-hidden bg-white" style={{ minHeight: "100svh" }}>
-      {/* Layout: top ~45% = text zone (white), bottom ~55% = art */}
-      
-      {/* Art image — full width, sits at bottom, always shows heads.
-           We use a fixed pixel offset from the bottom so the art scales
-           naturally and the couple's heads are never clipped regardless of
-           viewport width or height. */}
-      <div
-        className="absolute inset-x-0 bottom-0"
-        style={{
-          /* Start the art zone at 52% of the viewport height on large screens,
-             but never start later than 340px from the top so there's always
-             enough room for the art on small phones. */
-          top: "min(52vh, calc(100svh - clamp(320px, 48vw, 520px)))",
-        }}
-      >
-        <img
-          src={HERO_ART}
-          alt="Arut & Viba wedding ceremony"
-          className="w-full h-full"
-          style={{
-            objectFit: "contain",
-            objectPosition: "center bottom",
-            /* Ensure the image is never taller than its container so it
-               doesn't overflow and crop the top (where the heads are). */
-            maxHeight: "100%",
-          }}
-        />
-        {/* Soft fade at the top edge of art to blend with white */}
-        <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-white to-transparent" />
-      </div>
+    <section id="top" className="bg-white" style={{ minHeight: "100svh", display: "flex", flexDirection: "column" }}>
 
-      {/* Text content — sits in the white top zone */}
-      <div className="relative z-10 flex flex-col items-center justify-start pt-20 md:pt-24 px-6 text-center pb-8">
-        {/* Large Logo */}
+      {/* ─── ZONE 1: Pure white text band — logo, names, date ─── */}
+      <div className="relative z-10 flex flex-col items-center justify-center pt-20 md:pt-24 px-6 text-center pb-6 bg-white">
         <div className="mb-0.5 animate-fade-in">
           <img src={LOGO_URL} alt="A&V monogram" className="w-24 h-24 md:w-32 md:h-32 mx-auto drop-shadow-sm" />
         </div>
-        {/* Hashtag directly below logo — tight gap */}
         <p className="font-display text-xl italic text-saffron/80 mb-3 -mt-1 animate-fade-up delay-100">#aruvi</p>
         <p className="font-body text-taupe tracking-[0.45em] uppercase text-xs mb-3 animate-fade-up delay-200">
           Together with their families
@@ -154,22 +122,37 @@ function HeroSection() {
         <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-light text-ink mb-3 animate-fade-up delay-300 leading-none">
           Arut <em className="text-saffron not-italic">&</em> Viba
         </h1>
-        <div className="flex items-center justify-center gap-4 mb-4 animate-fade-up delay-400">
+        <div className="flex items-center justify-center gap-4 mb-3 animate-fade-up delay-400">
           <div className="h-px w-12 bg-champagne" />
           <p className="font-display text-base md:text-lg text-taupe italic">request the honour of your presence</p>
           <div className="h-px w-12 bg-champagne" />
         </div>
         <p className="font-body text-ink/70 tracking-[0.3em] uppercase text-xs mb-1 animate-fade-up delay-500">23rd – 24th January 2027</p>
-        <p className="font-body text-taupe tracking-[0.2em] uppercase text-xs mb-6 animate-fade-up delay-500">MGM Beach Resorts · Chennai, Tamil Nadu</p>
-        <div className="animate-fade-up delay-600 bg-white/80 backdrop-blur-sm px-8 py-4 border border-champagne/50">
-          <Countdown />
-        </div>
+        <p className="font-body text-taupe tracking-[0.2em] uppercase text-xs animate-fade-up delay-500">MGM Beach Resorts · Chennai, Tamil Nadu</p>
+      </div>
 
+      {/* ─── ZONE 2: Art image — fills remaining space, couple's heads always at top of this zone ─── */}
+      <div className="relative flex-1 overflow-hidden" style={{ minHeight: "clamp(280px, 45vw, 560px)" }}>
+        {/* Countdown floats at the very top of the art zone, above the heads */}
+        <div className="absolute top-0 inset-x-0 z-20 flex justify-center pt-3 pb-2 pointer-events-none">
+          <div className="animate-fade-up delay-600 bg-white/90 backdrop-blur-sm px-6 py-3 border border-champagne/50 shadow-sm">
+            <Countdown />
+          </div>
+        </div>
+        {/* Art image — object-contain so the full painting is visible, anchored to bottom */}
+        <img
+          src={HERO_ART}
+          alt="Arut & Viba wedding ceremony"
+          className="w-full h-full"
+          style={{ objectFit: "contain", objectPosition: "center bottom" }}
+        />
+        {/* Soft fade at the very top of the art zone to blend with white */}
+        <div className="absolute inset-x-0 top-0 h-8 bg-gradient-to-b from-white to-transparent pointer-events-none" />
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce z-10">
-        <svg width="20" height="30" viewBox="0 0 24 36" fill="none" className="opacity-40">
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 animate-bounce z-10">
+        <svg width="20" height="30" viewBox="0 0 24 36" fill="none" className="opacity-30">
           <rect x="1" y="1" width="22" height="34" rx="11" stroke="#7A6552" strokeWidth="1.5"/>
           <circle cx="12" cy="10" r="3" fill="#7A6552" className="animate-pulse"/>
         </svg>
@@ -211,6 +194,10 @@ function StorySection() {
   const trackRef = useRef<HTMLDivElement>(null);
   const [activeIdx, setActiveIdx] = useState(0);
   const [inStory, setInStory] = useState(false);
+  // Ref to debounce wheel snapping so one wheel tick = one chapter
+  const wheelCooldown = useRef(false);
+  const activeIdxRef = useRef(0);
+  activeIdxRef.current = activeIdx;
 
   // Scroll to a specific chapter index within the story, or exit to events section
   const scrollToChapter = (idx: number) => {
@@ -222,6 +209,9 @@ function StorySection() {
       // Past last chapter — scroll to events section
       const target = sectionTop + totalScroll + window.innerHeight + 10;
       window.scrollTo({ top: target, behavior: "smooth" });
+    } else if (idx < 0) {
+      // Before first chapter — scroll above story section
+      window.scrollTo({ top: sectionTop - window.innerHeight, behavior: "smooth" });
     } else {
       // Scroll to the exact position that shows chapter idx
       const progress = idx / (storyChapters.length - 1);
@@ -253,7 +243,35 @@ function StorySection() {
       }
     };
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+
+    // Desktop wheel snap: intercept wheel events while inside the story section
+    // so one scroll tick advances exactly one chapter.
+    const onWheel = (e: WheelEvent) => {
+      // Only intercept on desktop (pointer: fine)
+      if (!window.matchMedia("(pointer: fine)").matches) return;
+      const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+      const scrolled = window.scrollY - sectionTop;
+      const totalScroll = section.offsetHeight - window.innerHeight;
+      // Only intercept when we're inside the story scroll zone
+      if (scrolled < -window.innerHeight * 0.1 || scrolled > totalScroll + window.innerHeight * 0.1) return;
+      // If at boundaries and scrolling out, let native scroll handle it
+      const cur = activeIdxRef.current;
+      if (e.deltaY < 0 && cur === 0 && scrolled <= 0) return;
+      if (e.deltaY > 0 && cur === storyChapters.length - 1 && scrolled >= totalScroll) return;
+      // Prevent native scroll and snap to next/prev chapter
+      e.preventDefault();
+      if (wheelCooldown.current) return;
+      wheelCooldown.current = true;
+      const next = e.deltaY > 0 ? cur + 1 : cur - 1;
+      scrollToChapter(next);
+      setTimeout(() => { wheelCooldown.current = false; }, 700);
+    };
+    window.addEventListener("wheel", onWheel, { passive: false });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("wheel", onWheel);
+    };
   }, []);
 
   return (
