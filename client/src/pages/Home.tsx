@@ -292,20 +292,17 @@ function StorySection() {
   // Unified scroll-driven approach: works on both mobile and desktop.
   useEffect(() => {
     const section = document.getElementById("story-scroll-section");
-    const mobileSection = document.getElementById("mobile-story-scroll");
     const onScroll = () => {
-      // ─ MOBILE: track scroll position within mobile-story-scroll container ─
+      // ─ MOBILE: look up element fresh each time (md:hidden means it may not exist at mount) ─
+      const mobileSection = mobileStoryRef.current;
       if (mobileSection && window.matchMedia('(max-width: 767px)').matches) {
         const mTop = mobileSection.getBoundingClientRect().top + window.scrollY;
         const scrolled = window.scrollY - mTop;
         const vh = window.innerHeight;
         const totalScroll = mobileSection.offsetHeight - vh;
-        if (scrolled >= 0 && scrolled <= totalScroll) {
-          const progress = scrolled / totalScroll;
-          const newIdx = Math.min(
-            storyChapters.length - 1,
-            Math.round(progress * (storyChapters.length - 1))
-          );
+        if (scrolled >= -10 && scrolled <= totalScroll + 10) {
+          const progress = Math.max(0, Math.min(1, scrolled / totalScroll));
+          const newIdx = Math.round(progress * (storyChapters.length - 1));
           setActiveIdx(newIdx);
         }
         return;
