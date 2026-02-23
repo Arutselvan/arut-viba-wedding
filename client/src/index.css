@@ -213,6 +213,11 @@
     scroll-behavior: smooth;
   }
 
+  /* Horizontal scroll story track */
+  #story-scroll-section .sticky {
+    will-change: transform;
+  }
+
   /* Custom scrollbar */
   ::-webkit-scrollbar {
     width: 6px;
