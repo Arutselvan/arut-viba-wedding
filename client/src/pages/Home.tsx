@@ -193,36 +193,30 @@ const storyChapters = [
 function StorySection() {
   const trackRef = useRef<HTMLDivElement>(null);
   const [activeIdx, setActiveIdx] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
 
+  // Unified scroll-driven approach: works on both mobile and desktop.
+  // The section has a tall scroll height so all chapters are naturally
+  // encountered as the user scrolls. On desktop the card slides horizontally;
+  // on mobile the card cross-fades in place.
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
-
-  // Desktop: sticky scroll-driven horizontal pan
-  useEffect(() => {
-    if (isMobile) return;
     const section = document.getElementById("story-scroll-section");
-    if (!section || !trackRef.current) return;
+    if (!section) return;
     const onScroll = () => {
       const sectionTop = section.getBoundingClientRect().top + window.scrollY;
       const scrolled = window.scrollY - sectionTop;
       const totalScroll = section.offsetHeight - window.innerHeight;
       const progress = Math.max(0, Math.min(1, scrolled / totalScroll));
+      const newIdx = Math.round(progress * (storyChapters.length - 1));
+      setActiveIdx(newIdx);
+      // Desktop horizontal pan
       if (trackRef.current) {
         const maxTranslate = trackRef.current.scrollWidth - window.innerWidth;
         trackRef.current.style.transform = `translateX(-${progress * maxTranslate}px)`;
-        setActiveIdx(Math.round(progress * (storyChapters.length - 1)));
       }
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [isMobile]);
-
-  const goTo = (idx: number) => setActiveIdx(Math.max(0, Math.min(storyChapters.length - 1, idx)));
+  }, []);
 
   return (
     <section id="story" className="bg-white">
@@ -238,131 +232,93 @@ function StorySection() {
         <p className="font-body text-taupe max-w-xl mx-auto text-sm leading-relaxed px-6">
           From the Tempe heat to the Bay Area fog — a love story written across time zones, red-eye flights, and a thousand "see you soon"s.
         </p>
-        {/* Desktop hint */}
-        <p className="hidden md:block font-body text-taupe/50 text-xs mt-5 tracking-widest animate-pulse">↓ Scroll to journey through our story</p>
-        {/* Mobile hint */}
-        <p className="md:hidden font-body text-taupe/50 text-xs mt-5 tracking-widest">Tap the arrows to journey through our story</p>
+        <p className="font-body text-taupe/50 text-xs mt-5 tracking-widest animate-pulse">↓ Scroll to journey through our story</p>
       </div>
 
-      {/* ── MOBILE: Tap-through card stack ── */}
-      {isMobile && (
-        <div className="md:hidden pb-16 px-4">
-          {/* Timeline dots */}
-          <div className="flex items-center justify-center gap-2 mb-6">
+      {/*
+        Unified scroll-driven story:
+        - Desktop: cards slide horizontally as you scroll
+        - Mobile: cards cross-fade in a sticky full-screen panel as you scroll
+        Both use the same tall scroll container so the user naturally passes
+        through every chapter before reaching the next section.
+      */}
+      <div id="story-scroll-section" style={{ height: `${storyChapters.length * 120}vh` }} className="relative">
+        <div className="sticky top-0 h-screen overflow-hidden">
+
+          {/* Progress dots — visible on both */}
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
             {storyChapters.map((ch, i) => (
-              <button key={i} onClick={() => goTo(i)}
-                className={`rounded-full transition-all duration-400 ${i === activeIdx ? "w-8 h-2.5" : "w-2.5 h-2.5 opacity-30"}`}
-                style={{ background: i === activeIdx ? ch.accent : "#D4A853" }}
-                aria-label={`Chapter ${i + 1}`}
-              />
+              <div key={i} className={`rounded-full transition-all duration-500 ${i === activeIdx ? "w-8 h-2.5" : "w-2.5 h-2.5 opacity-40"}`}
+                style={{ background: i === activeIdx ? ch.accent : "#D4A853" }} />
             ))}
           </div>
 
-          {/* Card */}
-          <div
-            key={activeIdx}
-            className={`rounded-2xl overflow-hidden shadow-xl bg-gradient-to-br ${storyChapters[activeIdx].bg} animate-fade-in`}
-            style={{ animationDuration: "0.35s" }}
-          >
-            {/* Image */}
-            <div className="relative">
-              <img
-                src={storyChapters[activeIdx].img}
-                alt={storyChapters[activeIdx].title}
-                className="w-full h-56 object-cover"
-              />
-              {/* Chapter badge */}
-              <div className="absolute top-3 left-3 px-3 py-1 text-white text-xs font-body tracking-widest uppercase rounded-full"
-                style={{ background: storyChapters[activeIdx].accent }}>
-                {storyChapters[activeIdx].year}
-              </div>
-              <div className="absolute bottom-0 inset-x-0 h-12 bg-gradient-to-t from-black/20 to-transparent" />
-            </div>
-
-            {/* Text */}
-            <div className="p-6">
-              <p className="font-body text-xs tracking-[0.2em] uppercase text-taupe mb-2">{storyChapters[activeIdx].city}</p>
-              <h3 className="font-display text-3xl text-ink font-light mb-3 leading-tight">{storyChapters[activeIdx].title}</h3>
-              <div className="h-px w-10 mb-4" style={{ background: storyChapters[activeIdx].accent }} />
-              <p className="font-body text-taupe text-sm leading-relaxed">{storyChapters[activeIdx].desc}</p>
-            </div>
-          </div>
-
-          {/* Prev / Next navigation */}
-          <div className="flex items-center justify-between mt-5 px-2">
-            <button
-              onClick={() => goTo(activeIdx - 1)}
-              disabled={activeIdx === 0}
-              className="flex items-center gap-2 font-body text-xs tracking-widest uppercase text-taupe disabled:opacity-20 transition-opacity"
-            >
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <path d="M13 4L7 10L13 16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              Prev
-            </button>
-            <span className="font-display text-sm text-taupe/50 italic">{activeIdx + 1} / {storyChapters.length}</span>
-            <button
-              onClick={() => goTo(activeIdx + 1)}
-              disabled={activeIdx === storyChapters.length - 1}
-              className="flex items-center gap-2 font-body text-xs tracking-widest uppercase text-taupe disabled:opacity-20 transition-opacity"
-            >
-              Next
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <path d="M7 4L13 10L7 16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* ── DESKTOP: Sticky scroll-driven horizontal pan ── */}
-      {!isMobile && (
-        <div id="story-scroll-section" style={{ height: `${storyChapters.length * 120}vh` }} className="relative hidden md:block">
-          <div className="sticky top-0 h-screen overflow-hidden">
-            {/* Progress dots */}
-            <div className="absolute top-5 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
-              {storyChapters.map((ch, i) => (
-                <div key={i} className={`rounded-full transition-all duration-500 ${i === activeIdx ? "w-8 h-2.5" : "w-2.5 h-2.5 opacity-40"}`}
-                  style={{ background: i === activeIdx ? ch.accent : "#D4A853" }} />
-              ))}
-            </div>
-
-            {/* Horizontal track */}
-            <div ref={trackRef} className="flex h-full will-change-transform" style={{ transition: "transform 0.08s linear", width: `${storyChapters.length * 100}vw` }}>
-              {storyChapters.map((chapter, i) => (
-                <div key={i} className={`flex-shrink-0 w-screen h-screen bg-gradient-to-br ${chapter.bg} flex items-center`}>
-                  <div className="max-w-6xl mx-auto px-8 md:px-16 w-full grid md:grid-cols-2 gap-8 md:gap-16 items-center">
-                    {/* Image */}
-                    <div className={`${i % 2 === 0 ? "md:order-2" : "md:order-1"} flex justify-center`}>
-                      <div className="relative">
-                        <div className="absolute -inset-3 border opacity-20 rounded-sm" style={{ borderColor: chapter.accent }} />
-                        <div className="absolute -inset-1.5 border opacity-10 rounded-sm" style={{ borderColor: chapter.accent }} />
-                        <img
-                          src={chapter.img}
-                          alt={chapter.title}
-                          className="w-72 h-72 md:w-96 md:h-96 object-cover shadow-2xl"
-                          style={{ boxShadow: `0 25px 60px ${chapter.accent}30` }}
-                        />
-                        <div className="absolute -bottom-4 -right-4 font-display text-7xl font-light leading-none select-none pointer-events-none opacity-10" style={{ color: chapter.accent }}>
-                          {String(i + 1).padStart(2, "0")}
-                        </div>
-                      </div>
-                    </div>
-                    {/* Text */}
-                    <div className={`${i % 2 === 0 ? "md:order-1" : "md:order-2"}`}>
-                      <p className="font-body text-xs tracking-[0.4em] uppercase mb-1" style={{ color: chapter.accent }}>{chapter.year}</p>
-                      <p className="font-body text-xs tracking-[0.2em] uppercase text-taupe mb-4">{chapter.city}</p>
-                      <h3 className="font-display text-4xl md:text-5xl text-ink font-light mb-5 leading-tight">{chapter.title}</h3>
-                      <div className="h-px w-12 mb-5" style={{ background: chapter.accent }} />
-                      <p className="font-body text-taupe text-sm md:text-base leading-relaxed">{chapter.desc}</p>
-                    </div>
+          {/* ── MOBILE: cross-fade cards in place ── */}
+          <div className="md:hidden relative w-full h-full">
+            {storyChapters.map((chapter, i) => (
+              <div
+                key={i}
+                className={`absolute inset-0 bg-gradient-to-b ${chapter.bg} flex flex-col transition-opacity duration-500`}
+                style={{ opacity: i === activeIdx ? 1 : 0, pointerEvents: i === activeIdx ? "auto" : "none" }}
+              >
+                {/* Image top half */}
+                <div className="relative flex-shrink-0" style={{ height: "45%" }}>
+                  <img src={chapter.img} alt={chapter.title} className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/30" />
+                  <div className="absolute top-10 left-4 px-3 py-1 text-white text-xs font-body tracking-widest uppercase rounded-full"
+                    style={{ background: chapter.accent }}>
+                    {chapter.year}
+                  </div>
+                  {/* Chapter number watermark */}
+                  <div className="absolute bottom-3 right-4 font-display text-6xl font-light leading-none select-none opacity-20 text-white">
+                    {String(i + 1).padStart(2, "0")}
                   </div>
                 </div>
-              ))}
-            </div>
+                {/* Text bottom half */}
+                <div className="flex-1 px-6 pt-5 pb-10 overflow-auto">
+                  <p className="font-body text-xs tracking-[0.2em] uppercase text-taupe mb-1">{chapter.city}</p>
+                  <h3 className="font-display text-3xl text-ink font-light mb-3 leading-tight">{chapter.title}</h3>
+                  <div className="h-px w-10 mb-3" style={{ background: chapter.accent }} />
+                  <p className="font-body text-taupe text-sm leading-relaxed">{chapter.desc}</p>
+                  {/* Scroll nudge on last card */}
+                  {i === storyChapters.length - 1 && (
+                    <p className="mt-6 font-body text-taupe/40 text-xs tracking-widest animate-pulse">↓ Keep scrolling</p>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
+
+          {/* ── DESKTOP: horizontal pan ── */}
+          <div ref={trackRef} className="hidden md:flex h-full will-change-transform" style={{ transition: "transform 0.08s linear", width: `${storyChapters.length * 100}vw` }}>
+            {storyChapters.map((chapter, i) => (
+              <div key={i} className={`flex-shrink-0 w-screen h-screen bg-gradient-to-br ${chapter.bg} flex items-center`}>
+                <div className="max-w-6xl mx-auto px-8 md:px-16 w-full grid md:grid-cols-2 gap-8 md:gap-16 items-center">
+                  <div className={`${i % 2 === 0 ? "md:order-2" : "md:order-1"} flex justify-center`}>
+                    <div className="relative">
+                      <div className="absolute -inset-3 border opacity-20 rounded-sm" style={{ borderColor: chapter.accent }} />
+                      <div className="absolute -inset-1.5 border opacity-10 rounded-sm" style={{ borderColor: chapter.accent }} />
+                      <img src={chapter.img} alt={chapter.title} className="w-72 h-72 md:w-96 md:h-96 object-cover shadow-2xl"
+                        style={{ boxShadow: `0 25px 60px ${chapter.accent}30` }} />
+                      <div className="absolute -bottom-4 -right-4 font-display text-7xl font-light leading-none select-none pointer-events-none opacity-10" style={{ color: chapter.accent }}>
+                        {String(i + 1).padStart(2, "0")}
+                      </div>
+                    </div>
+                  </div>
+                  <div className={`${i % 2 === 0 ? "md:order-1" : "md:order-2"}`}>
+                    <p className="font-body text-xs tracking-[0.4em] uppercase mb-1" style={{ color: chapter.accent }}>{chapter.year}</p>
+                    <p className="font-body text-xs tracking-[0.2em] uppercase text-taupe mb-4">{chapter.city}</p>
+                    <h3 className="font-display text-4xl md:text-5xl text-ink font-light mb-5 leading-tight">{chapter.title}</h3>
+                    <div className="h-px w-12 mb-5" style={{ background: chapter.accent }} />
+                    <p className="font-body text-taupe text-sm md:text-base leading-relaxed">{chapter.desc}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
         </div>
-      )}
+      </div>
     </section>
   );
 }
