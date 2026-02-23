@@ -80,9 +80,10 @@ function Navigation() {
           <span className={`font-display text-xl font-medium text-ink transition-all duration-300 ${scrolled ? "opacity-100" : "opacity-80"}`}>Arut & Viba</span>
         </a>
         <div className="hidden md:flex items-center gap-8">
-          {links.map(({ label, href }) => (
+          {links.filter(l => l.label !== "RSVP").map(({ label, href }) => (
             <a key={href} href={href} className="font-body text-xs tracking-[0.2em] uppercase text-ink hover:text-saffron transition-colors duration-300">{label}</a>
           ))}
+          <a href="#rsvp" className={`font-body text-xs tracking-[0.2em] uppercase px-5 py-2 border transition-colors duration-300 ${scrolled ? "border-ink text-ink hover:bg-ink hover:text-white" : "border-ink/70 text-ink hover:bg-ink hover:text-white"}`}>RSVP</a>
         </div>
         <button className="md:hidden p-2 text-ink" onClick={() => setOpen(!open)} aria-label="menu">
           <div className="w-5 flex flex-col gap-1.5">
@@ -511,7 +512,7 @@ function RSVPSection() {
             className="inline-flex items-center gap-3 bg-ink text-white font-body text-xs tracking-[0.3em] uppercase px-12 py-4 hover:bg-sienna transition-colors duration-300">
             RSVP Now →
           </a>
-          <p className="font-body text-taupe/50 text-xs mt-4">RSVP form will be available soon</p>
+
         </div>
       </div>
     </section>
