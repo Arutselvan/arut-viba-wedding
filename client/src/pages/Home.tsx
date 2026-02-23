@@ -276,8 +276,7 @@ function StorySection() {
       const progress = Math.max(0, Math.min(1, scrolled / totalScroll));
       const newIdx = Math.round(progress * (storyChapters.length - 1));
       setActiveIdx(newIdx);
-      // Show side rail only when fully inside the story scroll section
-      setInStory(scrolled > 0 && scrolled < totalScroll);
+      // inStory is now managed by IntersectionObserver below — no-op here
       // Desktop horizontal pan
       if (trackRef.current) {
         const maxTranslate = trackRef.current.scrollWidth - window.innerWidth;
@@ -314,6 +313,19 @@ function StorySection() {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("wheel", onWheel);
     };
+  }, []);
+
+  // IntersectionObserver: show the fixed mobile panel as soon as any part
+  // of the story-scroll-section is in the viewport, hide when fully out.
+  useEffect(() => {
+    const section = document.getElementById('story-scroll-section');
+    if (!section) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setInStory(entry.isIntersecting),
+      { threshold: 0 } // trigger as soon as 1px is visible
+    );
+    observer.observe(section);
+    return () => observer.disconnect();
   }, []);
 
   return (
