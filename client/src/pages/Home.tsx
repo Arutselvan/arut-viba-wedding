@@ -220,15 +220,29 @@ function StorySection() {
   const wheelCooldown = useRef(false);
   const activeIdxRef = useRef(0);
   activeIdxRef.current = activeIdx;
+  // Capture a stable viewport height once on mount.
+  // Using a ref (not state) so it never triggers re-renders.
+  // This prevents the card from resizing when the mobile browser chrome hides/shows.
+  const stableVH = useRef(window.innerHeight);
+  useEffect(() => {
+    // Re-capture only on genuine resize (orientation change), not chrome show/hide
+    const onResize = () => {
+      // Only update if the change is large (>100px) — chrome toggle is ~60-80px
+      if (Math.abs(window.innerHeight - stableVH.current) > 100) {
+        stableVH.current = window.innerHeight;
+      }
+    };
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
 
   // Scroll to a specific chapter index within the story, or exit to events section.
-  // IMPORTANT: always use window.innerHeight (not visualViewport) so the value
-  // matches the CSS vh units used for the section height. This keeps scrollToChapter
-  // and onScroll in perfect sync.
+  // Uses stableVH (captured at mount) so calculations never change when the
+  // mobile browser chrome hides/shows during a tap-triggered scroll.
   const scrollToChapter = (idx: number) => {
     const section = document.getElementById("story-scroll-section");
     if (!section) return;
-    const vh = window.innerHeight;
+    const vh = stableVH.current;
     const sectionTop = section.getBoundingClientRect().top + window.scrollY;
     const totalScroll = section.offsetHeight - vh;
     if (idx >= storyChapters.length) {
@@ -239,11 +253,9 @@ function StorySection() {
       // Before first chapter — scroll above story section
       window.scrollTo({ top: sectionTop - vh, behavior: "smooth" });
     } else if (idx === storyChapters.length - 1) {
-      // Last chapter: overshoot by 20px so progress always reaches 1.0
-      // even if innerHeight fluctuates slightly during the smooth scroll
+      // Last chapter: overshoot slightly so progress always reaches 1.0
       window.scrollTo({ top: sectionTop + totalScroll + 20, behavior: "smooth" });
     } else {
-      // Scroll to the exact position that shows chapter idx
       const progress = idx / (storyChapters.length - 1);
       const target = sectionTop + progress * totalScroll;
       window.scrollTo({ top: target, behavior: "smooth" });
@@ -260,7 +272,7 @@ function StorySection() {
     const onScroll = () => {
       const sectionTop = section.getBoundingClientRect().top + window.scrollY;
       const scrolled = window.scrollY - sectionTop;
-      const totalScroll = section.offsetHeight - window.innerHeight;
+      const totalScroll = section.offsetHeight - stableVH.current;
       const progress = Math.max(0, Math.min(1, scrolled / totalScroll));
       const newIdx = Math.round(progress * (storyChapters.length - 1));
       setActiveIdx(newIdx);
@@ -281,9 +293,9 @@ function StorySection() {
       if (!window.matchMedia("(pointer: fine)").matches) return;
       const sectionTop = section.getBoundingClientRect().top + window.scrollY;
       const scrolled = window.scrollY - sectionTop;
-      const totalScroll = section.offsetHeight - window.innerHeight;
+      const totalScroll = section.offsetHeight - stableVH.current;
       // Only intercept when we're inside the story scroll zone
-      if (scrolled < -window.innerHeight * 0.1 || scrolled > totalScroll + window.innerHeight * 0.1) return;
+      if (scrolled < -stableVH.current * 0.1 || scrolled > totalScroll + stableVH.current * 0.1) return;
       // If at boundaries and scrolling out, let native scroll handle it
       const cur = activeIdxRef.current;
       if (e.deltaY < 0 && cur === 0 && scrolled <= 0) return;
@@ -349,7 +361,7 @@ function StorySection() {
       </div>
 
       <div id="story-scroll-section" style={{ height: `${storyChapters.length * 120}dvh` }} className="relative">
-        <div className="sticky top-0" style={{ height: '100dvh', overflow: 'visible' }}>
+        <div className="sticky top-0" style={{ height: `${stableVH.current}px`, overflow: 'visible' }}>
           {/* overflow:visible so the fixed side rail isn't clipped */}
 
           {/* ── MOBILE: cross-fade cards in place ── */}
