@@ -13,7 +13,7 @@ const LOGO_URL = "https://files.manuscdn.com/user_upload_by_module/session_file/
 const VENUE_PHOTO = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/UKFTelsfibbZjvzA.jpg";
 
 // Hero
-const HERO_ART = "https://private-us-east-1.manuscdn.com/sessionFile/0HKKMuEcCJL7yTTQfsbnhc/sandbox/rYl6AY77yOQ6EEYEtD2PQu-img-1_1771823200000_na1fn_aGVyby1hcnQtdjM.jpg?x-oss-process=image/resize,w_1920,h_1920/format,webp/quality,q_80&Expires=1798761600&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9wcml2YXRlLXVzLWVhc3QtMS5tYW51c2Nkbi5jb20vc2Vzc2lvbkZpbGUvMEhLS011RWNDSkw3eVRUUWZzYm5oYy9zYW5kYm94L3JZbDZBWTc3eU9RNkVFWUV0RDJQUXUtaW1nLTFfMTc3MTgyMzIwMDAwMF9uYTFmbl9hR1Z5YnkxaGNuUXRkak0uanBnP3gtb3NzLXByb2Nlc3M9aW1hZ2UvcmVzaXplLHdfMTkyMCxoXzE5MjAvZm9ybWF0LHdlYnAvcXVhbGl0eSxxXzgwIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzk4NzYxNjAwfX19XX0_&Key-Pair-Id=K2HSFNDJXOU9YS&Signature=mm4BbYymYhTw0HxUP-F8k7Yvs~~2BPInwwC~BDsz7vWoT6rimH1fH~HOoCQ-NrSQkOIk1Ky0pC~z~2GOMOLyDpTNLtt1G0wTaDetQF-Mcp~ubt~ojyEb1kLNjrsg2ISJ4783cOE1jbBaKSYLn67qzm7OVhlyac2N9ymRZr3IABneHjkCYg-TxBxi2aNJmJSE-wL-rbPnsAWFRXOMoKKUcDxdIA0~WiKD~k92yt3ZVfpra-fha7hQBKWi3vV-RasKpY-VQb8MtvCLLvBJg8a83zBeZV8knswWFyWBn~DLJs~~ni8qNPZ2LwbAMFNLU-WaUx5GHRjruV50ToVBHKfgFg__";
+const HERO_ART = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/FifwgfeKPcnOBQcN.jpg";
 
 // Story chapter images
 const IMG_ASU = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/VJIXDMrqMmnSpTLU.jpg";
