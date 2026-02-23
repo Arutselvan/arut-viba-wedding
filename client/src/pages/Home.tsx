@@ -194,10 +194,6 @@ function StorySection() {
   const [activeIdx, setActiveIdx] = useState(0);
   const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
   const trackRef = useRef<HTMLDivElement>(null);
-  const pausedRef = useRef(false);
-  const activeIdxRef = useRef(0);
-  activeIdxRef.current = activeIdx;
-
   // Track which slide is visible using IntersectionObserver on the track
   useEffect(() => {
     const track = trackRef.current;
@@ -217,26 +213,9 @@ function StorySection() {
     return () => observer.disconnect();
   }, []);
 
-  // Auto-scroll: advance every 4 s, loop back to 0, pause on hover/touch
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (pausedRef.current) return;
-      const next = (activeIdxRef.current + 1) % storyChapters.length;
-      const el = slideRefs.current[next];
-      if (el) el.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const pause = () => { pausedRef.current = true; };
-  const resume = () => { pausedRef.current = false; };
-
   const goTo = (i: number) => {
-    pause();
     const el = slideRefs.current[i];
     if (el) el.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
-    // Resume auto-scroll after 8 s of inactivity
-    setTimeout(resume, 8000);
   };
 
   return (
@@ -259,10 +238,6 @@ function StorySection() {
       <div
         ref={trackRef}
         className="relative story-snap-track"
-        onMouseEnter={pause}
-        onMouseLeave={resume}
-        onTouchStart={pause}
-        onTouchEnd={() => setTimeout(resume, 6000)}
         style={{
           display: "flex",
           overflowX: "auto",
@@ -346,9 +321,10 @@ function StorySection() {
             >
               {/* Prev arrow */}
               <button
-                onClick={() => goTo(i > 0 ? i - 1 : storyChapters.length - 1)}
+                onClick={() => i > 0 && goTo(i - 1)}
                 className="p-1 transition-all duration-200 hover:scale-110 active:scale-95"
                 aria-label="Previous chapter"
+                style={{ visibility: i > 0 ? "visible" : "hidden" }}
               >
                 <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
                   <circle cx="22" cy="22" r="21" stroke={ch.accent} strokeWidth="1.2" opacity="0.4" />
@@ -386,7 +362,6 @@ function StorySection() {
               ) : (
                 <a
                   href="#events"
-                  onClick={resume}
                   className="p-1 flex items-center transition-all duration-200 hover:scale-110"
                   aria-label="Continue to celebrations"
                 >
