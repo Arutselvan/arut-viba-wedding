@@ -1,10 +1,3 @@
-/* ============================================================
-   DESIGN SYSTEM: "Ink & Marigold"
-   Philosophy: Romantic South Asian Editorial
-   Colors: Ivory parchment, saffron gold, burnt sienna, deep charcoal
-   Typography: Cormorant Garamond (display) + Lato (body)
-   ============================================================ */
-
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -34,63 +27,38 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
 
-  /* Wedding custom colors */
-  --color-saffron: oklch(0.72 0.15 65);
-  --color-marigold: oklch(0.78 0.18 72);
-  --color-sienna: oklch(0.52 0.14 42);
-  --color-parchment: oklch(0.97 0.015 80);
-  --color-ink: oklch(0.15 0.02 50);
-  --color-champagne: oklch(0.75 0.10 75);
+  /* ── Ink & Marigold Design Tokens ── */
+  --color-ink: #1C1410;
+  --color-taupe: #7A6552;
+  --color-saffron: #D4A853;
+  --color-sienna: #C4622D;
+  --color-champagne: #E8D9C0;
+  --color-parchment: #FAF6F0;
+  --color-ivory: #FFFDF8;
 }
 
 :root {
-  --radius: 0.25rem;
-  --background: oklch(0.97 0.015 80);
-  --foreground: oklch(0.15 0.02 50);
-  --card: oklch(1 0.01 80);
-  --card-foreground: oklch(0.15 0.02 50);
-  --popover: oklch(1 0.01 80);
-  --popover-foreground: oklch(0.15 0.02 50);
-  --primary: oklch(0.52 0.14 42);
-  --primary-foreground: oklch(0.97 0.015 80);
-  --secondary: oklch(0.93 0.02 80);
-  --secondary-foreground: oklch(0.30 0.04 50);
-  --muted: oklch(0.93 0.02 80);
-  --muted-foreground: oklch(0.50 0.04 60);
-  --accent: oklch(0.72 0.15 65);
-  --accent-foreground: oklch(0.15 0.02 50);
+  --radius: 0;
+  --background: #FAF6F0;
+  --foreground: #1C1410;
+  --card: #FFFFFF;
+  --card-foreground: #1C1410;
+  --popover: #FFFFFF;
+  --popover-foreground: #1C1410;
+  --primary: #D4A853;
+  --primary-foreground: #1C1410;
+  --secondary: #FAF6F0;
+  --secondary-foreground: #7A6552;
+  --muted: #F5EFE6;
+  --muted-foreground: #7A6552;
+  --accent: #E8D9C0;
+  --accent-foreground: #1C1410;
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.88 0.03 75);
-  --input: oklch(0.88 0.03 75);
-  --ring: oklch(0.72 0.15 65);
-  --chart-1: oklch(0.72 0.15 65);
-  --chart-2: oklch(0.78 0.18 72);
-  --chart-3: oklch(0.52 0.14 42);
-  --chart-4: oklch(0.75 0.10 75);
-  --chart-5: oklch(0.60 0.12 55);
-  --sidebar: oklch(0.97 0.015 80);
-  --sidebar-foreground: oklch(0.15 0.02 50);
-  --sidebar-primary: oklch(0.52 0.14 42);
-  --sidebar-primary-foreground: oklch(0.97 0.015 80);
-  --sidebar-accent: oklch(0.93 0.02 80);
-  --sidebar-accent-foreground: oklch(0.15 0.02 50);
-  --sidebar-border: oklch(0.88 0.03 75);
-  --sidebar-ring: oklch(0.72 0.15 65);
+  --border: #E8D9C0;
+  --input: #E8D9C0;
+  --ring: #D4A853;
 }
 
 @layer base {
@@ -100,254 +68,108 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'Lato', sans-serif;
-    font-weight: 300;
-  }
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Cormorant Garamond', serif;
+    -webkit-font-smoothing: antialiased;
   }
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
-  [type="button"]:not(:disabled),
-  [type="submit"]:not(:disabled),
-  [type="reset"]:not(:disabled),
-  a[href],
-  select:not(:disabled),
-  input[type="checkbox"]:not(:disabled),
-  input[type="radio"]:not(:disabled) {
+  a[href] {
     @apply cursor-pointer;
   }
 }
 
-@layer components {
-  .container {
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-
-  .flex {
-    min-height: 0;
-    min-width: 0;
-  }
-
-  @media (min-width: 640px) {
-    .container {
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .container {
-      padding-left: 2rem;
-      padding-right: 2rem;
-      max-width: 1280px;
-    }
-  }
-
-  /* Wedding-specific utility classes */
-  .font-display {
-    font-family: 'Cormorant Garamond', serif;
-  }
-
-  .font-body {
-    font-family: 'Lato', sans-serif;
-  }
-
-  .text-ink {
-    color: oklch(0.15 0.02 50);
-  }
-
-  .text-saffron {
-    color: oklch(0.72 0.15 65);
-  }
-
-  .text-sienna {
-    color: oklch(0.52 0.14 42);
-  }
-
-  .text-taupe {
-    color: oklch(0.50 0.04 60);
-  }
-
-  .bg-parchment {
-    background-color: oklch(0.97 0.015 80);
-  }
-
-  .bg-saffron {
-    background-color: oklch(0.72 0.15 65);
-  }
-
-  .bg-sienna {
-    background-color: oklch(0.52 0.14 42);
-  }
-
-  .border-champagne {
-    border-color: oklch(0.75 0.10 75);
-  }
-
-  .border-saffron {
-    border-color: oklch(0.72 0.15 65);
-  }
-
-  /* Ornamental divider */
-  .ornament-divider {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin: 2rem 0;
-  }
-
-  .ornament-divider::before,
-  .ornament-divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(to right, transparent, oklch(0.75 0.10 75), transparent);
-  }
-
-  /* Smooth scroll */
-  html {
-    scroll-behavior: smooth;
-  }
-
-  /* Horizontal scroll story track */
-  #story-scroll-section .sticky {
-    will-change: transform;
-  }
-
-  /* Custom scrollbar */
-  ::-webkit-scrollbar {
-    width: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background: oklch(0.97 0.015 80);
-  }
-  ::-webkit-scrollbar-thumb {
-    background: oklch(0.75 0.10 75);
-    border-radius: 3px;
-  }
-
-  /* Photo grid square */
-  .photo-square {
-    aspect-ratio: 1 / 1;
-    overflow: hidden;
-    position: relative;
-  }
-
-  .photo-square img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.6s ease;
-  }
-
-  .photo-square:hover img {
-    transform: scale(1.05);
-  }
-
-  /* Nav link underline animation */
-  .nav-link {
-    position: relative;
-  }
-
-  .nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 0;
-    height: 1px;
-    background: oklch(0.72 0.15 65);
-    transition: width 0.3s ease;
-  }
-
-  .nav-link:hover::after {
-    width: 100%;
-  }
+/* ── Typography ── */
+.font-display {
+  font-family: 'Cormorant Garamond', 'Georgia', serif;
+}
+.font-body {
+  font-family: 'Lato', 'Helvetica Neue', sans-serif;
 }
 
-/* Keyframe animations */
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* ── Color Utilities ── */
+.text-ink { color: #1C1410; }
+.text-taupe { color: #7A6552; }
+.text-saffron { color: #D4A853; }
+.text-sienna { color: #C4622D; }
+.text-champagne { color: #E8D9C0; }
+.bg-parchment { background-color: #FAF6F0; }
+.bg-ivory { background-color: #FFFDF8; }
+.bg-ink { background-color: #1C1410; }
+.bg-saffron { background-color: #D4A853; }
+.bg-sienna { background-color: #C4622D; }
+.bg-champagne { background-color: #E8D9C0; }
+.border-champagne { border-color: #E8D9C0; }
+.border-saffron { border-color: #D4A853; }
+.border-ink { border-color: #1C1410; }
+.hover\:bg-sienna:hover { background-color: #C4622D; }
+
+/* ── Photo Grid ── */
+.photo-square {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
 }
 
+/* ── Scroll Reveal Animations ── */
+.reveal,
+.reveal-left,
+.reveal-right,
+.reveal-scale {
+  opacity: 0;
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal { transform: translateY(40px); }
+.reveal-left { transform: translateX(-50px); }
+.reveal-right { transform: translateX(50px); }
+.reveal-scale { transform: scale(0.94); }
+
+.reveal.visible,
+.reveal-left.visible,
+.reveal-right.visible,
+.reveal-scale.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── Hero Entrance Animations ── */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
-
-@keyframes floatPetal {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-12px) rotate(8deg); }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes shimmer {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
-}
-
-.animate-fade-up {
-  animation: fadeUp 0.8s ease-out forwards;
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.6s ease-out forwards;
-}
-
-.animate-float {
-  animation: floatPetal 4s ease-in-out infinite;
-}
-
-/* Stagger delays */
-.delay-100 { animation-delay: 0.1s; }
+.animate-fade-in { animation: fadeIn 1.2s ease both; }
+.animate-fade-up { animation: fadeUp 1s cubic-bezier(0.22, 1, 0.36, 1) both; }
 .delay-200 { animation-delay: 0.2s; }
 .delay-300 { animation-delay: 0.3s; }
 .delay-400 { animation-delay: 0.4s; }
 .delay-500 { animation-delay: 0.5s; }
 .delay-600 { animation-delay: 0.6s; }
 .delay-700 { animation-delay: 0.7s; }
-.delay-800 { animation-delay: 0.8s; }
 
-/* Initially hidden for scroll animations */
-.reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
+/* ── Container ── */
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+.flex { min-height: 0; min-width: 0; }
+
+@media (min-width: 640px) {
+  .container { padding-left: 1.5rem; padding-right: 1.5rem; }
+}
+@media (min-width: 1024px) {
+  .container { padding-left: 2rem; padding-right: 2rem; max-width: 1280px; }
 }
 
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+/* ── Smooth scrolling ── */
+html { scroll-behavior: smooth; }
 
-.reveal-left {
-  opacity: 0;
-  transform: translateX(-30px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
-
-.reveal-left.visible {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.reveal-right {
-  opacity: 0;
-  transform: translateX(30px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
-
-.reveal-right.visible {
-  opacity: 1;
-  transform: translateX(0);
+/* ── Google Maps info window ── */
+.gm-style .gm-style-iw-c {
+  border-radius: 0 !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important;
 }
