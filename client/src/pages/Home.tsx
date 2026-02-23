@@ -269,25 +269,21 @@ function StorySection() {
       const totalScroll = section.offsetHeight - getVH();
       const progress = Math.max(0, Math.min(1, scrolled / totalScroll));
       const newIdx = Math.round(progress * (storyChapters.length - 1));
-      // If we're mid-programmatic scroll, only update when we reach the target
-      // to prevent intermediate scroll positions from confusing the wheel handler
-      if (targetIdxRef.current !== null) {
-        if (newIdx === targetIdxRef.current) targetIdxRef.current = null;
-        else {
-          // Still animating — update visual pan but don't change activeIdx
-          if (trackRef.current) {
-            const maxTranslate = trackRef.current.scrollWidth - window.innerWidth;
-            trackRef.current.style.transform = `translateX(-${progress * maxTranslate}px)`;
-          }
-          return;
-        }
-      }
-      setActiveIdx(newIdx);
+
+      // Always update inStory and visual pan — never skip these
       setInStory(scrolled > 0 && scrolled < totalScroll);
       if (trackRef.current) {
         const maxTranslate = trackRef.current.scrollWidth - window.innerWidth;
         trackRef.current.style.transform = `translateX(-${progress * maxTranslate}px)`;
       }
+
+      // Only skip activeIdx update while mid-programmatic scroll
+      // (prevents intermediate positions from confusing the wheel handler)
+      if (targetIdxRef.current !== null) {
+        if (newIdx === targetIdxRef.current) targetIdxRef.current = null;
+        else return; // still animating, don't update activeIdx
+      }
+      setActiveIdx(newIdx);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
 
