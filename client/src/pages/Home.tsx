@@ -221,16 +221,14 @@ function StorySection() {
   const activeIdxRef = useRef(0);
   activeIdxRef.current = activeIdx;
 
-  // Stable viewport height — visualViewport is more reliable on mobile
-  // (doesn't shrink when the browser chrome hides)
-  const getVH = () =>
-    (window.visualViewport ? window.visualViewport.height : window.innerHeight);
-
-  // Scroll to a specific chapter index within the story, or exit to events section
+  // Scroll to a specific chapter index within the story, or exit to events section.
+  // IMPORTANT: always use window.innerHeight (not visualViewport) so the value
+  // matches the CSS vh units used for the section height. This keeps scrollToChapter
+  // and onScroll in perfect sync.
   const scrollToChapter = (idx: number) => {
     const section = document.getElementById("story-scroll-section");
     if (!section) return;
-    const vh = getVH();
+    const vh = window.innerHeight;
     const sectionTop = section.getBoundingClientRect().top + window.scrollY;
     const totalScroll = section.offsetHeight - vh;
     if (idx >= storyChapters.length) {
@@ -241,9 +239,9 @@ function StorySection() {
       // Before first chapter — scroll above story section
       window.scrollTo({ top: sectionTop - vh, behavior: "smooth" });
     } else if (idx === storyChapters.length - 1) {
-      // Last chapter: scroll to exactly totalScroll so progress === 1.0
-      // Add a small buffer (4px) to ensure we clear the rounding threshold
-      window.scrollTo({ top: sectionTop + totalScroll + 4, behavior: "smooth" });
+      // Last chapter: overshoot by 20px so progress always reaches 1.0
+      // even if innerHeight fluctuates slightly during the smooth scroll
+      window.scrollTo({ top: sectionTop + totalScroll + 20, behavior: "smooth" });
     } else {
       // Scroll to the exact position that shows chapter idx
       const progress = idx / (storyChapters.length - 1);
@@ -350,8 +348,8 @@ function StorySection() {
         </div>
       </div>
 
-      <div id="story-scroll-section" style={{ height: `${storyChapters.length * 120}vh` }} className="relative">
-        <div className="sticky top-0 h-screen" style={{ overflow: "visible" }}>
+      <div id="story-scroll-section" style={{ height: `${storyChapters.length * 120}dvh` }} className="relative">
+        <div className="sticky top-0" style={{ height: '100dvh', overflow: 'visible' }}>
           {/* overflow:visible so the fixed side rail isn't clipped */}
 
           {/* ── MOBILE: cross-fade cards in place ── */}
