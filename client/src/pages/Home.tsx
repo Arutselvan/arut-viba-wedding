@@ -13,7 +13,7 @@ const LOGO_URL = "https://files.manuscdn.com/user_upload_by_module/session_file/
 const VENUE_PHOTO = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/UKFTelsfibbZjvzA.jpg";
 
 // Hero
-const HERO_ART = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/FifwgfeKPcnOBQcN.jpg";
+const HERO_ART = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/yipQgtjvEddTtziH.jpg";
 
 // Story chapter images
 const IMG_ASU = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/VJIXDMrqMmnSpTLU.jpg";
