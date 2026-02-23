@@ -187,234 +187,46 @@ const storyChapters = [
   },
 ];
 
-// ─── Mobile Story: pure swipe + tap, zero scroll dependency ───────────────────
-// This component is completely self-contained. It does NOT use window.scrollTo
-// or window.scrollY for chapter navigation, so it never interferes with the
-// rest of the page scroll on mobile.
-function MobileStory() {
-  const [idx, setIdx] = useState(0);
-  const touchStartY = useRef(0);
-  const touchStartX = useRef(0);
-
-  const goTo = (next: number) => {
-    setIdx(Math.max(0, Math.min(storyChapters.length - 1, next)));
-  };
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartY.current = e.touches[0].clientY;
-    touchStartX.current = e.touches[0].clientX;
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    const dy = touchStartY.current - e.changedTouches[0].clientY;
-    const dx = touchStartX.current - e.changedTouches[0].clientX;
-    // Only act on predominantly vertical swipes of ≥40px
-    if (Math.abs(dy) < 40 || Math.abs(dx) > Math.abs(dy)) return;
-    if (dy > 0) goTo(idx + 1);
-    else goTo(idx - 1);
-  };
-
-  const ch = storyChapters[idx];
-
-  return (
-    <section id="story" className="md:hidden bg-white">
-      {/* Section header */}
-      <div className="py-16 text-center">
-        <p className="font-body text-saffron tracking-[0.4em] uppercase text-xs mb-4">A Love Story</p>
-        <h2 className="font-display text-5xl text-ink font-light mb-4">Our Story</h2>
-        <div className="flex items-center justify-center gap-3 mb-6">
-          <div className="h-px w-16 bg-champagne" />
-          <div className="w-2 h-2 rounded-full bg-saffron opacity-60" />
-          <div className="h-px w-16 bg-champagne" />
-        </div>
-        <p className="font-body text-taupe max-w-xl mx-auto text-sm leading-relaxed px-6">
-          From the Tempe heat to the Bay Area fog — a love story written across time zones, red-eye flights, and a thousand "see you soon"s.
-        </p>
-        <p className="font-body text-taupe/50 text-xs mt-4 tracking-widest">↕ Swipe to journey through our story</p>
-      </div>
-
-      {/* Full-screen card — swipeable, no scroll dependency */}
-      <div
-        className={`relative w-full bg-gradient-to-b ${ch.bg} flex flex-col select-none`}
-        style={{ height: "100svh" }}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-      >
-        {/* Image top 45% */}
-        <div className="relative flex-shrink-0" style={{ height: "45%", paddingTop: "72px" }}>
-          <img src={ch.img} alt={ch.title} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/30" />
-          <div
-            className="absolute left-4 px-3 py-1 text-white text-xs font-body tracking-widest uppercase rounded-full"
-            style={{ background: ch.accent, top: "80px" }}
-          >
-            {ch.year}
-          </div>
-          <div className="absolute bottom-3 right-4 font-display text-6xl font-light leading-none select-none opacity-20 text-white">
-            {String(idx + 1).padStart(2, "0")}
-          </div>
-        </div>
-
-        {/* Text area */}
-        <div className="flex-1 px-6 pt-5 pb-24 overflow-auto">
-          <p className="font-body text-xs tracking-[0.2em] uppercase text-taupe mb-1">{ch.city}</p>
-          <h3 className="font-display text-3xl text-ink font-light mb-3 leading-tight">{ch.title}</h3>
-          <div className="h-px w-10 mb-3" style={{ background: ch.accent }} />
-          <p className="font-body text-taupe text-sm leading-relaxed">{ch.desc}</p>
-        </div>
-
-        {/* Bottom nav: dots + arrows */}
-        <div
-          className="absolute bottom-0 inset-x-0 flex items-center justify-between px-6 z-10"
-          style={{ paddingBottom: "max(env(safe-area-inset-bottom, 0px), 16px)", paddingTop: "8px" }}
-        >
-          {/* Dots */}
-          <div className="flex gap-2 items-center">
-            {storyChapters.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => goTo(i)}
-                className="rounded-full transition-all duration-300"
-                style={{
-                  width: i === idx ? 20 : 8,
-                  height: 8,
-                  background: i === idx ? ch.accent : `${ch.accent}40`,
-                }}
-              />
-            ))}
-          </div>
-          {/* Arrows */}
-          <div className="flex gap-2 items-center">
-            {idx > 0 && (
-              <button onClick={() => goTo(idx - 1)} className="p-2 rounded-full" aria-label="Previous">
-                <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-                  <circle cx="14" cy="14" r="13" stroke={ch.accent} strokeWidth="1" opacity="0.4"/>
-                  <path d="M9 16L14 11L19 16" stroke={ch.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </button>
-            )}
-            {idx < storyChapters.length - 1 ? (
-              <button onClick={() => goTo(idx + 1)} className="p-2 rounded-full" aria-label="Next">
-                <svg className="animate-bounce" width="28" height="28" viewBox="0 0 28 28" fill="none">
-                  <circle cx="14" cy="14" r="13" stroke={ch.accent} strokeWidth="1" opacity="0.4"/>
-                  <path d="M9 12L14 17L19 12" stroke={ch.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </button>
-            ) : (
-              <a
-                href="#events"
-                className="p-2 rounded-full flex items-center gap-1 font-body text-xs tracking-widest uppercase"
-                style={{ color: ch.accent }}
-              >
-                Continue
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M4 7L8 11L12 7" stroke={ch.accent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </a>
-            )}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ─── Desktop Story: scroll-driven horizontal pan ───────────────────────────────
-// Only renders on md+ screens. onScroll and onWheel listeners are only attached
-// when window width ≥ 768px, so they never affect mobile scroll behaviour.
-function DesktopStory() {
-  const trackRef = useRef<HTMLDivElement>(null);
+// ─── Story Section: CSS scroll-snap carousel ─────────────────────────────────
+// One component, all devices. The browser handles everything natively:
+//   • Touch: native swipe + momentum (iOS/Android)
+//   • Trackpad: two-finger swipe
+//   • Mouse wheel: scroll
+//   • Keyboard: arrow keys via scrollIntoView on prev/next buttons
+// Zero window.scrollY math. Zero scroll-hijacking. Zero viewport hacks.
+function StorySection() {
   const [activeIdx, setActiveIdx] = useState(0);
-  const [inStory, setInStory] = useState(false);
-  const activeIdxRef = useRef(0);
-  activeIdxRef.current = activeIdx;
-  // deltaY accumulator: sum events across a gesture, advance on threshold
-  const wheelAccum = useRef(0);
-  const wheelLocked = useRef(false);
-  const targetIdxRef = useRef<number | null>(null);
+  const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const trackRef = useRef<HTMLDivElement>(null);
 
-  const getVH = () => document.documentElement.clientHeight;
-
-  const scrollToChapter = (idx: number) => {
-    const section = document.getElementById("story-scroll-section-desktop");
-    if (!section) return;
-    const vh = getVH();
-    const sectionTop = section.getBoundingClientRect().top + window.scrollY;
-    const totalScroll = section.offsetHeight - vh;
-    targetIdxRef.current = idx;
-    if (idx >= storyChapters.length) {
-      window.scrollTo({ top: sectionTop + totalScroll + vh + 10, behavior: "smooth" });
-    } else if (idx < 0) {
-      window.scrollTo({ top: sectionTop - vh, behavior: "smooth" });
-    } else if (idx === storyChapters.length - 1) {
-      window.scrollTo({ top: sectionTop + totalScroll, behavior: "smooth" });
-    } else {
-      const progress = idx / (storyChapters.length - 1);
-      window.scrollTo({ top: sectionTop + progress * totalScroll, behavior: "smooth" });
-    }
-  };
-
+  // Track which slide is visible using IntersectionObserver on the track
   useEffect(() => {
-    // Only attach scroll/wheel listeners on desktop (≥768px)
-    if (!window.matchMedia("(min-width: 768px)").matches) return;
-    const section = document.getElementById("story-scroll-section-desktop");
-    if (!section) return;
-
-    const onScroll = () => {
-      const sectionTop = section.getBoundingClientRect().top + window.scrollY;
-      const scrolled = window.scrollY - sectionTop;
-      const totalScroll = section.offsetHeight - getVH();
-      const progress = Math.max(0, Math.min(1, scrolled / totalScroll));
-      const newIdx = Math.round(progress * (storyChapters.length - 1));
-
-      // Always update inStory and visual pan
-      setInStory(scrolled > 0 && scrolled < totalScroll);
-      if (trackRef.current) {
-        const maxTranslate = trackRef.current.scrollWidth - window.innerWidth;
-        trackRef.current.style.transform = `translateX(-${progress * maxTranslate}px)`;
-      }
-
-      // Only skip activeIdx update while mid-programmatic scroll
-      if (targetIdxRef.current !== null) {
-        if (newIdx === targetIdxRef.current) targetIdxRef.current = null;
-        else return;
-      }
-      setActiveIdx(newIdx);
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-
-    const THRESHOLD = 80;
-    const onWheel = (e: WheelEvent) => {
-      const sectionTop = section.getBoundingClientRect().top + window.scrollY;
-      const scrolled = window.scrollY - sectionTop;
-      const totalScroll = section.offsetHeight - getVH();
-      const vh = getVH();
-      if (scrolled < -vh * 0.1 || scrolled > totalScroll + vh * 0.1) return;
-      const cur = activeIdxRef.current;
-      if (e.deltaY < 0 && cur === 0 && scrolled <= 0) return;
-      if (e.deltaY > 0 && cur === storyChapters.length - 1 && scrolled >= totalScroll) return;
-      e.preventDefault();
-      if (wheelLocked.current) return;
-      wheelAccum.current += e.deltaY;
-      if (Math.abs(wheelAccum.current) < THRESHOLD) return;
-      const direction = wheelAccum.current > 0 ? 1 : -1;
-      wheelAccum.current = 0;
-      wheelLocked.current = true;
-      scrollToChapter(cur + direction);
-      setTimeout(() => { wheelLocked.current = false; }, 800);
-    };
-    window.addEventListener("wheel", onWheel, { passive: false });
-
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("wheel", onWheel);
-    };
+    const track = trackRef.current;
+    if (!track) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const i = slideRefs.current.indexOf(entry.target as HTMLDivElement);
+            if (i !== -1) setActiveIdx(i);
+          }
+        });
+      },
+      { root: track, threshold: 0.6 }
+    );
+    slideRefs.current.forEach((el) => { if (el) observer.observe(el); });
+    return () => observer.disconnect();
   }, []);
 
+  const goTo = (i: number) => {
+    const el = slideRefs.current[i];
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
+  };
+
   return (
-    <section id="story-desktop" className="hidden md:block bg-white">
+    <section id="story" className="bg-white">
       {/* Section header */}
-      <div className="py-20 text-center reveal">
+      <div className="py-16 md:py-20 text-center reveal">
         <p className="font-body text-saffron tracking-[0.4em] uppercase text-xs mb-4">A Love Story</p>
         <h2 className="font-display text-5xl md:text-6xl text-ink font-light mb-4">Our Story</h2>
         <div className="flex items-center justify-center gap-3 mb-6">
@@ -425,91 +237,139 @@ function DesktopStory() {
         <p className="font-body text-taupe max-w-xl mx-auto text-sm leading-relaxed px-6">
           From the Tempe heat to the Bay Area fog — a love story written across time zones, red-eye flights, and a thousand "see you soon"s.
         </p>
-        <p className="font-body text-taupe/50 text-xs mt-5 tracking-widest animate-pulse">↓ Scroll to journey through our story</p>
       </div>
 
-      {/* Side progress rail */}
+      {/* Scroll-snap track: horizontal, one slide = 100vw × 100svh */}
       <div
-        className="sticky top-1/2 -translate-y-1/2 z-30 pointer-events-none transition-opacity duration-500"
-        style={{ marginLeft: "calc(100% - 2.5rem)", height: 0, opacity: inStory ? 1 : 0 }}
+        ref={trackRef}
+        className="relative story-snap-track"
+        style={{
+          display: "flex",
+          overflowX: "auto",
+          overflowY: "hidden",
+          scrollSnapType: "x mandatory",
+          scrollBehavior: "smooth",
+          WebkitOverflowScrolling: "touch",
+          msOverflowStyle: "none",
+          scrollbarWidth: "none",
+          height: "100svh",
+        }}
       >
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 flex flex-col items-end gap-3 pr-3">
-          {storyChapters.map((ch, i) => (
-            <div key={i} className="flex items-center gap-2">
-              <div
-                className={`rounded-full transition-all duration-500 shadow-sm ${i === activeIdx ? "w-3 h-3" : "w-2 h-2 opacity-40"}`}
-                style={{ background: i === activeIdx ? ch.accent : "#D4A853", boxShadow: i === activeIdx ? `0 0 8px ${ch.accent}80` : "none" }}
-              />
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div id="story-scroll-section-desktop" style={{ height: `${storyChapters.length * 120}dvh` }} className="relative">
-        <div className="sticky top-0" style={{ height: "100dvh", overflow: "visible" }}>
+        {storyChapters.map((ch, i) => (
           <div
-            ref={trackRef}
-            className="flex h-full will-change-transform"
-            style={{ transition: "transform 0.08s linear", width: `${storyChapters.length * 100}vw` }}
+            key={i}
+            ref={(el) => { slideRefs.current[i] = el; }}
+            className={`relative flex-shrink-0 bg-gradient-to-br ${ch.bg} flex flex-col md:flex-row md:items-center`}
+            style={{
+              width: "100vw",
+              height: "100svh",
+              scrollSnapAlign: "start",
+              scrollSnapStop: "always",
+            }}
           >
-            {storyChapters.map((chapter, i) => (
-              <div key={i} className={`relative flex-shrink-0 w-screen h-screen bg-gradient-to-br ${chapter.bg} flex items-center pt-20`}>
-                <div className="max-w-6xl mx-auto px-8 md:px-16 w-full grid md:grid-cols-2 gap-8 md:gap-16 items-center">
-                  <div className={`${i % 2 === 0 ? "md:order-2" : "md:order-1"} flex justify-center`}>
-                    <div className="relative">
-                      <div className="absolute -inset-3 border opacity-20 rounded-sm" style={{ borderColor: chapter.accent }} />
-                      <div className="absolute -inset-1.5 border opacity-10 rounded-sm" style={{ borderColor: chapter.accent }} />
-                      <img
-                        src={chapter.img}
-                        alt={chapter.title}
-                        className="w-72 h-72 md:w-96 md:h-96 object-cover shadow-2xl"
-                        style={{ boxShadow: `0 25px 60px ${chapter.accent}30` }}
-                      />
-                      <div
-                        className="absolute -bottom-4 -right-4 font-display text-7xl font-light leading-none select-none pointer-events-none opacity-10"
-                        style={{ color: chapter.accent }}
-                      >
-                        {String(i + 1).padStart(2, "0")}
-                      </div>
-                    </div>
-                  </div>
-                  <div className={`${i % 2 === 0 ? "md:order-1" : "md:order-2"}`}>
-                    <p className="font-body text-xs tracking-[0.4em] uppercase mb-1" style={{ color: chapter.accent }}>{chapter.year}</p>
-                    <p className="font-body text-xs tracking-[0.2em] uppercase text-taupe mb-4">{chapter.city}</p>
-                    <h3 className="font-display text-4xl md:text-5xl text-ink font-light mb-5 leading-tight">{chapter.title}</h3>
-                    <div className="h-px w-12 mb-5" style={{ background: chapter.accent }} />
-                    <p className="font-body text-taupe text-sm md:text-base leading-relaxed">{chapter.desc}</p>
-                  </div>
-                </div>
-                {/* Desktop nav buttons */}
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4">
-                  {i > 0 && (
-                    <button
-                      onClick={() => scrollToChapter(i - 1)}
-                      className="p-2 rounded-full transition-all duration-200 hover:scale-125 active:scale-95"
-                      aria-label="Previous chapter"
-                    >
-                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                        <circle cx="16" cy="16" r="15" stroke={chapter.accent} strokeWidth="1" opacity="0.3"/>
-                        <path d="M10 18L16 12L22 18" stroke={chapter.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </button>
-                  )}
-                  <button
-                    onClick={() => scrollToChapter(i + 1)}
-                    className="p-2 rounded-full transition-all duration-200 hover:scale-125 active:scale-95"
-                    aria-label={i < storyChapters.length - 1 ? "Next chapter" : "Continue to Celebrations"}
-                  >
-                    <svg className="animate-bounce" width="32" height="32" viewBox="0 0 32 32" fill="none">
-                      <circle cx="16" cy="16" r="15" stroke={chapter.accent} strokeWidth="1" opacity="0.3"/>
-                      <path d="M10 14L16 20L22 14" stroke={chapter.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </button>
+            {/* ── Mobile layout: image top, text bottom ── */}
+            <div className="md:hidden flex flex-col h-full">
+              {/* Image */}
+              <div className="relative flex-shrink-0" style={{ height: "45%", paddingTop: "72px" }}>
+                <img src={ch.img} alt={ch.title} className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/25" />
+                <div
+                  className="absolute left-4 px-3 py-1 text-white text-xs font-body tracking-widest uppercase rounded-full"
+                  style={{ background: ch.accent, top: "80px" }}
+                >
+                  {ch.year}
                 </div>
               </div>
-            ))}
+              {/* Text */}
+              <div className="flex-1 px-6 pt-5 pb-4 overflow-auto">
+                <p className="font-body text-xs tracking-[0.2em] uppercase text-taupe mb-1">{ch.city}</p>
+                <h3 className="font-display text-3xl text-ink font-light mb-3 leading-tight">{ch.title}</h3>
+                <div className="h-px w-10 mb-3" style={{ background: ch.accent }} />
+                <p className="font-body text-taupe text-sm leading-relaxed">{ch.desc}</p>
+              </div>
+            </div>
+
+            {/* ── Desktop layout: image left/right, text right/left ── */}
+            <div className="hidden md:flex w-full h-full items-center pt-20">
+              <div className="max-w-6xl mx-auto px-16 w-full grid grid-cols-2 gap-16 items-center">
+                <div className={`${i % 2 === 0 ? "order-2" : "order-1"} flex justify-center`}>
+                  <div className="relative">
+                    <div className="absolute -inset-3 border opacity-20" style={{ borderColor: ch.accent }} />
+                    <img
+                      src={ch.img}
+                      alt={ch.title}
+                      className="w-96 h-96 object-cover shadow-2xl"
+                      style={{ boxShadow: `0 25px 60px ${ch.accent}30` }}
+                    />
+                    <div
+                      className="absolute -bottom-4 -right-4 font-display text-7xl font-light leading-none select-none pointer-events-none opacity-10"
+                      style={{ color: ch.accent }}
+                    >
+                      {String(i + 1).padStart(2, "0")}
+                    </div>
+                  </div>
+                </div>
+                <div className={i % 2 === 0 ? "order-1" : "order-2"}>
+                  <p className="font-body text-xs tracking-[0.4em] uppercase mb-1" style={{ color: ch.accent }}>{ch.year}</p>
+                  <p className="font-body text-xs tracking-[0.2em] uppercase text-taupe mb-4">{ch.city}</p>
+                  <h3 className="font-display text-5xl text-ink font-light mb-5 leading-tight">{ch.title}</h3>
+                  <div className="h-px w-12 mb-5" style={{ background: ch.accent }} />
+                  <p className="font-body text-taupe text-base leading-relaxed">{ch.desc}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* ── Nav: dots + prev/next (shared mobile + desktop) ── */}
+            <div
+              className="absolute bottom-0 inset-x-0 flex items-center justify-between px-6 z-20"
+              style={{ paddingBottom: "max(env(safe-area-inset-bottom, 0px), 16px)", paddingTop: "8px" }}
+            >
+              {/* Dot indicators */}
+              <div className="flex gap-2 items-center">
+                {storyChapters.map((_, di) => (
+                  <button
+                    key={di}
+                    onClick={() => goTo(di)}
+                    aria-label={`Go to chapter ${di + 1}`}
+                    className="rounded-full transition-all duration-300"
+                    style={{
+                      width: di === activeIdx ? 20 : 8,
+                      height: 8,
+                      background: di === activeIdx ? ch.accent : `${ch.accent}40`,
+                    }}
+                  />
+                ))}
+              </div>
+              {/* Prev / Next / Continue */}
+              <div className="flex gap-2 items-center">
+                {i > 0 && (
+                  <button onClick={() => goTo(i - 1)} className="p-2" aria-label="Previous chapter">
+                    <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+                      <circle cx="15" cy="15" r="14" stroke={ch.accent} strokeWidth="1" opacity="0.4" />
+                      <path d="M10 17L15 12L20 17" stroke={ch.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+                )}
+                {i < storyChapters.length - 1 ? (
+                  <button onClick={() => goTo(i + 1)} className="p-2" aria-label="Next chapter">
+                    <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+                      <circle cx="15" cy="15" r="14" stroke={ch.accent} strokeWidth="1" opacity="0.4" />
+                      <path d="M10 13L15 18L20 13" stroke={ch.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+                ) : (
+                  <a
+                    href="#events"
+                    className="flex items-center gap-1 font-body text-xs tracking-widest uppercase px-3 py-2"
+                    style={{ color: ch.accent }}
+                  >
+                    Continue ↓
+                  </a>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
     </section>
   );
@@ -750,10 +610,7 @@ export default function Home() {
     <div className="min-h-screen bg-white">
       <Navigation />
       <HeroSection />
-      {/* Mobile story: pure swipe+tap, no scroll dependency */}
-      <MobileStory />
-      {/* Desktop story: scroll-driven horizontal pan, listeners only on md+ */}
-      <DesktopStory />
+      <StorySection />
       <EventsSection />
       <VenueSection />
       <RSVPSection />

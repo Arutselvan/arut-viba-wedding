@@ -173,3 +173,8 @@ html { scroll-behavior: smooth; }
   border-radius: 0 !important;
   box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important;
 }
+
+/* Hide scrollbar on story scroll-snap track */
+.story-snap-track::-webkit-scrollbar {
+  display: none;
+}
