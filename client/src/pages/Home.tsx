@@ -194,6 +194,14 @@ function StorySection() {
   const trackRef = useRef<HTMLDivElement>(null);
   const [activeIdx, setActiveIdx] = useState(0);
 
+  const scrollToNextSection = () => {
+    const section = document.getElementById("story-scroll-section");
+    if (!section) return;
+    // Scroll to just past the end of the story section
+    const target = section.getBoundingClientRect().top + window.scrollY + section.offsetHeight + 10;
+    window.scrollTo({ top: target, behavior: "smooth" });
+  };
+
   // Unified scroll-driven approach: works on both mobile and desktop.
   // The section has a tall scroll height so all chapters are naturally
   // encountered as the user scrolls. On desktop the card slides horizontally;
@@ -301,7 +309,17 @@ function StorySection() {
                   <p className="font-body text-taupe text-sm leading-relaxed">{chapter.desc}</p>
                 </div>
                 {/* Persistent animated scroll cue at the very bottom of every card */}
-                <div className="absolute bottom-0 inset-x-0 flex flex-col items-center pb-4 pointer-events-none">
+                <div className="absolute bottom-0 inset-x-0 flex flex-col items-center pb-4" style={{ pointerEvents: i === storyChapters.length - 1 ? "auto" : "none" }}>
+                  {/* Skip button — only on last chapter */}
+                  {i === storyChapters.length - 1 && (
+                    <button
+                      onClick={scrollToNextSection}
+                      className="mb-3 px-5 py-2 rounded-full font-body text-xs tracking-widest uppercase text-white transition-all duration-300 hover:scale-105 active:scale-95"
+                      style={{ background: chapter.accent, boxShadow: `0 4px 16px ${chapter.accent}50` }}
+                    >
+                      Continue to Celebrations ↓
+                    </button>
+                  )}
                   <p className="font-body text-[10px] tracking-[0.3em] uppercase mb-1" style={{ color: chapter.accent, opacity: 0.7 }}>
                     {i < storyChapters.length - 1 ? `${i + 1} of ${storyChapters.length} · Keep scrolling` : "End of story · Keep scrolling"}
                   </p>
@@ -339,7 +357,17 @@ function StorySection() {
                   </div>
                 </div>
                 {/* Bottom scroll cue */}
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 pointer-events-none">
+                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1" style={{ pointerEvents: i === storyChapters.length - 1 ? "auto" : "none" }}>
+                  {/* Skip button — only on last chapter */}
+                  {i === storyChapters.length - 1 && (
+                    <button
+                      onClick={scrollToNextSection}
+                      className="mb-2 px-6 py-2.5 rounded-full font-body text-xs tracking-widest uppercase text-white transition-all duration-300 hover:scale-105 active:scale-95"
+                      style={{ background: chapter.accent, boxShadow: `0 4px 20px ${chapter.accent}50` }}
+                    >
+                      Continue to Celebrations ↓
+                    </button>
+                  )}
                   <p className="font-body text-[10px] tracking-[0.3em] uppercase" style={{ color: chapter.accent, opacity: 0.6 }}>
                     {i < storyChapters.length - 1 ? `${i + 1} of ${storyChapters.length} · Scroll to continue` : "End of story · Scroll to continue"}
                   </p>
