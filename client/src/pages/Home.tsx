@@ -13,7 +13,7 @@ const LOGO_URL = "https://files.manuscdn.com/user_upload_by_module/session_file/
 const VENUE_PHOTO = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/UKFTelsfibbZjvzA.jpg";
 
 // Hero
-const HERO_ART = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/yipQgtjvEddTtziH.jpg";
+const HERO_ART = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/uOLELpieAzNYtnOM.jpg";
 
 // Story chapter images
 const IMG_ASU = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/VJIXDMrqMmnSpTLU.jpg";
@@ -119,27 +119,22 @@ function HeroSection() {
      */
     <section id="top" className="relative" style={{ height: "100svh", minHeight: 600 }}>
 
-      {/* Single full-bleed art image — anchored bottom so couple is never cropped */}
+      {/* Single full-bleed art image — v6 has scene in bottom-right, sky in top-left
+          object-position: right bottom keeps the couple always visible */}
       <img
         src={HERO_ART}
         alt="Arut & Viba wedding ceremony"
         className="absolute inset-0 w-full h-full"
-        style={{ objectFit: "cover", objectPosition: "center bottom" }}
+        style={{ objectFit: "cover", objectPosition: "right bottom" }}
       />
 
-      {/* Nav bar clearance gradient — only the very top strip, just enough to keep
-          the nav links readable over any stray watercolor bleed */}
-      <div
-        className="absolute inset-x-0 top-0"
-        style={{ height: "72px", background: "linear-gradient(to bottom, rgba(255,252,245,0.55) 0%, transparent 100%)" }}
-      />
-
-      {/* Soft sky-zone overlay — ensures text is always readable regardless of viewport aspect ratio */}
+      {/* Very light overlay over the sky area — the sky in v6 is genuinely clear
+          so this is just a subtle tint to ensure text contrast on all displays */}
       <div
         className="absolute inset-x-0 top-0"
         style={{
-          height: "65%",
-          background: "linear-gradient(to bottom, rgba(255,253,250,0.88) 0%, rgba(255,253,250,0.82) 30%, rgba(255,253,250,0.60) 55%, rgba(255,253,250,0.15) 75%, transparent 100%)",
+          height: "70%",
+          background: "linear-gradient(to bottom, rgba(255,254,252,0.72) 0%, rgba(255,254,252,0.60) 40%, rgba(255,254,252,0.20) 70%, transparent 100%)",
           pointerEvents: "none",
         }}
       />
