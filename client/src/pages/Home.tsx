@@ -1,4 +1,4 @@
-/**
+/*
  * DESIGN SYSTEM: "Ink & Marigold"
  * Romantic South Asian Editorial — ivory parchment, saffron gold, deep charcoal
  * Typography: Cormorant Garamond (display) + Lato (body)
@@ -108,27 +108,13 @@ function Navigation() {
 // ─── Hero ──────────────────────────────────────────────────────────────────────
 function HeroSection() {
   return (
-    /*
-     * Hero strategy: single full-bleed watercolor image.
-     * The image has a large clear sky/white zone in the top ~35% of the canvas.
-     * We use object-fit:cover + object-position:center bottom so the image always
-     * fills the viewport anchored at the bottom (couple & mandap always visible).
-     * All text is absolutely positioned inside the top 40vh — always in the sky.
-     * The countdown is placed at ~38vh so it sits just below the text block.
-     * No gradient overlay needed — the sky is naturally light enough.
-     */
     <section id="top" className="relative" style={{ height: "100svh", minHeight: 600 }}>
-
-      {/* Single full-bleed art image — v6 has scene in bottom-right, sky in top-left
-          object-position: right bottom keeps the couple always visible */}
       <img
         src={HERO_ART}
         alt="Arut & Viba wedding ceremony"
         className="absolute inset-0 w-full h-full"
         style={{ objectFit: "cover", objectPosition: "center bottom" }}
       />
-
-      {/* Subtle sky overlay — v13 has a clear pale blue sky in top 80%, just a light tint for text legibility */}
       <div
         className="absolute inset-x-0 top-0"
         style={{
@@ -137,42 +123,31 @@ function HeroSection() {
           pointerEvents: "none",
         }}
       />
-
-      {/* ── TEXT BLOCK: absolutely positioned in the sky zone (top 8vh) ── */}
       <div
         className="absolute inset-x-0 z-10 flex flex-col items-center text-center px-4"
         style={{ top: "8vh" }}
       >
-        {/* Logo */}
         <div className="animate-fade-in" style={{ marginBottom: "-8px" }}>
           <img src={LOGO_URL} alt="A&V monogram" className="w-24 h-24 md:w-32 md:h-32 lg:w-36 lg:h-36 mx-auto drop-shadow-sm" />
         </div>
-        {/* Hashtag */}
         <p className="font-display text-base md:text-lg italic text-saffron animate-fade-up delay-100 leading-none mb-2">#aruvi</p>
-        {/* Sub-tagline */}
         <p className="font-body text-ink/65 tracking-[0.4em] uppercase text-[10px] md:text-xs mb-2 animate-fade-up delay-200">
           Together with their families
         </p>
-        {/* Names */}
         <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-light text-ink mb-2 animate-fade-up delay-300 leading-none">
           Arut <em className="text-saffron not-italic">&</em> Viba
         </h1>
-        {/* Tagline */}
         <div className="flex items-center justify-center gap-3 mb-2 animate-fade-up delay-400">
           <div className="h-px w-10 bg-ink/20" />
           <p className="font-display text-sm md:text-base text-ink/55 italic">request the honour of your presence</p>
           <div className="h-px w-10 bg-ink/20" />
         </div>
-        {/* Date & venue */}
         <p className="font-body text-ink/65 tracking-[0.28em] uppercase text-[10px] md:text-xs mb-0.5 animate-fade-up delay-500">23rd – 24th January 2027</p>
         <p className="font-body text-ink/55 tracking-[0.18em] uppercase text-[10px] md:text-xs mb-4 animate-fade-up delay-500">MGM Beach Resorts · Chennai, Tamil Nadu</p>
-        {/* Countdown — frosted glass pill */}
         <div className="animate-fade-up delay-600 bg-white/75 backdrop-blur-md px-6 md:px-8 py-3 md:py-4 border border-white/60 shadow-md">
           <Countdown />
         </div>
       </div>
-
-      {/* Scroll indicator */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce z-10">
         <svg width="20" height="30" viewBox="0 0 24 36" fill="none" className="opacity-35">
           <rect x="1" y="1" width="22" height="34" rx="11" stroke="#7A6552" strokeWidth="1.5"/>
@@ -183,7 +158,7 @@ function HeroSection() {
   );
 }
 
-// ─── Story Section — Cinematic Horizontal Scroll ───────────────────────────────
+// ─── Story Chapter Data ────────────────────────────────────────────────────────
 const storyChapters = [
   {
     year: "2022", city: "Tempe, Arizona", title: "Where It All Began",
@@ -212,37 +187,160 @@ const storyChapters = [
   },
 ];
 
-function StorySection() {
+// ─── Mobile Story: pure swipe + tap, zero scroll dependency ───────────────────
+// This component is completely self-contained. It does NOT use window.scrollTo
+// or window.scrollY for chapter navigation, so it never interferes with the
+// rest of the page scroll on mobile.
+function MobileStory() {
+  const [idx, setIdx] = useState(0);
+  const touchStartY = useRef(0);
+  const touchStartX = useRef(0);
+
+  const goTo = (next: number) => {
+    setIdx(Math.max(0, Math.min(storyChapters.length - 1, next)));
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartY.current = e.touches[0].clientY;
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const dy = touchStartY.current - e.changedTouches[0].clientY;
+    const dx = touchStartX.current - e.changedTouches[0].clientX;
+    // Only act on predominantly vertical swipes of ≥40px
+    if (Math.abs(dy) < 40 || Math.abs(dx) > Math.abs(dy)) return;
+    if (dy > 0) goTo(idx + 1);
+    else goTo(idx - 1);
+  };
+
+  const ch = storyChapters[idx];
+
+  return (
+    <section id="story" className="md:hidden bg-white">
+      {/* Section header */}
+      <div className="py-16 text-center">
+        <p className="font-body text-saffron tracking-[0.4em] uppercase text-xs mb-4">A Love Story</p>
+        <h2 className="font-display text-5xl text-ink font-light mb-4">Our Story</h2>
+        <div className="flex items-center justify-center gap-3 mb-6">
+          <div className="h-px w-16 bg-champagne" />
+          <div className="w-2 h-2 rounded-full bg-saffron opacity-60" />
+          <div className="h-px w-16 bg-champagne" />
+        </div>
+        <p className="font-body text-taupe max-w-xl mx-auto text-sm leading-relaxed px-6">
+          From the Tempe heat to the Bay Area fog — a love story written across time zones, red-eye flights, and a thousand "see you soon"s.
+        </p>
+        <p className="font-body text-taupe/50 text-xs mt-4 tracking-widest">↕ Swipe to journey through our story</p>
+      </div>
+
+      {/* Full-screen card — swipeable, no scroll dependency */}
+      <div
+        className={`relative w-full bg-gradient-to-b ${ch.bg} flex flex-col select-none`}
+        style={{ height: "100svh" }}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        {/* Image top 45% */}
+        <div className="relative flex-shrink-0" style={{ height: "45%", paddingTop: "72px" }}>
+          <img src={ch.img} alt={ch.title} className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/30" />
+          <div
+            className="absolute left-4 px-3 py-1 text-white text-xs font-body tracking-widest uppercase rounded-full"
+            style={{ background: ch.accent, top: "80px" }}
+          >
+            {ch.year}
+          </div>
+          <div className="absolute bottom-3 right-4 font-display text-6xl font-light leading-none select-none opacity-20 text-white">
+            {String(idx + 1).padStart(2, "0")}
+          </div>
+        </div>
+
+        {/* Text area */}
+        <div className="flex-1 px-6 pt-5 pb-24 overflow-auto">
+          <p className="font-body text-xs tracking-[0.2em] uppercase text-taupe mb-1">{ch.city}</p>
+          <h3 className="font-display text-3xl text-ink font-light mb-3 leading-tight">{ch.title}</h3>
+          <div className="h-px w-10 mb-3" style={{ background: ch.accent }} />
+          <p className="font-body text-taupe text-sm leading-relaxed">{ch.desc}</p>
+        </div>
+
+        {/* Bottom nav: dots + arrows */}
+        <div
+          className="absolute bottom-0 inset-x-0 flex items-center justify-between px-6 z-10"
+          style={{ paddingBottom: "max(env(safe-area-inset-bottom, 0px), 16px)", paddingTop: "8px" }}
+        >
+          {/* Dots */}
+          <div className="flex gap-2 items-center">
+            {storyChapters.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => goTo(i)}
+                className="rounded-full transition-all duration-300"
+                style={{
+                  width: i === idx ? 20 : 8,
+                  height: 8,
+                  background: i === idx ? ch.accent : `${ch.accent}40`,
+                }}
+              />
+            ))}
+          </div>
+          {/* Arrows */}
+          <div className="flex gap-2 items-center">
+            {idx > 0 && (
+              <button onClick={() => goTo(idx - 1)} className="p-2 rounded-full" aria-label="Previous">
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                  <circle cx="14" cy="14" r="13" stroke={ch.accent} strokeWidth="1" opacity="0.4"/>
+                  <path d="M9 16L14 11L19 16" stroke={ch.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+            )}
+            {idx < storyChapters.length - 1 ? (
+              <button onClick={() => goTo(idx + 1)} className="p-2 rounded-full" aria-label="Next">
+                <svg className="animate-bounce" width="28" height="28" viewBox="0 0 28 28" fill="none">
+                  <circle cx="14" cy="14" r="13" stroke={ch.accent} strokeWidth="1" opacity="0.4"/>
+                  <path d="M9 12L14 17L19 12" stroke={ch.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+            ) : (
+              <a
+                href="#events"
+                className="p-2 rounded-full flex items-center gap-1 font-body text-xs tracking-widest uppercase"
+                style={{ color: ch.accent }}
+              >
+                Continue
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M4 7L8 11L12 7" stroke={ch.accent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Desktop Story: scroll-driven horizontal pan ───────────────────────────────
+// Only renders on md+ screens. onScroll and onWheel listeners are only attached
+// when window width ≥ 768px, so they never affect mobile scroll behaviour.
+function DesktopStory() {
   const trackRef = useRef<HTMLDivElement>(null);
   const [activeIdx, setActiveIdx] = useState(0);
   const [inStory, setInStory] = useState(false);
   const activeIdxRef = useRef(0);
   activeIdxRef.current = activeIdx;
-  // Wheel accumulator: sum deltaY across a gesture; fire when threshold crossed.
-  // Resets after each chapter advance. This correctly handles both mouse wheels
-  // (large deltaY per event) and trackpads (many small deltaY events per gesture).
+  // deltaY accumulator: sum events across a gesture, advance on threshold
   const wheelAccum = useRef(0);
-  const wheelLocked = useRef(false); // true while smooth-scrolling to next chapter
-  // Track the chapter we're programmatically scrolling TO so onScroll
-  // doesn't update activeIdx mid-animation and confuse the next wheel event
+  const wheelLocked = useRef(false);
   const targetIdxRef = useRef<number | null>(null);
 
-  // Scroll to a specific chapter index within the story, or exit to events section.
-  // IMPORTANT: always use window.innerHeight (not visualViewport) so the value
-  // matches the CSS vh units used for the section height. This keeps scrollToChapter
-  // and onScroll in perfect sync.
-  // Use document.documentElement.clientHeight — this is stable and always matches
-  // CSS dvh units. Unlike window.innerHeight it does NOT change when the mobile
-  // browser chrome (address bar) hides/shows, preventing the last-chapter shift.
   const getVH = () => document.documentElement.clientHeight;
 
   const scrollToChapter = (idx: number) => {
-    const section = document.getElementById("story-scroll-section");
+    const section = document.getElementById("story-scroll-section-desktop");
     if (!section) return;
     const vh = getVH();
     const sectionTop = section.getBoundingClientRect().top + window.scrollY;
     const totalScroll = section.offsetHeight - vh;
-    // Record where we're heading so onScroll doesn't interfere mid-animation
     targetIdxRef.current = idx;
     if (idx >= storyChapters.length) {
       window.scrollTo({ top: sectionTop + totalScroll + vh + 10, behavior: "smooth" });
@@ -256,13 +354,12 @@ function StorySection() {
     }
   };
 
-  // Unified scroll-driven approach: works on both mobile and desktop.
-  // The section has a tall scroll height so all chapters are naturally
-  // encountered as the user scrolls. On desktop the card slides horizontally;
-  // on mobile the card cross-fades in place.
   useEffect(() => {
-    const section = document.getElementById("story-scroll-section");
+    // Only attach scroll/wheel listeners on desktop (≥768px)
+    if (!window.matchMedia("(min-width: 768px)").matches) return;
+    const section = document.getElementById("story-scroll-section-desktop");
     if (!section) return;
+
     const onScroll = () => {
       const sectionTop = section.getBoundingClientRect().top + window.scrollY;
       const scrolled = window.scrollY - sectionTop;
@@ -270,7 +367,7 @@ function StorySection() {
       const progress = Math.max(0, Math.min(1, scrolled / totalScroll));
       const newIdx = Math.round(progress * (storyChapters.length - 1));
 
-      // Always update inStory and visual pan — never skip these
+      // Always update inStory and visual pan
       setInStory(scrolled > 0 && scrolled < totalScroll);
       if (trackRef.current) {
         const maxTranslate = trackRef.current.scrollWidth - window.innerWidth;
@@ -278,46 +375,32 @@ function StorySection() {
       }
 
       // Only skip activeIdx update while mid-programmatic scroll
-      // (prevents intermediate positions from confusing the wheel handler)
       if (targetIdxRef.current !== null) {
         if (newIdx === targetIdxRef.current) targetIdxRef.current = null;
-        else return; // still animating, don't update activeIdx
+        else return;
       }
       setActiveIdx(newIdx);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
 
-    // Desktop wheel snap using deltaY accumulator.
-    // Trackpads fire many small events per gesture; we accumulate them and
-    // only advance one chapter when the total crosses THRESHOLD.
-    // Mouse wheels fire one large event; they cross THRESHOLD immediately.
     const THRESHOLD = 80;
     const onWheel = (e: WheelEvent) => {
-      // Only intercept on pointer:fine devices (mouse / trackpad)
-      if (!window.matchMedia("(pointer: fine)").matches) return;
       const sectionTop = section.getBoundingClientRect().top + window.scrollY;
       const scrolled = window.scrollY - sectionTop;
       const totalScroll = section.offsetHeight - getVH();
       const vh = getVH();
-      // Only intercept while inside the story scroll zone
       if (scrolled < -vh * 0.1 || scrolled > totalScroll + vh * 0.1) return;
-      // At boundaries: let native scroll handle exit
       const cur = activeIdxRef.current;
       if (e.deltaY < 0 && cur === 0 && scrolled <= 0) return;
       if (e.deltaY > 0 && cur === storyChapters.length - 1 && scrolled >= totalScroll) return;
-      // We're inside — prevent native scroll
       e.preventDefault();
-      // While a programmatic scroll is in flight, eat all wheel events
       if (wheelLocked.current) return;
-      // Accumulate delta
       wheelAccum.current += e.deltaY;
       if (Math.abs(wheelAccum.current) < THRESHOLD) return;
-      // Threshold crossed — advance one chapter and reset
       const direction = wheelAccum.current > 0 ? 1 : -1;
       wheelAccum.current = 0;
       wheelLocked.current = true;
       scrollToChapter(cur + direction);
-      // Unlock after animation completes (~600ms smooth scroll)
       setTimeout(() => { wheelLocked.current = false; }, 800);
     };
     window.addEventListener("wheel", onWheel, { passive: false });
@@ -329,7 +412,7 @@ function StorySection() {
   }, []);
 
   return (
-    <section id="story" className="bg-white">
+    <section id="story-desktop" className="hidden md:block bg-white">
       {/* Section header */}
       <div className="py-20 text-center reveal">
         <p className="font-body text-saffron tracking-[0.4em] uppercase text-xs mb-4">A Love Story</p>
@@ -345,14 +428,7 @@ function StorySection() {
         <p className="font-body text-taupe/50 text-xs mt-5 tracking-widest animate-pulse">↓ Scroll to journey through our story</p>
       </div>
 
-      {/*
-        Unified scroll-driven story:
-        - Desktop: cards slide horizontally as you scroll
-        - Mobile: cards cross-fade in a sticky full-screen panel as you scroll
-        Both use the same tall scroll container so the user naturally passes
-        through every chapter before reaching the next section.
-      */}
-      {/* ── FIXED side progress rail — only visible when inside the story scroll zone ── */}
+      {/* Side progress rail */}
       <div
         className="sticky top-1/2 -translate-y-1/2 z-30 pointer-events-none transition-opacity duration-500"
         style={{ marginLeft: "calc(100% - 2.5rem)", height: 0, opacity: inStory ? 1 : 0 }}
@@ -360,11 +436,8 @@ function StorySection() {
         <div className="absolute right-0 top-1/2 -translate-y-1/2 flex flex-col items-end gap-3 pr-3">
           {storyChapters.map((ch, i) => (
             <div key={i} className="flex items-center gap-2">
-              {/* Dot only — no text label on any screen */}
               <div
-                className={`rounded-full transition-all duration-500 shadow-sm ${
-                  i === activeIdx ? "w-3 h-3" : "w-2 h-2 opacity-40"
-                }`}
+                className={`rounded-full transition-all duration-500 shadow-sm ${i === activeIdx ? "w-3 h-3" : "w-2 h-2 opacity-40"}`}
                 style={{ background: i === activeIdx ? ch.accent : "#D4A853", boxShadow: i === activeIdx ? `0 0 8px ${ch.accent}80` : "none" }}
               />
             </div>
@@ -372,73 +445,13 @@ function StorySection() {
         </div>
       </div>
 
-      <div id="story-scroll-section" style={{ height: `${storyChapters.length * 120}dvh` }} className="relative">
-        <div className="sticky top-0" style={{ height: '100dvh', overflow: 'visible' }}>
-          {/* overflow:visible so the fixed side rail isn't clipped */}
-
-          {/* ── MOBILE: cross-fade cards in place ── */}
-          <div className="md:hidden relative w-full h-full overflow-hidden">
-            {storyChapters.map((chapter, i) => (
-              <div
-                key={i}
-                className={`absolute inset-0 bg-gradient-to-b ${chapter.bg} flex flex-col transition-opacity duration-500`}
-                style={{ opacity: i === activeIdx ? 1 : 0, pointerEvents: i === activeIdx ? "auto" : "none" }}
-              >
-                {/* Image top half — padded by nav bar height (72px) so image is never hidden */}
-                <div className="relative flex-shrink-0" style={{ height: "45%", paddingTop: "72px" }}>
-                  <img src={chapter.img} alt={chapter.title} className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/30" />
-                  {/* Year badge — positioned below the nav bar padding */}
-                  <div className="absolute left-4 px-3 py-1 text-white text-xs font-body tracking-widest uppercase rounded-full"
-                    style={{ background: chapter.accent, top: "80px" }}>
-                    {chapter.year}
-                  </div>
-                  {/* Chapter number watermark */}
-                  <div className="absolute bottom-3 right-4 font-display text-6xl font-light leading-none select-none opacity-20 text-white">
-                    {String(i + 1).padStart(2, "0")}
-                  </div>
-                </div>
-                {/* Text bottom half */}
-                <div className="flex-1 px-6 pt-5 pb-16 overflow-auto">
-                  <p className="font-body text-xs tracking-[0.2em] uppercase text-taupe mb-1">{chapter.city}</p>
-                  <h3 className="font-display text-3xl text-ink font-light mb-3 leading-tight">{chapter.title}</h3>
-                  <div className="h-px w-10 mb-3" style={{ background: chapter.accent }} />
-                  <p className="font-body text-taupe text-sm leading-relaxed">{chapter.desc}</p>
-                </div>
-                {/* Nav buttons — absolute inside the card, not fixed, so they never shift with browser chrome */}
-                <div className="absolute bottom-0 inset-x-0 flex items-center justify-center gap-4 z-10"
-                  style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 12px)', paddingTop: '8px' }}>
-                  {/* Up arrow — prev chapter (hidden on first) */}
-                  {activeIdx > 0 ? (
-                    <button
-                      onClick={() => scrollToChapter(activeIdx - 1)}
-                      className="p-2 rounded-full transition-all duration-200 hover:scale-125 active:scale-95"
-                      aria-label="Previous chapter"
-                    >
-                      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-                        <circle cx="14" cy="14" r="13" stroke={chapter.accent} strokeWidth="1" opacity="0.3"/>
-                        <path d="M9 16L14 11L19 16" stroke={chapter.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </button>
-                  ) : <div className="w-10" />}
-                  {/* Down arrow — next chapter or celebrations */}
-                  <button
-                    onClick={() => scrollToChapter(activeIdx + 1)}
-                    className="p-2 rounded-full transition-all duration-200 hover:scale-125 active:scale-95"
-                    aria-label={activeIdx < storyChapters.length - 1 ? "Next chapter" : "Continue to Celebrations"}
-                  >
-                    <svg className="animate-bounce" width="28" height="28" viewBox="0 0 28 28" fill="none">
-                      <circle cx="14" cy="14" r="13" stroke={chapter.accent} strokeWidth="1" opacity="0.3"/>
-                      <path d="M9 12L14 17L19 12" stroke={chapter.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* ── DESKTOP: horizontal pan ── */}
-          <div ref={trackRef} className="hidden md:flex h-full will-change-transform" style={{ transition: "transform 0.08s linear", width: `${storyChapters.length * 100}vw` }}>
+      <div id="story-scroll-section-desktop" style={{ height: `${storyChapters.length * 120}dvh` }} className="relative">
+        <div className="sticky top-0" style={{ height: "100dvh", overflow: "visible" }}>
+          <div
+            ref={trackRef}
+            className="flex h-full will-change-transform"
+            style={{ transition: "transform 0.08s linear", width: `${storyChapters.length * 100}vw` }}
+          >
             {storyChapters.map((chapter, i) => (
               <div key={i} className={`relative flex-shrink-0 w-screen h-screen bg-gradient-to-br ${chapter.bg} flex items-center pt-20`}>
                 <div className="max-w-6xl mx-auto px-8 md:px-16 w-full grid md:grid-cols-2 gap-8 md:gap-16 items-center">
@@ -446,9 +459,16 @@ function StorySection() {
                     <div className="relative">
                       <div className="absolute -inset-3 border opacity-20 rounded-sm" style={{ borderColor: chapter.accent }} />
                       <div className="absolute -inset-1.5 border opacity-10 rounded-sm" style={{ borderColor: chapter.accent }} />
-                      <img src={chapter.img} alt={chapter.title} className="w-72 h-72 md:w-96 md:h-96 object-cover shadow-2xl"
-                        style={{ boxShadow: `0 25px 60px ${chapter.accent}30` }} />
-                      <div className="absolute -bottom-4 -right-4 font-display text-7xl font-light leading-none select-none pointer-events-none opacity-10" style={{ color: chapter.accent }}>
+                      <img
+                        src={chapter.img}
+                        alt={chapter.title}
+                        className="w-72 h-72 md:w-96 md:h-96 object-cover shadow-2xl"
+                        style={{ boxShadow: `0 25px 60px ${chapter.accent}30` }}
+                      />
+                      <div
+                        className="absolute -bottom-4 -right-4 font-display text-7xl font-light leading-none select-none pointer-events-none opacity-10"
+                        style={{ color: chapter.accent }}
+                      >
                         {String(i + 1).padStart(2, "0")}
                       </div>
                     </div>
@@ -461,14 +481,12 @@ function StorySection() {
                     <p className="font-body text-taupe text-sm md:text-base leading-relaxed">{chapter.desc}</p>
                   </div>
                 </div>
-                {/* Desktop nav buttons — prev + next chevrons, no text */}
+                {/* Desktop nav buttons */}
                 <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4">
-                  {/* Up — prev chapter (hidden on first) */}
                   {i > 0 && (
                     <button
                       onClick={() => scrollToChapter(i - 1)}
                       className="p-2 rounded-full transition-all duration-200 hover:scale-125 active:scale-95"
-                      style={{ background: "transparent" }}
                       aria-label="Previous chapter"
                     >
                       <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
@@ -477,11 +495,9 @@ function StorySection() {
                       </svg>
                     </button>
                   )}
-                  {/* Down — next chapter or celebrations */}
                   <button
                     onClick={() => scrollToChapter(i + 1)}
                     className="p-2 rounded-full transition-all duration-200 hover:scale-125 active:scale-95"
-                    style={{ background: "transparent" }}
                     aria-label={i < storyChapters.length - 1 ? "Next chapter" : "Continue to Celebrations"}
                   >
                     <svg className="animate-bounce" width="32" height="32" viewBox="0 0 32 32" fill="none">
@@ -493,7 +509,6 @@ function StorySection() {
               </div>
             ))}
           </div>
-
         </div>
       </div>
     </section>
@@ -543,7 +558,6 @@ function EventsSection() {
           {events.map((event, i) => (
             <div key={i} className="reveal overflow-hidden border border-champagne/30 bg-white">
               <div className={`grid md:grid-cols-2 ${i % 2 === 1 ? "" : ""}`}>
-                {/* Image panel */}
                 <div className={`relative overflow-hidden ${i % 2 === 1 ? "md:order-2" : "md:order-1"}`} style={{ minHeight: "380px" }}>
                   <img src={event.img} alt={event.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
@@ -551,8 +565,6 @@ function EventsSection() {
                     <span className="font-body text-white/90 text-xs tracking-[0.3em] uppercase bg-black/30 backdrop-blur-sm px-3 py-1">{event.day} · {event.time}</span>
                   </div>
                 </div>
-
-                {/* Text panel */}
                 <div className={`p-8 md:p-12 flex flex-col justify-center ${i % 2 === 1 ? "md:order-1" : "md:order-2"}`}>
                   <div className="flex items-center gap-3 mb-2">
                     <span className={`font-body text-xs tracking-[0.3em] uppercase ${event.textAccent}`}>{event.date}</span>
@@ -561,8 +573,6 @@ function EventsSection() {
                   <p className="font-body text-sm font-medium text-taupe mb-4 tracking-wide">{event.time}</p>
                   <div className="h-px w-10 mb-4" style={{ background: event.accent }} />
                   <p className="font-body text-taupe text-sm leading-relaxed mb-6">{event.desc}</p>
-
-                  {/* Dress code */}
                   <div className="bg-parchment border border-champagne/50 p-4">
                     <div className="flex items-center gap-2 mb-2">
                       <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6,1 L7.5,4 L11,4.5 L8.5,7 L9,11 L6,9.5 L3,11 L3.5,7 L1,4.5 L4.5,4 Z" fill="#D4A853" fillOpacity="0.8"/></svg>
@@ -576,8 +586,6 @@ function EventsSection() {
             </div>
           ))}
         </div>
-
-
       </div>
     </section>
   );
@@ -742,7 +750,10 @@ export default function Home() {
     <div className="min-h-screen bg-white">
       <Navigation />
       <HeroSection />
-      <StorySection />
+      {/* Mobile story: pure swipe+tap, no scroll dependency */}
+      <MobileStory />
+      {/* Desktop story: scroll-driven horizontal pan, listeners only on md+ */}
+      <DesktopStory />
       <EventsSection />
       <VenueSection />
       <RSVPSection />
