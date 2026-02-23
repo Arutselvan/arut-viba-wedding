@@ -165,7 +165,7 @@ function HeroSection() {
 const storyChapters = [
   {
     year: "2022", city: "Tempe, Arizona", title: "Where It All Began",
-    desc: "Two strangers crossed paths at Arizona State University — on the iconic Palm Walk, under the Arizona sun, beside the terracotta walls of Old Main. What started as a two-month friendship quickly became something neither could ignore.",
+    desc: "Two strangers crossed paths at Arizona State University in Tempe. What started as a two-month friendship quickly became something neither could ignore — and before long, they were dating.",
     img: IMG_ASU, accent: "#E8A020", bg: "from-amber-50 to-orange-50",
   },
   {
