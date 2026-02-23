@@ -108,51 +108,54 @@ function Navigation() {
 // ─── Hero ──────────────────────────────────────────────────────────────────────
 function HeroSection() {
   return (
-    <section id="top" className="bg-white" style={{ minHeight: "100svh", display: "flex", flexDirection: "column" }}>
+    <section id="top" className="relative overflow-hidden" style={{ minHeight: "100svh" }}>
 
-      {/* ─── ZONE 1: Pure white text band — logo, names, date ─── */}
-      <div className="relative z-10 flex flex-col items-center justify-center pt-20 md:pt-24 px-6 text-center pb-6 bg-white">
+      {/* Full-bleed art image — fills the entire hero */}
+      <img
+        src={HERO_ART}
+        alt="Arut & Viba wedding ceremony"
+        className="absolute inset-0 w-full h-full"
+        style={{ objectFit: "cover", objectPosition: "center bottom" }}
+      />
+
+      {/* Very subtle gradient over the sky area (top ~55%) to ensure text legibility
+           without obscuring the art — soft warm ivory wash, not a hard block */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: "linear-gradient(to bottom, rgba(255,252,245,0.82) 0%, rgba(255,252,245,0.65) 30%, rgba(255,252,245,0.15) 55%, transparent 72%)",
+        }}
+      />
+
+      {/* Text content — floats over the sky portion */}
+      <div className="relative z-10 flex flex-col items-center justify-start pt-20 md:pt-24 px-6 text-center">
         <div className="mb-0.5 animate-fade-in">
           <img src={LOGO_URL} alt="A&V monogram" className="w-24 h-24 md:w-32 md:h-32 mx-auto drop-shadow-sm" />
         </div>
-        <p className="font-display text-xl italic text-saffron/80 mb-3 -mt-1 animate-fade-up delay-100">#aruvi</p>
-        <p className="font-body text-taupe tracking-[0.45em] uppercase text-xs mb-3 animate-fade-up delay-200">
+        <p className="font-display text-xl italic text-saffron mb-3 -mt-1 animate-fade-up delay-100">#aruvi</p>
+        <p className="font-body text-ink/70 tracking-[0.45em] uppercase text-xs mb-3 animate-fade-up delay-200">
           Together with their families
         </p>
         <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-light text-ink mb-3 animate-fade-up delay-300 leading-none">
           Arut <em className="text-saffron not-italic">&</em> Viba
         </h1>
         <div className="flex items-center justify-center gap-4 mb-3 animate-fade-up delay-400">
-          <div className="h-px w-12 bg-champagne" />
-          <p className="font-display text-base md:text-lg text-taupe italic">request the honour of your presence</p>
-          <div className="h-px w-12 bg-champagne" />
+          <div className="h-px w-12 bg-ink/20" />
+          <p className="font-display text-base md:text-lg text-ink/60 italic">request the honour of your presence</p>
+          <div className="h-px w-12 bg-ink/20" />
         </div>
         <p className="font-body text-ink/70 tracking-[0.3em] uppercase text-xs mb-1 animate-fade-up delay-500">23rd – 24th January 2027</p>
-        <p className="font-body text-taupe tracking-[0.2em] uppercase text-xs animate-fade-up delay-500">MGM Beach Resorts · Chennai, Tamil Nadu</p>
-      </div>
+        <p className="font-body text-ink/60 tracking-[0.2em] uppercase text-xs mb-8 animate-fade-up delay-500">MGM Beach Resorts · Chennai, Tamil Nadu</p>
 
-      {/* ─── ZONE 2: Art image — fills remaining space, couple's heads always at top of this zone ─── */}
-      <div className="relative flex-1 overflow-hidden" style={{ minHeight: "clamp(280px, 45vw, 560px)" }}>
-        {/* Countdown floats at the very top of the art zone, above the heads */}
-        <div className="absolute top-0 inset-x-0 z-20 flex justify-center pt-3 pb-2 pointer-events-none">
-          <div className="animate-fade-up delay-600 bg-white/90 backdrop-blur-sm px-6 py-3 border border-champagne/50 shadow-sm">
-            <Countdown />
-          </div>
+        {/* Countdown — sits in the sky zone, well above the couple's heads */}
+        <div className="animate-fade-up delay-600 bg-white/75 backdrop-blur-sm px-8 py-4 border border-champagne/60 shadow-sm">
+          <Countdown />
         </div>
-        {/* Art image — object-contain so the full painting is visible, anchored to bottom */}
-        <img
-          src={HERO_ART}
-          alt="Arut & Viba wedding ceremony"
-          className="w-full h-full"
-          style={{ objectFit: "contain", objectPosition: "center bottom" }}
-        />
-        {/* Soft fade at the very top of the art zone to blend with white */}
-        <div className="absolute inset-x-0 top-0 h-8 bg-gradient-to-b from-white to-transparent pointer-events-none" />
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 animate-bounce z-10">
-        <svg width="20" height="30" viewBox="0 0 24 36" fill="none" className="opacity-30">
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce z-10">
+        <svg width="20" height="30" viewBox="0 0 24 36" fill="none" className="opacity-40">
           <rect x="1" y="1" width="22" height="34" rx="11" stroke="#7A6552" strokeWidth="1.5"/>
           <circle cx="12" cy="10" r="3" fill="#7A6552" className="animate-pulse"/>
         </svg>
@@ -169,12 +172,12 @@ const storyChapters = [
     img: IMG_ASU, accent: "#E8A020", bg: "from-amber-50 to-orange-50",
   },
   {
-    year: "2022 – 2023", city: "San Francisco ↔ Tempe", title: "Different Cities, Same Heartbeat",
+    year: "2022 – 2023", city: "San Francisco & Tempe", title: "Different Cities, Same Heartbeat",
     desc: "Life pulled them apart — one to San Francisco, the other staying in Tempe. But distance only made the heart grow fonder. FaceTime dates, weekend visits, and a thousand 'see you soon' messages kept their story alive across the miles.",
     img: IMG_LONGDIST, accent: "#4a9eca", bg: "from-sky-50 to-blue-50",
   },
   {
-    year: "January 2024", city: "New York City ↔ San Francisco", title: "Coast to Coast",
+    year: "January 2024", city: "New York City", title: "Coast to Coast",
     desc: "A new opportunity brought a new city — New York. The miles multiplied, but so did their commitment. Red-eye flights across the country became their love language, and the Manhattan skyline became a familiar backdrop to their long-distance love.",
     img: IMG_NYC, accent: "#7A6552", bg: "from-stone-50 to-slate-50",
   },
