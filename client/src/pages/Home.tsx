@@ -225,28 +225,29 @@ function StorySection() {
   // IMPORTANT: always use window.innerHeight (not visualViewport) so the value
   // matches the CSS vh units used for the section height. This keeps scrollToChapter
   // and onScroll in perfect sync.
+  // Use document.documentElement.clientHeight — this is stable and always matches
+  // CSS dvh units. Unlike window.innerHeight it does NOT change when the mobile
+  // browser chrome (address bar) hides/shows, preventing the last-chapter shift.
+  const getVH = () => document.documentElement.clientHeight;
+
   const scrollToChapter = (idx: number) => {
     const section = document.getElementById("story-scroll-section");
     if (!section) return;
-    const vh = window.innerHeight;
+    const vh = getVH();
     const sectionTop = section.getBoundingClientRect().top + window.scrollY;
     const totalScroll = section.offsetHeight - vh;
     if (idx >= storyChapters.length) {
       // Past last chapter — scroll to events section
-      const target = sectionTop + totalScroll + vh + 10;
-      window.scrollTo({ top: target, behavior: "smooth" });
+      window.scrollTo({ top: sectionTop + totalScroll + vh + 10, behavior: "smooth" });
     } else if (idx < 0) {
       // Before first chapter — scroll above story section
       window.scrollTo({ top: sectionTop - vh, behavior: "smooth" });
     } else if (idx === storyChapters.length - 1) {
-      // Last chapter: overshoot by 20px so progress always reaches 1.0
-      // even if innerHeight fluctuates slightly during the smooth scroll
-      window.scrollTo({ top: sectionTop + totalScroll + 20, behavior: "smooth" });
+      // Last chapter: land exactly at totalScroll (no overshoot needed since clientHeight is stable)
+      window.scrollTo({ top: sectionTop + totalScroll, behavior: "smooth" });
     } else {
-      // Scroll to the exact position that shows chapter idx
       const progress = idx / (storyChapters.length - 1);
-      const target = sectionTop + progress * totalScroll;
-      window.scrollTo({ top: target, behavior: "smooth" });
+      window.scrollTo({ top: sectionTop + progress * totalScroll, behavior: "smooth" });
     }
   };
 
@@ -260,7 +261,7 @@ function StorySection() {
     const onScroll = () => {
       const sectionTop = section.getBoundingClientRect().top + window.scrollY;
       const scrolled = window.scrollY - sectionTop;
-      const totalScroll = section.offsetHeight - window.innerHeight;
+      const totalScroll = section.offsetHeight - getVH();
       const progress = Math.max(0, Math.min(1, scrolled / totalScroll));
       const newIdx = Math.round(progress * (storyChapters.length - 1));
       setActiveIdx(newIdx);
@@ -281,9 +282,10 @@ function StorySection() {
       if (!window.matchMedia("(pointer: fine)").matches) return;
       const sectionTop = section.getBoundingClientRect().top + window.scrollY;
       const scrolled = window.scrollY - sectionTop;
-      const totalScroll = section.offsetHeight - window.innerHeight;
+      const totalScroll = section.offsetHeight - getVH();
+      const vh = getVH();
       // Only intercept when we're inside the story scroll zone
-      if (scrolled < -window.innerHeight * 0.1 || scrolled > totalScroll + window.innerHeight * 0.1) return;
+      if (scrolled < -vh * 0.1 || scrolled > totalScroll + vh * 0.1) return;
       // If at boundaries and scrolling out, let native scroll handle it
       const cur = activeIdxRef.current;
       if (e.deltaY < 0 && cur === 0 && scrolled <= 0) return;
@@ -381,37 +383,34 @@ function StorySection() {
                   <div className="h-px w-10 mb-3" style={{ background: chapter.accent }} />
                   <p className="font-body text-taupe text-sm leading-relaxed">{chapter.desc}</p>
                 </div>
-                {/* Nav buttons — fixed to bottom of viewport so they never go off-screen */}
-                {i === activeIdx && (
-                  <div className="fixed bottom-0 inset-x-0 flex items-center justify-center gap-4 pb-safe pb-4 z-40" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 12px)' }}>
-                    {/* Up arrow — prev chapter (hidden on first) */}
-                    {activeIdx > 0 && (
-                      <button
-                        onClick={() => scrollToChapter(activeIdx - 1)}
-                        className="p-2 rounded-full transition-all duration-200 hover:scale-125 active:scale-95"
-                        style={{ background: "transparent" }}
-                        aria-label="Previous chapter"
-                      >
-                        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-                          <circle cx="14" cy="14" r="13" stroke={chapter.accent} strokeWidth="1" opacity="0.3"/>
-                          <path d="M9 16L14 11L19 16" stroke={chapter.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      </button>
-                    )}
-                    {/* Down arrow — next chapter or celebrations */}
+                {/* Nav buttons — absolute inside the card, not fixed, so they never shift with browser chrome */}
+                <div className="absolute bottom-0 inset-x-0 flex items-center justify-center gap-4 z-10"
+                  style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 12px)', paddingTop: '8px' }}>
+                  {/* Up arrow — prev chapter (hidden on first) */}
+                  {activeIdx > 0 ? (
                     <button
-                      onClick={() => scrollToChapter(activeIdx + 1)}
+                      onClick={() => scrollToChapter(activeIdx - 1)}
                       className="p-2 rounded-full transition-all duration-200 hover:scale-125 active:scale-95"
-                      style={{ background: "transparent" }}
-                      aria-label={activeIdx < storyChapters.length - 1 ? "Next chapter" : "Continue to Celebrations"}
+                      aria-label="Previous chapter"
                     >
-                      <svg className="animate-bounce" width="28" height="28" viewBox="0 0 28 28" fill="none">
+                      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
                         <circle cx="14" cy="14" r="13" stroke={chapter.accent} strokeWidth="1" opacity="0.3"/>
-                        <path d="M9 12L14 17L19 12" stroke={chapter.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M9 16L14 11L19 16" stroke={chapter.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     </button>
-                  </div>
-                )}
+                  ) : <div className="w-10" />}
+                  {/* Down arrow — next chapter or celebrations */}
+                  <button
+                    onClick={() => scrollToChapter(activeIdx + 1)}
+                    className="p-2 rounded-full transition-all duration-200 hover:scale-125 active:scale-95"
+                    aria-label={activeIdx < storyChapters.length - 1 ? "Next chapter" : "Continue to Celebrations"}
+                  >
+                    <svg className="animate-bounce" width="28" height="28" viewBox="0 0 28 28" fill="none">
+                      <circle cx="14" cy="14" r="13" stroke={chapter.accent} strokeWidth="1" opacity="0.3"/>
+                      <path d="M9 12L14 17L19 12" stroke={chapter.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </button>
+                </div>
               </div>
             ))}
           </div>
