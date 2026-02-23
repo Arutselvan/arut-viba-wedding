@@ -108,9 +108,18 @@ function Navigation() {
 // ─── Hero ──────────────────────────────────────────────────────────────────────
 function HeroSection() {
   return (
-    <section id="top" className="relative overflow-hidden" style={{ minHeight: "100svh" }}>
+    /*
+     * Hero strategy: single full-bleed watercolor image.
+     * The image has a large clear sky/white zone in the top ~35% of the canvas.
+     * We use object-fit:cover + object-position:center bottom so the image always
+     * fills the viewport anchored at the bottom (couple & mandap always visible).
+     * All text is absolutely positioned inside the top 40vh — always in the sky.
+     * The countdown is placed at ~38vh so it sits just below the text block.
+     * No gradient overlay needed — the sky is naturally light enough.
+     */
+    <section id="top" className="relative" style={{ height: "100svh", minHeight: 600 }}>
 
-      {/* Full-bleed art image — fills the entire hero */}
+      {/* Single full-bleed art image — anchored bottom so couple is never cropped */}
       <img
         src={HERO_ART}
         alt="Arut & Viba wedding ceremony"
@@ -118,44 +127,50 @@ function HeroSection() {
         style={{ objectFit: "cover", objectPosition: "center bottom" }}
       />
 
-      {/* Very subtle gradient over the sky area (top ~55%) to ensure text legibility
-           without obscuring the art — soft warm ivory wash, not a hard block */}
+      {/* Nav bar clearance gradient — only the very top strip, just enough to keep
+          the nav links readable over any stray watercolor bleed */}
       <div
-        className="absolute inset-0"
-        style={{
-          background: "linear-gradient(to bottom, rgba(255,252,245,0.82) 0%, rgba(255,252,245,0.65) 30%, rgba(255,252,245,0.15) 55%, transparent 72%)",
-        }}
+        className="absolute inset-x-0 top-0"
+        style={{ height: "72px", background: "linear-gradient(to bottom, rgba(255,252,245,0.55) 0%, transparent 100%)" }}
       />
 
-      {/* Text content — floats over the sky portion */}
-      <div className="relative z-10 flex flex-col items-center justify-start pt-20 md:pt-24 px-6 text-center">
-        <div className="mb-0.5 animate-fade-in">
-          <img src={LOGO_URL} alt="A&V monogram" className="w-24 h-24 md:w-32 md:h-32 mx-auto drop-shadow-sm" />
+      {/* ── TEXT BLOCK: absolutely positioned in the sky zone (top 8vh–38vh) ── */}
+      <div
+        className="absolute inset-x-0 z-10 flex flex-col items-center text-center px-4"
+        style={{ top: "8vh" }}
+      >
+        {/* Logo */}
+        <div className="animate-fade-in mb-1">
+          <img src={LOGO_URL} alt="A&V monogram" className="w-20 h-20 md:w-28 md:h-28 mx-auto drop-shadow-sm" />
         </div>
-        <p className="font-display text-xl italic text-saffron mb-3 -mt-1 animate-fade-up delay-100">#aruvi</p>
-        <p className="font-body text-ink/70 tracking-[0.45em] uppercase text-xs mb-3 animate-fade-up delay-200">
+        {/* Hashtag */}
+        <p className="font-display text-lg md:text-xl italic text-saffron animate-fade-up delay-100 leading-none mb-2">#aruvi</p>
+        {/* Sub-tagline */}
+        <p className="font-body text-ink/65 tracking-[0.4em] uppercase text-[10px] md:text-xs mb-2 animate-fade-up delay-200">
           Together with their families
         </p>
-        <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-light text-ink mb-3 animate-fade-up delay-300 leading-none">
+        {/* Names */}
+        <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-light text-ink mb-2 animate-fade-up delay-300 leading-none">
           Arut <em className="text-saffron not-italic">&</em> Viba
         </h1>
-        <div className="flex items-center justify-center gap-4 mb-3 animate-fade-up delay-400">
-          <div className="h-px w-12 bg-ink/20" />
-          <p className="font-display text-base md:text-lg text-ink/60 italic">request the honour of your presence</p>
-          <div className="h-px w-12 bg-ink/20" />
+        {/* Tagline */}
+        <div className="flex items-center justify-center gap-3 mb-2 animate-fade-up delay-400">
+          <div className="h-px w-10 bg-ink/20" />
+          <p className="font-display text-sm md:text-base text-ink/55 italic">request the honour of your presence</p>
+          <div className="h-px w-10 bg-ink/20" />
         </div>
-        <p className="font-body text-ink/70 tracking-[0.3em] uppercase text-xs mb-1 animate-fade-up delay-500">23rd – 24th January 2027</p>
-        <p className="font-body text-ink/60 tracking-[0.2em] uppercase text-xs mb-8 animate-fade-up delay-500">MGM Beach Resorts · Chennai, Tamil Nadu</p>
-
-        {/* Countdown — sits in the sky zone, well above the couple's heads */}
-        <div className="animate-fade-up delay-600 bg-white/75 backdrop-blur-sm px-8 py-4 border border-champagne/60 shadow-sm">
+        {/* Date & venue */}
+        <p className="font-body text-ink/65 tracking-[0.28em] uppercase text-[10px] md:text-xs mb-0.5 animate-fade-up delay-500">23rd – 24th January 2027</p>
+        <p className="font-body text-ink/55 tracking-[0.18em] uppercase text-[10px] md:text-xs mb-4 animate-fade-up delay-500">MGM Beach Resorts · Chennai, Tamil Nadu</p>
+        {/* Countdown — frosted glass pill, sits at the bottom of the sky zone */}
+        <div className="animate-fade-up delay-600 bg-white/70 backdrop-blur-md px-6 md:px-8 py-3 md:py-4 border border-white/60 shadow-md">
           <Countdown />
         </div>
       </div>
 
       {/* Scroll indicator */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce z-10">
-        <svg width="20" height="30" viewBox="0 0 24 36" fill="none" className="opacity-40">
+        <svg width="20" height="30" viewBox="0 0 24 36" fill="none" className="opacity-35">
           <rect x="1" y="1" width="22" height="34" rx="11" stroke="#7A6552" strokeWidth="1.5"/>
           <circle cx="12" cy="10" r="3" fill="#7A6552" className="animate-pulse"/>
         </svg>
