@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import { MapView } from "@/components/Map";
 
 // ─── CDN Image URLs ────────────────────────────────────────────────────────────
-const LOGO_URL = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/UXWIsAVNadjfmIxQ.svg";
+const LOGO_URL = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/AVdiZBmryFCAlBJN.svg";
 const VENUE_PHOTO = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/UKFTelsfibbZjvzA.jpg";
 
 // Hero
