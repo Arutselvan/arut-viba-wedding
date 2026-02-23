@@ -220,6 +220,9 @@ function StorySection() {
   const wheelCooldown = useRef(false);
   const activeIdxRef = useRef(0);
   activeIdxRef.current = activeIdx;
+  // Track the chapter we're programmatically scrolling TO so onScroll
+  // doesn't update activeIdx mid-animation and confuse the next wheel event
+  const targetIdxRef = useRef<number | null>(null);
 
   // Scroll to a specific chapter index within the story, or exit to events section.
   // IMPORTANT: always use window.innerHeight (not visualViewport) so the value
@@ -236,14 +239,13 @@ function StorySection() {
     const vh = getVH();
     const sectionTop = section.getBoundingClientRect().top + window.scrollY;
     const totalScroll = section.offsetHeight - vh;
+    // Record where we're heading so onScroll doesn't interfere mid-animation
+    targetIdxRef.current = idx;
     if (idx >= storyChapters.length) {
-      // Past last chapter — scroll to events section
       window.scrollTo({ top: sectionTop + totalScroll + vh + 10, behavior: "smooth" });
     } else if (idx < 0) {
-      // Before first chapter — scroll above story section
       window.scrollTo({ top: sectionTop - vh, behavior: "smooth" });
     } else if (idx === storyChapters.length - 1) {
-      // Last chapter: land exactly at totalScroll (no overshoot needed since clientHeight is stable)
       window.scrollTo({ top: sectionTop + totalScroll, behavior: "smooth" });
     } else {
       const progress = idx / (storyChapters.length - 1);
@@ -264,10 +266,21 @@ function StorySection() {
       const totalScroll = section.offsetHeight - getVH();
       const progress = Math.max(0, Math.min(1, scrolled / totalScroll));
       const newIdx = Math.round(progress * (storyChapters.length - 1));
+      // If we're mid-programmatic scroll, only update when we reach the target
+      // to prevent intermediate scroll positions from confusing the wheel handler
+      if (targetIdxRef.current !== null) {
+        if (newIdx === targetIdxRef.current) targetIdxRef.current = null;
+        else {
+          // Still animating — update visual pan but don't change activeIdx
+          if (trackRef.current) {
+            const maxTranslate = trackRef.current.scrollWidth - window.innerWidth;
+            trackRef.current.style.transform = `translateX(-${progress * maxTranslate}px)`;
+          }
+          return;
+        }
+      }
       setActiveIdx(newIdx);
-      // Show side rail only when fully inside the story scroll section
       setInStory(scrolled > 0 && scrolled < totalScroll);
-      // Desktop horizontal pan
       if (trackRef.current) {
         const maxTranslate = trackRef.current.scrollWidth - window.innerWidth;
         trackRef.current.style.transform = `translateX(-${progress * maxTranslate}px)`;
@@ -292,11 +305,12 @@ function StorySection() {
       if (e.deltaY > 0 && cur === storyChapters.length - 1 && scrolled >= totalScroll) return;
       // Prevent native scroll and snap to next/prev chapter
       e.preventDefault();
+      // Check AND set cooldown atomically before any async work
       if (wheelCooldown.current) return;
       wheelCooldown.current = true;
       const next = e.deltaY > 0 ? cur + 1 : cur - 1;
       scrollToChapter(next);
-      setTimeout(() => { wheelCooldown.current = false; }, 700);
+      setTimeout(() => { wheelCooldown.current = false; }, 900);
     };
     window.addEventListener("wheel", onWheel, { passive: false });
 
