@@ -52,11 +52,11 @@ function Countdown() {
     tick(); const id = setInterval(tick, 1000); return () => clearInterval(id);
   }, []);
   return (
-    <div className="flex gap-6 md:gap-10 justify-center">
+    <div className="flex gap-5 md:gap-8 justify-center">
       {([["Days", t.days], ["Hours", t.hours], ["Mins", t.minutes], ["Secs", t.seconds]] as [string, number][]).map(([label, val]) => (
         <div key={label} className="flex flex-col items-center">
-          <span className="font-display text-5xl md:text-6xl font-light text-ink tabular-nums leading-none">{String(val).padStart(2, "0")}</span>
-          <span className="font-body text-[10px] tracking-[0.25em] uppercase text-taupe mt-1">{label}</span>
+          <span className="font-display text-3xl md:text-4xl font-light text-ink tabular-nums leading-none">{String(val).padStart(2, "0")}</span>
+          <span className="font-body text-[9px] tracking-[0.25em] uppercase text-taupe mt-0.5">{label}</span>
         </div>
       ))}
     </div>
@@ -144,11 +144,11 @@ function HeroSection() {
         style={{ top: "8vh" }}
       >
         {/* Logo */}
-        <div className="animate-fade-in mb-0">
-          <img src={LOGO_URL} alt="A&V monogram" className="w-28 h-28 md:w-36 md:h-36 lg:w-40 lg:h-40 mx-auto drop-shadow-sm" />
+        <div className="animate-fade-in" style={{ marginBottom: "-8px" }}>
+          <img src={LOGO_URL} alt="A&V monogram" className="w-24 h-24 md:w-32 md:h-32 lg:w-36 lg:h-36 mx-auto drop-shadow-sm" />
         </div>
         {/* Hashtag */}
-        <p className="font-display text-base md:text-lg italic text-saffron animate-fade-up delay-100 leading-none mb-2" style={{ marginTop: "-4px" }}>#aruvi</p>
+        <p className="font-display text-base md:text-lg italic text-saffron animate-fade-up delay-100 leading-none mb-2">#aruvi</p>
         {/* Sub-tagline */}
         <p className="font-body text-ink/65 tracking-[0.4em] uppercase text-[10px] md:text-xs mb-2 animate-fade-up delay-200">
           Together with their families
@@ -698,9 +698,7 @@ function Footer() {
         <p className="font-display text-3xl text-white/60 italic mb-2">Arut & Viba</p>
         <p className="font-body text-white/35 text-xs tracking-[0.3em] uppercase mb-6">23rd – 24th January 2027 · Chennai</p>
         <div className="h-px bg-white/10 mb-6" />
-        <p className="font-body text-white/40 text-xs tracking-widest uppercase mb-2">Share your moments with us</p>
-        <p className="font-display text-4xl md:text-5xl text-saffron italic mb-2">#aruvi</p>
-        <p className="font-body text-white/25 text-xs mb-6">Tag us on Instagram &amp; Facebook</p>
+        <p className="font-display text-4xl md:text-5xl text-saffron italic mb-6">#aruvi</p>
         <div className="h-px bg-white/10 mb-6" />
         <p className="font-body text-white/20 text-xs">Made with love for a love that crossed every time zone.</p>
       </div>
