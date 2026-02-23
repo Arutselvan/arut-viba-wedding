@@ -187,41 +187,106 @@ const storyChapters = [
   },
 ];
 
-// ─── Story Section: CSS scroll-snap carousel with auto-scroll ────────────────
-// One component, all devices. Browser handles touch/trackpad/wheel natively.
-// Auto-scrolls every 4 s; pauses on hover or touch; loops back to start.
-function StorySection() {
-  const [activeIdx, setActiveIdx] = useState(0);
-  const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const trackRef = useRef<HTMLDivElement>(null);
-  // Track which slide is visible using IntersectionObserver on the track
+// ─── Story Section: Single-view animated vertical timeline ─────────────────────
+// All chapters visible at once. Scroll-triggered entrance animations.
+// Zero scroll-hijacking. Works identically on all devices.
+function TimelineEntry({ ch, i, isLeft }: { ch: typeof storyChapters[0]; i: number; isLeft: boolean }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
   useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const i = slideRefs.current.indexOf(entry.target as HTMLDivElement);
-            if (i !== -1) setActiveIdx(i);
-          }
-        });
-      },
-      { root: track, threshold: 0.6 }
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
+      { threshold: 0.12 }
     );
-    slideRefs.current.forEach((el) => { if (el) observer.observe(el); });
-    return () => observer.disconnect();
+    obs.observe(el);
+    return () => obs.disconnect();
   }, []);
 
-  const goTo = (i: number) => {
-    const el = slideRefs.current[i];
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
-  };
-
   return (
-    <section id="story" className="bg-white">
-      {/* Section header */}
-      <div className="py-16 md:py-20 text-center reveal">
+    <div
+      ref={ref}
+      className="relative grid md:grid-cols-[1fr_auto_1fr] grid-cols-[auto_1fr] items-start"
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(36px)",
+        transition: `opacity 0.65s ease ${i * 0.13}s, transform 0.65s ease ${i * 0.13}s`,
+      }}
+    >
+      {/* Desktop left column */}
+      <div className="hidden md:flex justify-end pr-10 pt-1">
+        {isLeft ? (
+          <div className="max-w-xs text-right">
+            <p className="font-body text-xs tracking-[0.35em] uppercase mb-1" style={{ color: ch.accent }}>{ch.year}</p>
+            <p className="font-body text-xs tracking-[0.2em] uppercase text-taupe mb-3">{ch.city}</p>
+            <h3 className="font-display text-3xl text-ink font-light mb-3 leading-tight">{ch.title}</h3>
+            <div className="h-px w-10 mb-3 ml-auto" style={{ background: ch.accent }} />
+            <p className="font-body text-taupe text-sm leading-relaxed mb-5">{ch.desc}</p>
+            <div className="relative w-48 h-48 ml-auto">
+              <div className="absolute -inset-2 border opacity-15" style={{ borderColor: ch.accent }} />
+              <img src={ch.img} alt={ch.title} className="w-full h-full object-cover shadow-xl" />
+            </div>
+          </div>
+        ) : <div />}
+      </div>
+
+      {/* Centre spine */}
+      <div className="flex flex-col items-center pr-5 md:pr-0">
+        <div
+          className="w-4 h-4 rounded-full border-2 bg-white flex-shrink-0 mt-1 z-10"
+          style={{ borderColor: ch.accent, boxShadow: `0 0 0 5px ${ch.accent}1a` }}
+        />
+        {i < storyChapters.length - 1 && (
+          <div
+            className="w-px mt-1"
+            style={{
+              minHeight: "120px",
+              flex: "1 0 120px",
+              background: `linear-gradient(to bottom, ${ch.accent}55, ${storyChapters[i + 1].accent}55)`,
+            }}
+          />
+        )}
+      </div>
+
+      {/* Desktop right column */}
+      <div className="hidden md:flex justify-start pl-10 pt-1">
+        {!isLeft ? (
+          <div className="max-w-xs text-left">
+            <p className="font-body text-xs tracking-[0.35em] uppercase mb-1" style={{ color: ch.accent }}>{ch.year}</p>
+            <p className="font-body text-xs tracking-[0.2em] uppercase text-taupe mb-3">{ch.city}</p>
+            <h3 className="font-display text-3xl text-ink font-light mb-3 leading-tight">{ch.title}</h3>
+            <div className="h-px w-10 mb-3" style={{ background: ch.accent }} />
+            <p className="font-body text-taupe text-sm leading-relaxed mb-5">{ch.desc}</p>
+            <div className="relative w-48 h-48">
+              <div className="absolute -inset-2 border opacity-15" style={{ borderColor: ch.accent }} />
+              <img src={ch.img} alt={ch.title} className="w-full h-full object-cover shadow-xl" />
+            </div>
+          </div>
+        ) : <div />}
+      </div>
+
+      {/* Mobile content */}
+      <div className="md:hidden pb-10">
+        <p className="font-body text-xs tracking-[0.35em] uppercase mb-1" style={{ color: ch.accent }}>{ch.year}</p>
+        <p className="font-body text-xs tracking-[0.2em] uppercase text-taupe mb-2">{ch.city}</p>
+        <h3 className="font-display text-2xl text-ink font-light mb-2 leading-tight">{ch.title}</h3>
+        <div className="h-px w-8 mb-3" style={{ background: ch.accent }} />
+        <p className="font-body text-taupe text-sm leading-relaxed mb-4">{ch.desc}</p>
+        <div className="relative w-full max-w-xs h-44">
+          <div className="absolute -inset-1.5 border opacity-15" style={{ borderColor: ch.accent }} />
+          <img src={ch.img} alt={ch.title} className="w-full h-full object-cover shadow-lg" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function StorySection() {
+  return (
+    <section id="story" className="bg-white py-20 md:py-28">
+      <div className="text-center mb-16 md:mb-20 reveal px-6">
         <p className="font-body text-saffron tracking-[0.4em] uppercase text-xs mb-4">A Love Story</p>
         <h2 className="font-display text-5xl md:text-6xl text-ink font-light mb-4">Our Story</h2>
         <div className="flex items-center justify-center gap-3 mb-6">
@@ -229,150 +294,13 @@ function StorySection() {
           <div className="w-2 h-2 rounded-full bg-saffron opacity-60" />
           <div className="h-px w-16 bg-champagne" />
         </div>
-        <p className="font-body text-taupe max-w-xl mx-auto text-sm leading-relaxed px-6">
-          From the Tempe heat to the Bay Area fog — a love story written across time zones, red-eye flights, and a thousand "see you soon"s.
+        <p className="font-body text-taupe max-w-xl mx-auto text-sm leading-relaxed">
+          From the Tempe heat to the Bay Area fog — a love story written across time zones, red-eye flights, and a thousand “see you soon”s.
         </p>
       </div>
-
-      {/* Scroll-snap track: horizontal, one slide = 100vw × 100svh */}
-      <div
-        ref={trackRef}
-        className="relative story-snap-track"
-        style={{
-          display: "flex",
-          overflowX: "auto",
-          overflowY: "hidden",
-          scrollSnapType: "x mandatory",
-          scrollBehavior: "smooth",
-          WebkitOverflowScrolling: "touch",
-          msOverflowStyle: "none",
-          scrollbarWidth: "none",
-          height: "100svh",
-        }}
-      >
+      <div className="max-w-4xl mx-auto px-6 md:px-8">
         {storyChapters.map((ch, i) => (
-          <div
-            key={i}
-            ref={(el) => { slideRefs.current[i] = el; }}
-            className={`relative flex-shrink-0 bg-gradient-to-br ${ch.bg} flex flex-col md:flex-row md:items-center`}
-            style={{
-              width: "100vw",
-              height: "100svh",
-              scrollSnapAlign: "start",
-              scrollSnapStop: "always",
-            }}
-          >
-            {/* ── Mobile layout: image top, text bottom ── */}
-            <div className="md:hidden flex flex-col h-full">
-              {/* Image */}
-              <div className="relative flex-shrink-0" style={{ height: "45%", paddingTop: "72px" }}>
-                <img src={ch.img} alt={ch.title} className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/25" />
-                <div
-                  className="absolute left-4 px-3 py-1 text-white text-xs font-body tracking-widest uppercase rounded-full"
-                  style={{ background: ch.accent, top: "80px" }}
-                >
-                  {ch.year}
-                </div>
-              </div>
-              {/* Text */}
-              <div className="flex-1 px-6 pt-5 pb-4 overflow-auto">
-                <p className="font-body text-xs tracking-[0.2em] uppercase text-taupe mb-1">{ch.city}</p>
-                <h3 className="font-display text-3xl text-ink font-light mb-3 leading-tight">{ch.title}</h3>
-                <div className="h-px w-10 mb-3" style={{ background: ch.accent }} />
-                <p className="font-body text-taupe text-sm leading-relaxed">{ch.desc}</p>
-              </div>
-            </div>
-
-            {/* ── Desktop layout: image left/right, text right/left ── */}
-            <div className="hidden md:flex w-full h-full items-center pt-20">
-              <div className="max-w-6xl mx-auto px-16 w-full grid grid-cols-2 gap-16 items-center">
-                <div className={`${i % 2 === 0 ? "order-2" : "order-1"} flex justify-center`}>
-                  <div className="relative">
-                    <div className="absolute -inset-3 border opacity-20" style={{ borderColor: ch.accent }} />
-                    <img
-                      src={ch.img}
-                      alt={ch.title}
-                      className="w-96 h-96 object-cover shadow-2xl"
-                      style={{ boxShadow: `0 25px 60px ${ch.accent}30` }}
-                    />
-                    <div
-                      className="absolute -bottom-4 -right-4 font-display text-7xl font-light leading-none select-none pointer-events-none opacity-10"
-                      style={{ color: ch.accent }}
-                    >
-                      {String(i + 1).padStart(2, "0")}
-                    </div>
-                  </div>
-                </div>
-                <div className={i % 2 === 0 ? "order-1" : "order-2"}>
-                  <p className="font-body text-xs tracking-[0.4em] uppercase mb-1" style={{ color: ch.accent }}>{ch.year}</p>
-                  <p className="font-body text-xs tracking-[0.2em] uppercase text-taupe mb-4">{ch.city}</p>
-                  <h3 className="font-display text-5xl text-ink font-light mb-5 leading-tight">{ch.title}</h3>
-                  <div className="h-px w-12 mb-5" style={{ background: ch.accent }} />
-                  <p className="font-body text-taupe text-base leading-relaxed">{ch.desc}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* ── Bottom bar: prev arrow | dots | next arrow ── */}
-            <div
-              className="absolute bottom-0 inset-x-0 flex items-center justify-center gap-3 z-20"
-              style={{ paddingBottom: "max(env(safe-area-inset-bottom, 0px), 16px)", paddingTop: "8px" }}
-            >
-              {/* Prev arrow */}
-              <button
-                onClick={() => i > 0 && goTo(i - 1)}
-                className="p-1 transition-all duration-200 hover:scale-110 active:scale-95"
-                aria-label="Previous chapter"
-                style={{ visibility: i > 0 ? "visible" : "hidden" }}
-              >
-                <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
-                  <circle cx="22" cy="22" r="21" stroke={ch.accent} strokeWidth="1.2" opacity="0.4" />
-                  <path d="M26 14L18 22L26 30" stroke={ch.accent} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-
-              {/* Dot indicators */}
-              <div className="flex gap-2 items-center">
-                {storyChapters.map((_, di) => (
-                  <div
-                    key={di}
-                    className="rounded-full transition-all duration-300"
-                    style={{
-                      width: di === activeIdx ? 22 : 8,
-                      height: 8,
-                      background: di === activeIdx ? ch.accent : `${ch.accent}40`,
-                    }}
-                  />
-                ))}
-              </div>
-
-              {/* Next arrow or Continue */}
-              {i < storyChapters.length - 1 ? (
-                <button
-                  onClick={() => goTo(i + 1)}
-                  className="p-1 transition-all duration-200 hover:scale-110 active:scale-95"
-                  aria-label="Next chapter"
-                >
-                  <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
-                    <circle cx="22" cy="22" r="21" stroke={ch.accent} strokeWidth="1.2" opacity="0.4" />
-                    <path d="M18 14L26 22L18 30" stroke={ch.accent} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </button>
-              ) : (
-                <a
-                  href="#events"
-                  className="p-1 flex items-center transition-all duration-200 hover:scale-110"
-                  aria-label="Continue to celebrations"
-                >
-                  <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
-                    <circle cx="22" cy="22" r="21" stroke={ch.accent} strokeWidth="1.2" opacity="0.4" />
-                    <path d="M18 14L26 22L18 30" stroke={ch.accent} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </a>
-              )}
-            </div>
-          </div>
+          <TimelineEntry key={i} ch={ch} i={i} isLeft={i % 2 === 0} />
         ))}
       </div>
     </section>
