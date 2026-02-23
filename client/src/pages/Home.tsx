@@ -13,19 +13,19 @@ const LOGO_URL = "https://files.manuscdn.com/user_upload_by_module/session_file/
 const VENUE_PHOTO = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/UKFTelsfibbZjvzA.jpg";
 
 // Hero
-const HERO_ART = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/oNKfEAwtqgSoZyty.jpg";
+const HERO_ART = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/XPWsWyXNMqVSczzN.jpg";
 
 // Story chapter images
 const IMG_ASU = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/VJIXDMrqMmnSpTLU.jpg";
-const IMG_LONGDIST = "https://private-us-east-1.manuscdn.com/sessionFile/0HKKMuEcCJL7yTTQfsbnhc/sandbox/IZ8kQ7JCzNizLjK5AzkJ0n-img-2_1771822345000_na1fn_c3RvcnktbG9uZ2Rpc3RhbmNl.jpg?x-oss-process=image/resize,w_1920,h_1920/format,webp/quality,q_80&Expires=1798761600&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9wcml2YXRlLXVzLWVhc3QtMS5tYW51c2Nkbi5jb20vc2Vzc2lvbkZpbGUvMEhLS011RWNDSkw3eVRUUWZzYm5oYy9zYW5kYm94L0laOGtRN0pDek5pekxqSzVBemtKMG4taW1nLTJfMTc3MTgyMjM0NTAwMF9uYTFmbl9jM1J2Y25rdGJHOXVaMlJwYzNSaGJtTmwuanBnP3gtb3NzLXByb2Nlc3M9aW1hZ2UvcmVzaXplLHdfMTkyMCxoXzE5MjAvZm9ybWF0LHdlYnAvcXVhbGl0eSxxXzgwIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzk4NzYxNjAwfX19XX0_&Key-Pair-Id=K2HSFNDJXOU9YS&Signature=pkmH5AKjs4WypAuortpuXN8gdQcsvg6k4oIlxbVORGQmoRUM6tt30FXMY4wkLCKYZB032KY~pWjpZNg2U2KBZY8Srk6bxanfBLLphpFmQPIkEJolBPo93iBS3GYLrqpzxYOoMo~UUuU1O9ERUStbElDG4pjsvcJ4FAqfbQ97uPu170G1JSBCVL~hHh8O1JSHVwOIf18KY~tDJ91kgYSjTKCY3suXl-ykv~qCiIFkvQst9qpRicJT5j0DdXTnli8NpYaA8gHmnFbOThKAKnBoQXHdJ2fuhWSIsHkWU8J0RdGadlpBnknVMorx7JS98PuIQ2xayiQYuryOx-Opt0kCEQ__";
-const IMG_NYC = "https://private-us-east-1.manuscdn.com/sessionFile/0HKKMuEcCJL7yTTQfsbnhc/sandbox/IZ8kQ7JCzNizLjK5AzkJ0n-img-3_1771822348000_na1fn_c3Rvcnktbnlj.jpg?x-oss-process=image/resize,w_1920,h_1920/format,webp/quality,q_80&Expires=1798761600&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9wcml2YXRlLXVzLWVhc3QtMS5tYW51c2Nkbi5jb20vc2Vzc2lvbkZpbGUvMEhLS011RWNDSkw3eVRUUWZzYm5oYy9zYW5kYm94L0laOGtRN0pDek5pekxqSzVBemtKMG4taW1nLTNfMTc3MTgyMjM0ODAwMF9uYTFmbl9jM1J2Y25rdGJubGouanBnP3gtb3NzLXByb2Nlc3M9aW1hZ2UvcmVzaXplLHdfMTkyMCxoXzE5MjAvZm9ybWF0LHdlYnAvcXVhbGl0eSxxXzgwIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzk4NzYxNjAwfX19XX0_&Key-Pair-Id=K2HSFNDJXOU9YS&Signature=sa3jOFkAZFi63T9AVXR54EZCbSAsBObhXV95TZdbGQ5Ya0uNW3l~nt7dsqBvgdtd-2m7LejcTjVLGQCsmQT9PaVQ67hOtOT6AbXPW1NtgGCAdDVjcxGdqs3ssYonkjnsv2O6-RGQXoEr56Iue1ce0NnLUUZv~CeXgeYOyQRhygXt8-ogjTIkUmB5mE2zep8XJz9zr2On8uPp1VlKGERmEFQ~ci8zVhNM-dPvd~vOhrWdt~Mq2db2Ffpc1TQPl75NTvOyGhSBMhmdt0gw3tklQ9ZeFfN2oM-e1TLYqJNQ4gy9vW6weK9hPZbmvZruZjzHMDFvoGFxNdt1WxAPqLifeQ__";
-const IMG_BAYAREA = "https://private-us-east-1.manuscdn.com/sessionFile/0HKKMuEcCJL7yTTQfsbnhc/sandbox/iIvBqRGE6LbR6pZtXFdmoV-img-1_1771823090000_na1fn_c3RvcnktYmF5YXJlYS12Mw.jpg?x-oss-process=image/resize,w_1920,h_1920/format,webp/quality,q_80&Expires=1798761600&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9wcml2YXRlLXVzLWVhc3QtMS5tYW51c2Nkbi5jb20vc2Vzc2lvbkZpbGUvMEhLS011RWNDSkw3eVRUUWZzYm5oYy9zYW5kYm94L2lJdkJxUkdFNkxiUjZwWnRYRmRtb1YtaW1nLTFfMTc3MTgyMzA5MDAwMF9uYTFmbl9jM1J2Y25rdFltRjVZWEpsWVMxMk13LmpwZz94LW9zcy1wcm9jZXNzPWltYWdlL3Jlc2l6ZSx3XzE5MjAsaF8xOTIwL2Zvcm1hdCx3ZWJwL3F1YWxpdHkscV84MCIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTc5ODc2MTYwMH19fV19&Key-Pair-Id=K2HSFNDJXOU9YS&Signature=oxW5nvWCIQ73V~y7hK1RjOVAiYli~Vg18dw12nzYc6rVfu9a~1DIdPzHQjzls6vnnEMmat59kJpIbm4sa2~3oYzwD2OskNQPgN3fx2r9Okc7WkPL-mB7H0Hcf-XIE8~3D8M87CNZ2AQgSpBGACPuHZ69S1v4es57djKpHxePxgKsmjt8vMWCEbf-yafodbA804eZcLhXkdA-WJwiDZdnaVO8yRNIs-gpMpBABhqlXOaVua21d~WSGiuIIQVia5JNsETa5rcHAeaT-JvVliUzumg9mkBqBv0~phBrN7Ix7cxm-jAf18G1X4mg~fhRNUqao0a-S28jFy-Zp3PVoHIv-w__";
-const IMG_ENGAGED = "https://private-us-east-1.manuscdn.com/sessionFile/0HKKMuEcCJL7yTTQfsbnhc/sandbox/iIvBqRGE6LbR6pZtXFdmoV-img-2_1771823101000_na1fn_c3RvcnktZW5nYWdlZC12Mw.jpg?x-oss-process=image/resize,w_1920,h_1920/format,webp/quality,q_80&Expires=1798761600&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9wcml2YXRlLXVzLWVhc3QtMS5tYW51c2Nkbi5jb20vc2Vzc2lvbkZpbGUvMEhLS011RWNDSkw3eVRUUWZzYm5oYy9zYW5kYm94L2lJdkJxUkdFNkxiUjZwWnRYRmRtb1YtaW1nLTJfMTc3MTgyMzEwMTAwMF9uYTFmbl9jM1J2Y25rdFpXNW5ZV2RsWkMxMk13LmpwZz94LW9zcy1wcm9jZXNzPWltYWdlL3Jlc2l6ZSx3XzE5MjAsaF8xOTIwL2Zvcm1hdCx3ZWJwL3F1YWxpdHkscV84MCIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTc5ODc2MTYwMH19fV19&Key-Pair-Id=K2HSFNDJXOU9YS&Signature=uFZtVOyp6pIVUVdk7YrBggUd5DDiBpRa1w8bbzwnc6v~9vOroMn9w0qsD48GlSyoUswNWpWcvp18~sKRW3ucqip7RouEsVOsjpqdOGgGLOQuAfwH~GancM9raIPEPaHZR59zpQ78tSF8wjdCgLteq3h86beoUyO5heYxHq0qsntrYm5-xkHS-Z3PiKwPpCTXgQpzZAsLEP9Pboy2rrliTl4qQ0cZYfUmhjKb3QF6sC8uXXwa5yhCkNXed9G7dtNbLrMhyV36qT4jGbCdnL3cxcR0RnV31UU2cPP1G4ONw3kpvMMgG4oTJvQNcodce1NQyBT8lA62VpgsZ06xz7SPLA__";
+const IMG_LONGDIST = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/PcPHuIIoKORdpLqN.jpg";
+const IMG_NYC = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/UdSUUWAqnvwasgoG.jpg";
+const IMG_BAYAREA = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/uUmLugUygeppxyNJ.jpg";
+const IMG_ENGAGED = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/DAscLOLuJiFbQDFd.jpg";
 
 // Event images
 const IMG_HALDI = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/iVnZxxpKFlZQDSPr.jpg";
-const IMG_SANGEET = "https://private-us-east-1.manuscdn.com/sessionFile/0HKKMuEcCJL7yTTQfsbnhc/sandbox/iIvBqRGE6LbR6pZtXFdmoV-img-4_1771823086000_na1fn_ZXZlbnQtc2FuZ2VldC12Mg.jpg?x-oss-process=image/resize,w_1920,h_1920/format,webp/quality,q_80&Expires=1798761600&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9wcml2YXRlLXVzLWVhc3QtMS5tYW51c2Nkbi5jb20vc2Vzc2lvbkZpbGUvMEhLS011RWNDSkw3eVRUUWZzYm5oYy9zYW5kYm94L2lJdkJxUkdFNkxiUjZwWnRYRmRtb1YtaW1nLTRfMTc3MTgyMzA4NjAwMF9uYTFmbl9aWFpsYm5RdGMyRnVaMlZsZEMxMk1nLmpwZz94LW9zcy1wcm9jZXNzPWltYWdlL3Jlc2l6ZSx3XzE5MjAsaF8xOTIwL2Zvcm1hdCx3ZWJwL3F1YWxpdHkscV84MCIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTc5ODc2MTYwMH19fV19&Key-Pair-Id=K2HSFNDJXOU9YS&Signature=Fmfs9BYSh33iLkPFzaipm6vw4jHoR5u-4x3ACqIKmMFvRFUsfj7Xc5itHTyuK1r8QyiOQFhmRQuF52Cxtwpt6wngD7tAsaHid0OjcENOz2~5Z~pLEsuU5TQcdQfeltyT13VzTOPZip4aeNwXXaa5pI5LT7rLXcwNgESq6lO4ruTRSuqx797tNgOMi44-r63IIWPfArQ5~9Ew95wFzkyR4U4uXwnImf9bd8d1a8TQQe2RB2w-pwczHKKsxJjXiY49g45XYLAJ5ithGM0gFKoCSZ7A7k3P9nrOZOlJdrx~s8aRdzolr4YYsaUGr5E4nNvvQKj5GUfZrMnsPDw0uqUK0A__";
-const IMG_WEDDING = "https://private-us-east-1.manuscdn.com/sessionFile/0HKKMuEcCJL7yTTQfsbnhc/sandbox/iIvBqRGE6LbR6pZtXFdmoV-img-5_1771823090000_na1fn_ZXZlbnQtd2VkZGluZy12Mg.jpg?x-oss-process=image/resize,w_1920,h_1920/format,webp/quality,q_80&Expires=1798761600&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9wcml2YXRlLXVzLWVhc3QtMS5tYW51c2Nkbi5jb20vc2Vzc2lvbkZpbGUvMEhLS011RWNDSkw3eVRUUWZzYm5oYy9zYW5kYm94L2lJdkJxUkdFNkxiUjZwWnRYRmRtb1YtaW1nLTVfMTc3MTgyMzA5MDAwMF9uYTFmbl9aWFpsYm5RdGQyVmtaR2x1WnkxMk1nLmpwZz94LW9zcy1wcm9jZXNzPWltYWdlL3Jlc2l6ZSx3XzE5MjAsaF8xOTIwL2Zvcm1hdCx3ZWJwL3F1YWxpdHkscV84MCIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTc5ODc2MTYwMH19fV19&Key-Pair-Id=K2HSFNDJXOU9YS&Signature=i2qY3VELGdRl7hlBV1X2vklZcfy~FD8zSXjv~ZQMMqh9sWE9ZLLlvAMJMtGzPPpj5isfcR2dCC3azX9QC2uDDPSYRgDE4T-hmiU~LbF8SHVU6h~tcxjH53LIo1PVWBpWaFJZwYs2kcJjbeOSf5RU8bTlF71yKcMU6j3v~LWiYM7UbEkbtoJ0V9OIU00ls6E22QuPGUYMu5SCW~9tzdxDRwUsmqdtg6xXGnuchvi4aYLVojfg6r68DvUkLLkwWMAxaKxxLLGKlykZJXRLBFV0igHVEhAtvv~ltjeKd0zHoSHTVdHJA5lgSbIHr7LXmzSsYLEoDlzlCqpXT7fQFdSD8Q__";
+const IMG_SANGEET = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/cbAJPzrfWbyuslhp.jpg";
+const IMG_WEDDING = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/ndUdcvNfFxOMzYsY.jpg";
 
 // ─── Scroll Reveal Hook ────────────────────────────────────────────────────────
 function useScrollReveal() {
@@ -125,7 +125,7 @@ function HeroSection() {
         src={HERO_ART}
         alt="Arut & Viba wedding ceremony"
         className="absolute inset-0 w-full h-full"
-        style={{ objectFit: "cover", objectPosition: "center bottom" }}
+        style={{ objectFit: "contain", objectPosition: "center bottom", backgroundColor: "#f8f6f2" }}
       />
 
       {/* Very light overlay over the sky area — the sky in v6 is genuinely clear
@@ -145,11 +145,11 @@ function HeroSection() {
         style={{ top: "8vh" }}
       >
         {/* Logo */}
-        <div className="animate-fade-in mb-1">
+        <div className="animate-fade-in mb-0">
           <img src={LOGO_URL} alt="A&V monogram" className="w-28 h-28 md:w-36 md:h-36 lg:w-40 lg:h-40 mx-auto drop-shadow-sm" />
         </div>
         {/* Hashtag */}
-        <p className="font-display text-lg md:text-xl italic text-saffron animate-fade-up delay-100 leading-none mb-2">#aruvi</p>
+        <p className="font-display text-base md:text-lg italic text-saffron animate-fade-up delay-100 leading-none mb-2" style={{ marginTop: "-4px" }}>#aruvi</p>
         {/* Sub-tagline */}
         <p className="font-body text-ink/65 tracking-[0.4em] uppercase text-[10px] md:text-xs mb-2 animate-fade-up delay-200">
           Together with their families
