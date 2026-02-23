@@ -13,7 +13,7 @@ const LOGO_URL = "https://files.manuscdn.com/user_upload_by_module/session_file/
 const VENUE_PHOTO = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/UKFTelsfibbZjvzA.jpg";
 
 // Hero
-const HERO_ART = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/XPWsWyXNMqVSczzN.jpg";
+const HERO_ART = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/rRtojaZAWQqrXzNh.jpg";
 
 // Story chapter images
 const IMG_ASU = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/VJIXDMrqMmnSpTLU.jpg";
@@ -125,16 +125,15 @@ function HeroSection() {
         src={HERO_ART}
         alt="Arut & Viba wedding ceremony"
         className="absolute inset-0 w-full h-full"
-        style={{ objectFit: "contain", objectPosition: "center bottom", backgroundColor: "#f8f6f2" }}
+        style={{ objectFit: "cover", objectPosition: "center bottom" }}
       />
 
-      {/* Very light overlay over the sky area — the sky in v6 is genuinely clear
-          so this is just a subtle tint to ensure text contrast on all displays */}
+      {/* Subtle sky overlay — v13 has a clear pale blue sky in top 80%, just a light tint for text legibility */}
       <div
         className="absolute inset-x-0 top-0"
         style={{
-          height: "75%",
-          background: "linear-gradient(to bottom, rgba(255,254,252,0.78) 0%, rgba(255,254,252,0.65) 45%, rgba(255,254,252,0.25) 75%, transparent 100%)",
+          height: "65%",
+          background: "linear-gradient(to bottom, rgba(240,248,255,0.55) 0%, rgba(240,248,255,0.35) 50%, transparent 100%)",
           pointerEvents: "none",
         }}
       />
