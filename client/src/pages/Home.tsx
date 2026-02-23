@@ -112,14 +112,14 @@ function HeroSection() {
       {/* Layout: top ~45% = text zone (white), bottom ~55% = art */}
       
       {/* Art image — anchored to bottom, fills lower portion */}
-      <div className="absolute inset-x-0 bottom-0" style={{ top: "38%" }}>
+      <div className="absolute inset-x-0 bottom-0" style={{ top: "clamp(360px, 52%, 56%)" }}>
         <img src={HERO_ART} alt="Arut & Viba wedding ceremony" className="w-full h-full object-cover object-top" />
         {/* Soft fade at the top edge of art to blend with white */}
         <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-white to-transparent" />
       </div>
 
       {/* Text content — sits in the white top zone */}
-      <div className="relative z-10 flex flex-col items-center justify-start pt-20 md:pt-24 px-6 text-center" style={{ paddingBottom: "2rem" }}>
+      <div className="relative z-10 flex flex-col items-center justify-start pt-20 md:pt-24 px-6 text-center pb-8">
         {/* Large Logo */}
         <div className="mb-4 animate-fade-in">
           <img src={LOGO_URL} alt="A&V monogram" className="w-24 h-24 md:w-32 md:h-32 mx-auto drop-shadow-sm" />
@@ -140,7 +140,11 @@ function HeroSection() {
         <div className="animate-fade-up delay-600 bg-white/80 backdrop-blur-sm px-8 py-4 border border-champagne/50">
           <Countdown />
         </div>
-        <p className="font-body text-taupe/60 text-xs mt-3 tracking-wider animate-fade-up delay-700">#aruvi</p>
+        <div className="flex items-center gap-3 mt-3 animate-fade-up delay-700">
+          <div className="h-px w-8 bg-champagne/60" />
+          <p className="font-display text-xl italic text-saffron/80">#aruvi</p>
+          <div className="h-px w-8 bg-champagne/60" />
+        </div>
       </div>
 
       {/* Scroll indicator */}
@@ -352,11 +356,7 @@ function EventsSection() {
           ))}
         </div>
 
-        {/* Hashtag callout */}
-        <div className="mt-12 text-center reveal">
-          <p className="font-body text-taupe text-sm">Share your moments with us</p>
-          <p className="font-display text-4xl md:text-5xl text-saffron italic mt-1">#aruvi</p>
-        </div>
+
       </div>
     </section>
   );
@@ -504,8 +504,11 @@ function Footer() {
       <div className="max-w-4xl mx-auto px-6">
         <img src={LOGO_URL} alt="A&V" className="w-12 h-12 mx-auto mb-4 filter brightness-0 invert opacity-40" />
         <p className="font-display text-3xl text-white/60 italic mb-2">Arut & Viba</p>
-        <p className="font-body text-white/35 text-xs tracking-[0.3em] uppercase mb-4">23rd – 24th January 2027 · Chennai</p>
-        <p className="font-display text-2xl text-saffron/60 italic mb-6">#aruvi</p>
+        <p className="font-body text-white/35 text-xs tracking-[0.3em] uppercase mb-6">23rd – 24th January 2027 · Chennai</p>
+        <div className="h-px bg-white/10 mb-6" />
+        <p className="font-body text-white/40 text-xs tracking-widest uppercase mb-2">Share your moments with us</p>
+        <p className="font-display text-4xl md:text-5xl text-saffron italic mb-2">#aruvi</p>
+        <p className="font-body text-white/25 text-xs mb-6">Tag us on Instagram &amp; Facebook</p>
         <div className="h-px bg-white/10 mb-6" />
         <p className="font-body text-white/20 text-xs">Made with love for a love that crossed every time zone.</p>
       </div>
