@@ -13,7 +13,7 @@ const LOGO_URL = "https://files.manuscdn.com/user_upload_by_module/session_file/
 const VENUE_PHOTO = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/UKFTelsfibbZjvzA.jpg";
 
 // Hero
-const HERO_ART = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/obSPsqDmZDrWOTxn.jpg";
+const HERO_ART = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/oNKfEAwtqgSoZyty.jpg";
 
 // Story chapter images
 const IMG_ASU = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/VJIXDMrqMmnSpTLU.jpg";
@@ -133,8 +133,8 @@ function HeroSection() {
       <div
         className="absolute inset-x-0 top-0"
         style={{
-          height: "70%",
-          background: "linear-gradient(to bottom, rgba(255,254,252,0.72) 0%, rgba(255,254,252,0.60) 40%, rgba(255,254,252,0.20) 70%, transparent 100%)",
+          height: "75%",
+          background: "linear-gradient(to bottom, rgba(255,254,252,0.78) 0%, rgba(255,254,252,0.65) 45%, rgba(255,254,252,0.25) 75%, transparent 100%)",
           pointerEvents: "none",
         }}
       />
@@ -146,7 +146,7 @@ function HeroSection() {
       >
         {/* Logo */}
         <div className="animate-fade-in mb-1">
-          <img src={LOGO_URL} alt="A&V monogram" className="w-20 h-20 md:w-28 md:h-28 mx-auto drop-shadow-sm" />
+          <img src={LOGO_URL} alt="A&V monogram" className="w-28 h-28 md:w-36 md:h-36 lg:w-40 lg:h-40 mx-auto drop-shadow-sm" />
         </div>
         {/* Hashtag */}
         <p className="font-display text-lg md:text-xl italic text-saffron animate-fade-up delay-100 leading-none mb-2">#aruvi</p>
@@ -155,7 +155,7 @@ function HeroSection() {
           Together with their families
         </p>
         {/* Names */}
-        <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-light text-ink mb-2 animate-fade-up delay-300 leading-none">
+        <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-light text-ink mb-2 animate-fade-up delay-300 leading-none">
           Arut <em className="text-saffron not-italic">&</em> Viba
         </h1>
         {/* Tagline */}
