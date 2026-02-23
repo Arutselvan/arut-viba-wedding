@@ -210,6 +210,7 @@ const storyChapters = [
 function StorySection() {
   const trackRef = useRef<HTMLDivElement>(null);
   const [activeIdx, setActiveIdx] = useState(0);
+  const [inStory, setInStory] = useState(false);
 
   // Scroll to a specific chapter index within the story, or exit to events section
   const scrollToChapter = (idx: number) => {
@@ -243,6 +244,8 @@ function StorySection() {
       const progress = Math.max(0, Math.min(1, scrolled / totalScroll));
       const newIdx = Math.round(progress * (storyChapters.length - 1));
       setActiveIdx(newIdx);
+      // Show side rail only when fully inside the story scroll section
+      setInStory(scrolled > 0 && scrolled < totalScroll);
       // Desktop horizontal pan
       if (trackRef.current) {
         const maxTranslate = trackRef.current.scrollWidth - window.innerWidth;
@@ -277,8 +280,11 @@ function StorySection() {
         Both use the same tall scroll container so the user naturally passes
         through every chapter before reaching the next section.
       */}
-      {/* ── FIXED side progress rail — sits OUTSIDE the sticky/overflow container so it's always visible ── */}
-      <div className="sticky top-1/2 -translate-y-1/2 z-30 pointer-events-none" style={{ marginLeft: "calc(100% - 2.5rem)", height: 0 }}>
+      {/* ── FIXED side progress rail — only visible when inside the story scroll zone ── */}
+      <div
+        className="sticky top-1/2 -translate-y-1/2 z-30 pointer-events-none transition-opacity duration-500"
+        style={{ marginLeft: "calc(100% - 2.5rem)", height: 0, opacity: inStory ? 1 : 0 }}
+      >
         <div className="absolute right-0 top-1/2 -translate-y-1/2 flex flex-col items-end gap-3 pr-3">
           {storyChapters.map((ch, i) => (
             <div key={i} className="flex items-center gap-2">
@@ -315,13 +321,13 @@ function StorySection() {
                 className={`absolute inset-0 bg-gradient-to-b ${chapter.bg} flex flex-col transition-opacity duration-500`}
                 style={{ opacity: i === activeIdx ? 1 : 0, pointerEvents: i === activeIdx ? "auto" : "none" }}
               >
-                {/* Image top half — padded by nav bar height (64px) so image is never hidden */}
-                <div className="relative flex-shrink-0" style={{ height: "45%", paddingTop: "64px" }}>
-                  <img src={chapter.img} alt={chapter.title} className="w-full h-full object-cover" style={{ height: "calc(100% - 0px)" }} />
+                {/* Image top half — padded by nav bar height (72px) so image is never hidden */}
+                <div className="relative flex-shrink-0" style={{ height: "45%", paddingTop: "72px" }}>
+                  <img src={chapter.img} alt={chapter.title} className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/30" />
                   {/* Year badge — positioned below the nav bar padding */}
                   <div className="absolute left-4 px-3 py-1 text-white text-xs font-body tracking-widest uppercase rounded-full"
-                    style={{ background: chapter.accent, top: "72px" }}>
+                    style={{ background: chapter.accent, top: "80px" }}>
                     {chapter.year}
                   </div>
                   {/* Chapter number watermark */}
@@ -330,20 +336,30 @@ function StorySection() {
                   </div>
                 </div>
                 {/* Text bottom half */}
-                <div className="flex-1 px-6 pt-5 pb-16 overflow-auto">
+                <div className="flex-1 px-6 pt-5 pb-20 overflow-auto">
                   <p className="font-body text-xs tracking-[0.2em] uppercase text-taupe mb-1">{chapter.city}</p>
                   <h3 className="font-display text-3xl text-ink font-light mb-3 leading-tight">{chapter.title}</h3>
                   <div className="h-px w-10 mb-3" style={{ background: chapter.accent }} />
                   <p className="font-body text-taupe text-sm leading-relaxed">{chapter.desc}</p>
                 </div>
-                {/* Persistent animated scroll cue — only render the interactive button on the ACTIVE card
-                     to avoid all stacked absolute cards competing for the same tap */}
+                {/* Nav buttons — only on active card to avoid tap conflicts */}
                 {i === activeIdx && (
-                  <div className="absolute bottom-0 inset-x-0 flex flex-col items-center pb-4">
-                    <p className="font-body text-[10px] tracking-[0.3em] uppercase mb-1" style={{ color: chapter.accent, opacity: 0.7 }}>
-                      {activeIdx < storyChapters.length - 1 ? `${activeIdx + 1} of ${storyChapters.length} · Tap to continue` : "End of story · Tap to continue"}
-                    </p>
-                    {/* Tappable animated chevron — always uses activeIdx so it's always correct */}
+                  <div className="absolute bottom-0 inset-x-0 flex items-center justify-center gap-4 pb-5">
+                    {/* Up arrow — prev chapter (hidden on first) */}
+                    {activeIdx > 0 && (
+                      <button
+                        onClick={() => scrollToChapter(activeIdx - 1)}
+                        className="p-2 rounded-full transition-all duration-200 hover:scale-125 active:scale-95"
+                        style={{ background: "transparent" }}
+                        aria-label="Previous chapter"
+                      >
+                        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                          <circle cx="14" cy="14" r="13" stroke={chapter.accent} strokeWidth="1" opacity="0.3"/>
+                          <path d="M9 16L14 11L19 16" stroke={chapter.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </button>
+                    )}
+                    {/* Down arrow — next chapter or celebrations */}
                     <button
                       onClick={() => scrollToChapter(activeIdx + 1)}
                       className="p-2 rounded-full transition-all duration-200 hover:scale-125 active:scale-95"
@@ -364,7 +380,7 @@ function StorySection() {
           {/* ── DESKTOP: horizontal pan ── */}
           <div ref={trackRef} className="hidden md:flex h-full will-change-transform" style={{ transition: "transform 0.08s linear", width: `${storyChapters.length * 100}vw` }}>
             {storyChapters.map((chapter, i) => (
-              <div key={i} className={`relative flex-shrink-0 w-screen h-screen bg-gradient-to-br ${chapter.bg} flex items-center pt-16`}>
+              <div key={i} className={`relative flex-shrink-0 w-screen h-screen bg-gradient-to-br ${chapter.bg} flex items-center pt-20`}>
                 <div className="max-w-6xl mx-auto px-8 md:px-16 w-full grid md:grid-cols-2 gap-8 md:gap-16 items-center">
                   <div className={`${i % 2 === 0 ? "md:order-2" : "md:order-1"} flex justify-center`}>
                     <div className="relative">
@@ -385,16 +401,27 @@ function StorySection() {
                     <p className="font-body text-taupe text-sm md:text-base leading-relaxed">{chapter.desc}</p>
                   </div>
                 </div>
-                {/* Bottom scroll cue */}
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 pointer-events-none">
-                  <p className="font-body text-[10px] tracking-[0.3em] uppercase" style={{ color: chapter.accent, opacity: 0.6 }}>
-                    {i < storyChapters.length - 1 ? `${i + 1} of ${storyChapters.length} · Scroll to continue` : "End of story · Scroll to continue"}
-                  </p>
-                  {/* Tappable animated chevron */}
+                {/* Desktop nav buttons — prev + next chevrons, no text */}
+                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4">
+                  {/* Up — prev chapter (hidden on first) */}
+                  {i > 0 && (
+                    <button
+                      onClick={() => scrollToChapter(i - 1)}
+                      className="p-2 rounded-full transition-all duration-200 hover:scale-125 active:scale-95"
+                      style={{ background: "transparent" }}
+                      aria-label="Previous chapter"
+                    >
+                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <circle cx="16" cy="16" r="15" stroke={chapter.accent} strokeWidth="1" opacity="0.3"/>
+                        <path d="M10 18L16 12L22 18" stroke={chapter.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                  )}
+                  {/* Down — next chapter or celebrations */}
                   <button
                     onClick={() => scrollToChapter(i + 1)}
                     className="p-2 rounded-full transition-all duration-200 hover:scale-125 active:scale-95"
-                    style={{ pointerEvents: "auto", background: "transparent" }}
+                    style={{ background: "transparent" }}
                     aria-label={i < storyChapters.length - 1 ? "Next chapter" : "Continue to Celebrations"}
                   >
                     <svg className="animate-bounce" width="32" height="32" viewBox="0 0 32 32" fill="none">
