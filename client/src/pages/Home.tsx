@@ -7,7 +7,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { MapView } from "@/components/Map";
-import WaxSealReveal from "@/components/WaxSealReveal";
+import ZoomLogoReveal from "@/components/ZoomLogoReveal";
 
 // ─── CDN Image URLs ────────────────────────────────────────────────────────────
 const LOGO_URL = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/AVdiZBmryFCAlBJN.svg";
@@ -544,7 +544,7 @@ export default function Home() {
 
   return (
     <>
-      {!revealed && <WaxSealReveal onOpen={() => setRevealed(true)} />}
+      {!revealed && <ZoomLogoReveal onOpen={() => setRevealed(true)} />}
       <div
         className="min-h-screen bg-white"
         style={{ pointerEvents: revealed ? "auto" : "none" }}
