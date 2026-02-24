@@ -7,7 +7,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { MapView } from "@/components/Map";
-import ParticleReveal from "@/components/ParticleReveal";
 
 // ─── CDN Image URLs ────────────────────────────────────────────────────────────
 const LOGO_URL = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/AVdiZBmryFCAlBJN.svg";
@@ -540,18 +539,10 @@ function Footer() {
 // ─── Main ──────────────────────────────────────────────────────────────────────
 export default function Home() {
   useScrollReveal();
-  const [envelopeOpened, setEnvelopeOpened] = useState(false);
-
   return (
     <>
-      {!envelopeOpened && (
-        <ParticleReveal onOpen={() => setEnvelopeOpened(true)} />
-      )}
       <div
         className="min-h-screen bg-white"
-        style={{
-          pointerEvents: envelopeOpened ? "auto" : "none",
-        }}
       >
         <Navigation />
         <HeroSection />
