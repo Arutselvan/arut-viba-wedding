@@ -7,7 +7,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { MapView } from "@/components/Map";
-import SplitReveal from "@/components/SplitReveal";
+import ParticleReveal from "@/components/ParticleReveal";
 
 // ─── CDN Image URLs ────────────────────────────────────────────────────────────
 const LOGO_URL = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/AVdiZBmryFCAlBJN.svg";
@@ -545,7 +545,7 @@ export default function Home() {
   return (
     <>
       {!envelopeOpened && (
-        <SplitReveal onOpen={() => setEnvelopeOpened(true)} />
+        <ParticleReveal onOpen={() => setEnvelopeOpened(true)} />
       )}
       <div
         className="min-h-screen bg-white"
