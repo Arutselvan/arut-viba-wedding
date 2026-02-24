@@ -7,7 +7,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { MapView } from "@/components/Map";
-import ZoomLogoReveal from "@/components/ZoomLogoReveal";
 
 // ─── CDN Image URLs ────────────────────────────────────────────────────────────
 const LOGO_URL = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/AVdiZBmryFCAlBJN.svg";
@@ -540,15 +539,9 @@ function Footer() {
 // ─── Main ──────────────────────────────────────────────────────────────────────
 export default function Home() {
   useScrollReveal();
-  const [revealed, setRevealed] = useState(false);
 
   return (
-    <>
-      {!revealed && <ZoomLogoReveal onOpen={() => setRevealed(true)} />}
-      <div
-        className="min-h-screen bg-white"
-        style={{ pointerEvents: revealed ? "auto" : "none" }}
-      >
+    <div className="min-h-screen bg-white">
         <Navigation />
         <HeroSection />
         <StorySection />
@@ -556,7 +549,6 @@ export default function Home() {
         <VenueSection />
         <RSVPSection />
         <Footer />
-      </div>
-    </>
+    </div>
   );
 }
