@@ -7,6 +7,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { MapView } from "@/components/Map";
+import WaxSealReveal from "@/components/WaxSealReveal";
 
 // ─── CDN Image URLs ────────────────────────────────────────────────────────────
 const LOGO_URL = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/AVdiZBmryFCAlBJN.svg";
@@ -539,10 +540,14 @@ function Footer() {
 // ─── Main ──────────────────────────────────────────────────────────────────────
 export default function Home() {
   useScrollReveal();
+  const [revealed, setRevealed] = useState(false);
+
   return (
     <>
+      {!revealed && <WaxSealReveal onOpen={() => setRevealed(true)} />}
       <div
         className="min-h-screen bg-white"
+        style={{ pointerEvents: revealed ? "auto" : "none" }}
       >
         <Navigation />
         <HeroSection />
