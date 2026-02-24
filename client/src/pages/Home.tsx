@@ -550,9 +550,6 @@ export default function Home() {
       <div
         className="min-h-screen bg-white"
         style={{
-          transition: envelopeOpened ? "opacity 0.7s ease 0.1s, transform 0.7s cubic-bezier(0.22,1,0.36,1) 0.1s" : "none",
-          opacity: envelopeOpened ? 1 : 0,
-          transform: envelopeOpened ? "translateY(0)" : "translateY(30px)",
           pointerEvents: envelopeOpened ? "auto" : "none",
         }}
       >

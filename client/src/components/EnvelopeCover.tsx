@@ -58,16 +58,19 @@ export default function EnvelopeCover({ onOpen }: { onOpen: () => void }) {
 
     // Step 2: Envelope slides down
     setTimeout(() => {
-      envelope.style.transition = "transform 0.7s cubic-bezier(0.4, 0, 0.6, 1), opacity 0.5s ease";
+      envelope.style.transition = "transform 0.8s cubic-bezier(0.4, 0, 0.6, 1)";
       envelope.style.transform = "translateY(110vh)";
-      envelope.style.opacity = "0";
     }, 1100);
 
-    // Step 3: Done
+    // Step 3: Reveal website (trigger opacity transition on content)
+    setTimeout(() => {
+      onOpen();
+    }, 1500);
+
+    // Step 4: Remove envelope from DOM
     setTimeout(() => {
       setPhase("done");
-      onOpen();
-    }, 1700);
+    }, 2100);
   }, [phase, onOpen]);
 
   if (phase === "done") return null;
@@ -96,9 +99,6 @@ export default function EnvelopeCover({ onOpen }: { onOpen: () => void }) {
         userSelect: "none",
       }}
     >
-      {/* Dark background behind envelope */}
-      <div style={{ position: "absolute", inset: 0, background: "#0d1a14" }} />
-
       {/* Envelope body — the base rectangle */}
       <div
         style={{
