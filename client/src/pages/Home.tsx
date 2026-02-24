@@ -226,9 +226,9 @@ function TimelineEntry({ ch, i, isLeft }: { ch: typeof storyChapters[0]; i: numb
             <h3 className="font-display text-3xl text-ink font-light mb-3 leading-tight">{ch.title}</h3>
             <div className="h-px w-10 mb-3 ml-auto" style={{ background: ch.accent }} />
             <p className="font-body text-taupe text-sm leading-relaxed mb-5">{ch.desc}</p>
-            <div className="relative w-48 h-48 ml-auto">
-              <div className="absolute -inset-2 border opacity-15" style={{ borderColor: ch.accent }} />
-              <img src={ch.img} alt={ch.title} className="w-full h-full object-cover shadow-xl" />
+            <div className="relative w-full h-64 ml-auto">
+              <div className="absolute -inset-2 border opacity-20" style={{ borderColor: ch.accent }} />
+              <img src={ch.img} alt={ch.title} className="w-full h-full object-cover shadow-2xl" />
             </div>
           </div>
         ) : <div />}
@@ -261,9 +261,9 @@ function TimelineEntry({ ch, i, isLeft }: { ch: typeof storyChapters[0]; i: numb
             <h3 className="font-display text-3xl text-ink font-light mb-3 leading-tight">{ch.title}</h3>
             <div className="h-px w-10 mb-3" style={{ background: ch.accent }} />
             <p className="font-body text-taupe text-sm leading-relaxed mb-5">{ch.desc}</p>
-            <div className="relative w-48 h-48">
-              <div className="absolute -inset-2 border opacity-15" style={{ borderColor: ch.accent }} />
-              <img src={ch.img} alt={ch.title} className="w-full h-full object-cover shadow-xl" />
+            <div className="relative w-full h-64">
+              <div className="absolute -inset-2 border opacity-20" style={{ borderColor: ch.accent }} />
+              <img src={ch.img} alt={ch.title} className="w-full h-full object-cover shadow-2xl" />
             </div>
           </div>
         ) : <div />}
@@ -276,9 +276,9 @@ function TimelineEntry({ ch, i, isLeft }: { ch: typeof storyChapters[0]; i: numb
         <h3 className="font-display text-2xl text-ink font-light mb-2 leading-tight">{ch.title}</h3>
         <div className="h-px w-8 mb-3" style={{ background: ch.accent }} />
         <p className="font-body text-taupe text-sm leading-relaxed mb-4">{ch.desc}</p>
-        <div className="relative w-full max-w-xs h-44">
-          <div className="absolute -inset-1.5 border opacity-15" style={{ borderColor: ch.accent }} />
-          <img src={ch.img} alt={ch.title} className="w-full h-full object-cover shadow-lg" />
+        <div className="relative w-full h-56">
+          <div className="absolute -inset-1.5 border opacity-20" style={{ borderColor: ch.accent }} />
+          <img src={ch.img} alt={ch.title} className="w-full h-full object-cover shadow-xl" />
         </div>
       </div>
     </div>
