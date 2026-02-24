@@ -7,6 +7,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { MapView } from "@/components/Map";
+import { EnvelopeCover } from "@/components/EnvelopeCover";
 
 // ─── CDN Image URLs ────────────────────────────────────────────────────────────
 const LOGO_URL = "https://files.manuscdn.com/user_upload_by_module/session_file/310519663320933082/AVdiZBmryFCAlBJN.svg";
@@ -539,15 +540,30 @@ function Footer() {
 // ─── Main ──────────────────────────────────────────────────────────────────────
 export default function Home() {
   useScrollReveal();
+  const [envelopeOpened, setEnvelopeOpened] = useState(false);
+
   return (
-    <div className="min-h-screen bg-white">
-      <Navigation />
-      <HeroSection />
-      <StorySection />
-      <EventsSection />
-      <VenueSection />
-      <RSVPSection />
-      <Footer />
-    </div>
+    <>
+      {!envelopeOpened && (
+        <EnvelopeCover onOpen={() => setEnvelopeOpened(true)} />
+      )}
+      <div
+        className="min-h-screen bg-white"
+        style={{
+          transition: envelopeOpened ? "opacity 0.7s ease 0.1s, transform 0.7s cubic-bezier(0.22,1,0.36,1) 0.1s" : "none",
+          opacity: envelopeOpened ? 1 : 0,
+          transform: envelopeOpened ? "translateY(0)" : "translateY(30px)",
+          pointerEvents: envelopeOpened ? "auto" : "none",
+        }}
+      >
+        <Navigation />
+        <HeroSection />
+        <StorySection />
+        <EventsSection />
+        <VenueSection />
+        <RSVPSection />
+        <Footer />
+      </div>
+    </>
   );
 }

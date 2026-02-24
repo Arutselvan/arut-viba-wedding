@@ -178,3 +178,14 @@ html { scroll-behavior: smooth; }
 .story-snap-track::-webkit-scrollbar {
   display: none;
 }
+
+/* ── Envelope cover animations ── */
+@keyframes sparkle {
+  0%   { opacity: 0; transform: scale(0) translate(0, 0); }
+  40%  { opacity: 1; transform: scale(1.4) translate(var(--tx, 0px), var(--ty, -20px)); }
+  100% { opacity: 0; transform: scale(0.6) translate(var(--tx, 0px), var(--ty, -40px)); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.35; }
+  50%       { opacity: 0.65; }
+}
