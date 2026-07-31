@@ -71,7 +71,7 @@ function Navigation() {
     const fn = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", fn); return () => window.removeEventListener("scroll", fn);
   }, []);
-  const links = [{ label: "Our Story", href: "#story" }, { label: "Celebrations", href: "#events" }, { label: "Venue", href: "#venue" }, { label: "RSVP", href: "#rsvp" }];
+  const links = [{ label: "Celebrations", href: "#events" }, { label: "Venue", href: "#venue" }, { label: "RSVP", href: "#rsvp" }];
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? "bg-white/97 backdrop-blur-md shadow-sm py-3" : "bg-transparent py-4"}`}>
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
