@@ -131,7 +131,7 @@ function HeroSection() {
         <div className="animate-fade-in" style={{ marginBottom: "-8px" }}>
           <img src={LOGO_URL} alt="A&V monogram" className="w-24 h-24 md:w-32 md:h-32 lg:w-36 lg:h-36 mx-auto drop-shadow-sm" />
         </div>
-        <p className="font-display text-base md:text-lg italic text-saffron animate-fade-up delay-100 leading-none mb-2">#aruvi</p>
+
         <p className="font-body text-ink/65 tracking-[0.4em] uppercase text-[10px] md:text-xs mb-2 animate-fade-up delay-200">
           Together with their families
         </p>
