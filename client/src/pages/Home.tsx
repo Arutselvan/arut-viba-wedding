@@ -317,7 +317,7 @@ function StorySection() {
 const events = [
   {
     day: "Day 1", date: "January 23, 2027", name: "Haldi Ceremony", time: "10:00 AM",
-    desc: "A joyful celebration of turmeric and blessings. Join us in this cherished ritual that marks the beginning of the wedding festivities.",
+    desc: "A joyful celebration of turmeric and blessings. Join us in this cherished ritual.",
     dressCode: "Radiant in Yellow & Orange",
     dressNote: "Embrace the golden hues of turmeric. Think marigold sarees, mustard kurtas, and vibrant orange dupattas. The brighter, the better!",
     img: IMG_HALDI, accent: "#E8A020", textAccent: "text-amber-600",
@@ -331,7 +331,7 @@ const events = [
   },
   {
     day: "Day 2", date: "January 24, 2027", name: "Wedding Ceremony", time: "11:00 AM",
-    desc: "We invite you to celebrate our union on the lush lawns of MGM Beach Resorts, with the Bay of Bengal as our witness.",
+    desc: "We invite you to celebrate our union on the lush lawns of MGM Beach Resorts.",
     dressCode: "Classic Indian Traditional",
     dressNote: "Honor the sacred ceremony in traditional Indian attire. Silk sarees, dhotis, sherwanis, and traditional jewellery are warmly encouraged.",
     img: IMG_WEDDING, accent: "#C4622D", textAccent: "text-orange-700",
