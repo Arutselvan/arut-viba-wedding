@@ -330,7 +330,7 @@ const events = [
     img: IMG_SANGEET, accent: "#7A6552", textAccent: "text-stone-600",
   },
   {
-    day: "Day 2", date: "January 24, 2027", name: "Wedding Ceremony", time: "11:00 AM",
+    day: "Day 2", date: "January 24, 2027", name: "Wedding Ceremony", time: "10:30 AM",
     desc: "We invite you to celebrate our union on the lush lawns of MGM Beach Resorts.",
     dressCode: "Classic Indian Traditional",
     dressNote: "Honor the sacred ceremony in traditional Indian attire. Silk sarees, dhotis, sherwanis, and traditional jewellery are warmly encouraged.",
