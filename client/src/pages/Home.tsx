@@ -311,23 +311,23 @@ function StorySection() {
 const events = [
   {
     day: "Day 1", date: "January 23, 2027", name: "Haldi Ceremony", time: "10:00 AM",
-    desc: "Turmeric, blessings, and golden vibes. The start of the festivities.",
-    dressCode: "Yellow & Orange",
-    dressNote: "Wear yellow or orange. The brighter, the better.",
+    desc: "A joyful celebration of turmeric and blessings. Join us as we paint the couple in golden hues — a cherished ritual that marks the beginning of the wedding festivities.",
+    dressCode: "Radiant in Yellow & Orange",
+    dressNote: "Embrace the golden hues of turmeric. Think marigold sarees, mustard kurtas, and vibrant orange dupattas. The brighter, the better!",
     img: IMG_HALDI, accent: "#E8A020", textAccent: "text-amber-600",
   },
   {
     day: "Day 1", date: "January 23, 2027", name: "Sangeet & Reception", time: "6:30 PM",
-    desc: "Music, dance, and celebration. DJ all night.",
-    dressCode: "Formal Wear",
-    dressNote: "Lehengas, sherwanis, gowns, or cocktail wear.",
+    desc: "An evening of music, dance, and pure celebration under the stars. The DJ will keep the dance floor alive all night — come ready to dance your heart out.",
+    dressCode: "Dress to Impress",
+    dressNote: "Elegant lehengas, sherwanis, gowns, or cocktail wear — the evening calls for your most glamorous self. Shine bright!",
     img: IMG_SANGEET, accent: "#7A6552", textAccent: "text-stone-600",
   },
   {
-    day: "Day 2", date: "January 24, 2027", name: "Wedding Ceremony", time: "10:30 AM",
-    desc: "The ceremony on the lawns of MGM Beach Resorts, overlooking the Bay of Bengal.",
-    dressCode: "Indian Traditional",
-    dressNote: "Silk sarees, dhotis, sherwanis, and traditional jewellery.",
+    day: "Day 2", date: "January 24, 2027", name: "Wedding Ceremony", time: "11:00 AM",
+    desc: "The sacred union of Arut and Viba on the lush lawns of MGM Beach Resorts, with the Bay of Bengal as witness. A ceremony of fire, flowers, and forever.",
+    dressCode: "Classic Indian Traditional",
+    dressNote: "Honor the sacred ceremony in traditional Indian attire. Silk sarees, dhotis, sherwanis, and traditional jewellery are warmly encouraged.",
     img: IMG_WEDDING, accent: "#C4622D", textAccent: "text-orange-700",
   },
 ];
@@ -410,12 +410,7 @@ function VenueSection() {
               <p className="font-body text-taupe text-sm tracking-wider">Muthukadu, East Coast Road, Tamil Nadu</p>
             </div>
             <div className="h-px w-10 bg-saffron" />
-            <p className="font-body text-taupe leading-relaxed text-sm">
-              We have always dreamed of getting married in the open air, surrounded by lush greenery and the sound of the ocean. MGM Beach Resorts in Muthukadu offers exactly that — sprawling lawns, towering coconut palms, and the Bay of Bengal just steps away.
-            </p>
-            <blockquote className="border-l-2 border-saffron pl-4">
-              <p className="font-display text-lg italic text-ink">"Lush lawns, ocean breezes, and the warmth of Tamil Nadu — the perfect backdrop for a new beginning."</p>
-            </blockquote>
+
             <div className="space-y-3">
               <div className="flex items-start gap-3">
                 <span className="text-saffron mt-0.5">📍</span>
