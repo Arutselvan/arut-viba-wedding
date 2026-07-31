@@ -148,6 +148,12 @@ function HeroSection() {
         <div className="animate-fade-up delay-600 bg-white/75 backdrop-blur-md px-6 md:px-8 py-3 md:py-4 border border-white/60 shadow-md">
           <Countdown />
         </div>
+        <div className="animate-fade-up delay-700 mt-6">
+          <a href="https://forms.gle/wrevBbfn95cdaM8S9" target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-3 bg-ink text-white font-body text-xs tracking-[0.3em] uppercase px-10 py-3 hover:bg-sienna transition-colors duration-300">
+            RSVP Now →
+          </a>
+        </div>
       </div>
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce z-10">
         <svg width="20" height="30" viewBox="0 0 24 36" fill="none" className="opacity-35">
@@ -311,7 +317,7 @@ function StorySection() {
 const events = [
   {
     day: "Day 1", date: "January 23, 2027", name: "Haldi Ceremony", time: "10:00 AM",
-    desc: "A joyful celebration of turmeric and blessings. Join us in this cherished ritual.",
+    desc: "A joyful celebration of turmeric and blessings. Join us in this cherished ritual that marks the beginning of the wedding festivities.",
     dressCode: "Radiant in Yellow & Orange",
     dressNote: "Embrace the golden hues of turmeric. Think marigold sarees, mustard kurtas, and vibrant orange dupattas. The brighter, the better!",
     img: IMG_HALDI, accent: "#E8A020", textAccent: "text-amber-600",
@@ -498,11 +504,10 @@ function RSVPSection() {
             <div className="w-2 h-2 rounded-full bg-saffron opacity-60" />
             <div className="h-px w-16 bg-champagne" />
           </div>
-          <p className="font-body text-taupe leading-relaxed mb-2 text-sm">
-            We would be honoured to celebrate this special occasion with you. Please let us know if you can join us by <strong className="text-ink">December 1, 2026</strong>.
+          <p className="font-body text-taupe leading-relaxed mb-8 text-sm">
+            We would be honoured to celebrate this special occasion with you.
           </p>
-          <p className="font-body text-taupe/60 text-xs mb-8">Kindly respond at your earliest convenience.</p>
-          <a href="#rsvp-form" onClick={(e) => { e.preventDefault(); alert("RSVP form coming soon! Please check back later."); }}
+          <a href="https://forms.gle/wrevBbfn95cdaM8S9" target="_blank" rel="noopener noreferrer"
             className="inline-flex items-center gap-3 bg-ink text-white font-body text-xs tracking-[0.3em] uppercase px-12 py-4 hover:bg-sienna transition-colors duration-300">
             RSVP Now →
           </a>
