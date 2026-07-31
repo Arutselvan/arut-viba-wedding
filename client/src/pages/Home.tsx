@@ -528,7 +528,8 @@ function Footer() {
         <p className="font-body text-white/35 text-xs tracking-[0.3em] uppercase mb-6">23rd – 24th January 2027 · Chennai</p>
         <div className="h-px bg-white/10 mb-6" />
         <p className="font-display text-4xl md:text-5xl text-saffron italic mb-6">#aruvi</p>
-
+        <div className="h-px bg-white/10 mb-6" />
+        <p className="font-body text-white/20 text-xs">Made with ❤️ by Arut for Viba</p>
       </div>
     </footer>
   );
