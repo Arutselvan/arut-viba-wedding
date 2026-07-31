@@ -456,24 +456,7 @@ function VenueSection() {
             ))}
           </div>
 
-          {/* Map */}
-          <div className="shadow-lg overflow-hidden border border-champagne/40" style={{ height: "420px" }}>
-            <MapView
-              className="w-full h-full"
-              initialCenter={{ lat: 12.826301160886903, lng: 80.24829400139232 }}
-              initialZoom={16}
-              onMapReady={(map) => {
-                const location = { lat: 12.826301160886903, lng: 80.24829400139232 };
-                const markerEl = document.createElement("div");
-                markerEl.style.cssText = "width:22px;height:22px;background:#E8A020;border:3px solid white;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,0.35);";
-                new google.maps.marker.AdvancedMarkerElement({ position: location, map, title: "MGM Beach Resorts, Muthukadu", content: markerEl });
-                const infoWindow = new google.maps.InfoWindow({
-                  content: `<div style="font-family:sans-serif;padding:8px;min-width:180px;"><strong style="font-size:14px;color:#1C1410;">MGM Beach Resorts</strong><br/><span style="font-size:11px;color:#7A6552;">Muthukadu, East Coast Road<br/>Chennai, Tamil Nadu</span></div>`,
-                });
-                infoWindow.open({ map, shouldFocus: false });
-              }}
-            />
-          </div>
+
           <div className="mt-6 text-center">
             <a href="https://maps.app.goo.gl/KJRJoRZHbFhg8a27A" target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-ink text-white font-body text-xs tracking-[0.2em] uppercase px-10 py-3.5 hover:bg-sienna transition-colors duration-300">
