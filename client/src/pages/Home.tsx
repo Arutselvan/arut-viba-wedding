@@ -150,7 +150,7 @@ function HeroSection() {
         </div>
         <div className="animate-fade-up delay-700 mt-6">
           <a href="https://forms.gle/wrevBbfn95cdaM8S9" target="_blank" rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 bg-ink text-white font-body text-xs tracking-[0.3em] uppercase px-10 py-3 hover:bg-sienna transition-colors duration-300">
+            className="inline-flex items-center gap-2 bg-ink text-white font-body text-xs tracking-[0.2em] uppercase px-6 py-2 hover:bg-sienna transition-colors duration-300">
             RSVP Now →
           </a>
         </div>
