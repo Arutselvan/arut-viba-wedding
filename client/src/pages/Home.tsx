@@ -526,7 +526,7 @@ export default function Home() {
     <div className="min-h-screen bg-white">
         <Navigation />
         <HeroSection />
-        <StorySection />
+        {/* <StorySection /> */}
         <EventsSection />
         <VenueSection />
         <RSVPSection />
