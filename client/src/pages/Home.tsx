@@ -436,33 +436,12 @@ function VenueSection() {
           </div>
         </div>
 
-        {/* Directions */}
-        <div className="reveal">
-          <div className="text-center mb-10">
-            <p className="font-body text-saffron tracking-[0.4em] uppercase text-xs mb-3">Getting Here</p>
-            <h3 className="font-display text-4xl text-ink font-light">Directions</h3>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6 mb-10">
-            {[
-              { icon: "✈️", title: "From Chennai Airport", desc: "Take the East Coast Road (ECR) heading south. MGM Beach Resorts is approximately 35 km from Chennai International Airport — a scenic 45–60 minute coastal drive." },
-              { icon: "🚗", title: "From Chennai City", desc: "Head towards Thiruvanmiyur and join the East Coast Road (ECR). Follow ECR south through Sholinganallur and Palavakkam. MGM Muthukadu is directly on the coastal highway." },
-              { icon: "🚌", title: "Public Transport", desc: "MRTS to Thiruvanmiyur, then take ECR bus towards Mahabalipuram. Alight at MGM Muthukadu stop. Cabs and auto-rickshaws are readily available along ECR." },
-            ].map((item, i) => (
-              <div key={i} className="bg-parchment p-6 border border-champagne/40">
-                <div className="text-3xl mb-3">{item.icon}</div>
-                <h4 className="font-display text-xl text-ink mb-2">{item.title}</h4>
-                <p className="font-body text-taupe text-sm leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-
-
-          <div className="mt-6 text-center">
-            <a href="https://maps.app.goo.gl/KJRJoRZHbFhg8a27A" target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-ink text-white font-body text-xs tracking-[0.2em] uppercase px-10 py-3.5 hover:bg-sienna transition-colors duration-300">
-              Open in Google Maps →
-            </a>
-          </div>
+        {/* Open in Google Maps */}
+        <div className="reveal text-center">
+          <a href="https://maps.app.goo.gl/KJRJoRZHbFhg8a27A" target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-ink text-white font-body text-xs tracking-[0.2em] uppercase px-10 py-3.5 hover:bg-sienna transition-colors duration-300">
+            Open in Google Maps →
+          </a>
         </div>
       </div>
     </section>
@@ -487,9 +466,10 @@ function RSVPSection() {
             <div className="w-2 h-2 rounded-full bg-saffron opacity-60" />
             <div className="h-px w-16 bg-champagne" />
           </div>
-          <p className="font-body text-taupe leading-relaxed mb-8 text-sm">
+          <p className="font-body text-taupe leading-relaxed mb-2 text-sm">
             We would be honoured to celebrate this special occasion with you.
           </p>
+          <p className="font-body text-taupe/60 text-xs mb-8">Kindly respond at your earliest convenience.</p>
           <a href="https://forms.gle/wrevBbfn95cdaM8S9" target="_blank" rel="noopener noreferrer"
             className="inline-flex items-center gap-3 bg-ink text-white font-body text-xs tracking-[0.3em] uppercase px-12 py-4 hover:bg-sienna transition-colors duration-300">
             RSVP Now →
