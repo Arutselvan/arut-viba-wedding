@@ -162,28 +162,28 @@ function HeroSection() {
 // ─── Story Chapter Data ────────────────────────────────────────────────────────
 const storyChapters = [
   {
-    year: "2022", city: "Tempe, Arizona", title: "Where It All Began",
-    desc: "Two strangers crossed paths at Arizona State University in Tempe. What started as a two-month friendship quickly became something neither could ignore — and before long, they were together.",
+    year: "2022", city: "Tempe, Arizona", title: "ASU",
+    desc: "Met at Arizona State University. Started as friends, became inseparable.",
     img: IMG_ASU, accent: "#E8A020", bg: "from-amber-50 to-orange-50",
   },
   {
-    year: "2022 – 2023", city: "San Francisco & Tempe", title: "Different Cities, Same Heartbeat",
-    desc: "Life pulled them apart — one to San Francisco, the other staying in Tempe. But distance only made the heart grow fonder. FaceTime dates, weekend visits, and a thousand 'see you soon' messages kept their story alive across the miles.",
+    year: "2022 – 2023", city: "San Francisco & Tempe", title: "Long Distance",
+    desc: "One moved to San Francisco, the other stayed in Tempe. Made it work across the miles.",
     img: IMG_LONGDIST, accent: "#4a9eca", bg: "from-sky-50 to-blue-50",
   },
   {
-    year: "January 2024", city: "New York City", title: "Coast to Coast",
-    desc: "A new opportunity brought a new city — New York. The miles multiplied, but so did their commitment. Red-eye flights across the country became their love language, and the Manhattan skyline became a familiar backdrop to their long-distance love.",
+    year: "January 2024", city: "New York City", title: "New York",
+    desc: "A new job brought a new city. Still managing the distance, still committed.",
     img: IMG_NYC, accent: "#7A6552", bg: "from-stone-50 to-slate-50",
   },
   {
-    year: "April 2025", city: "Bay Area, California", title: "Finally, the Same City",
-    desc: "After years of counting down the days until the next flight, they finally closed the gap for good. No more red-eyes, no more time zones. Just the same sunrise, the same city, and the Golden Gate glowing in the distance.",
+    year: "April 2025", city: "Bay Area, California", title: "Bay Area",
+    desc: "Finally in the same city. No more red-eyes, no more time zones.",
     img: IMG_BAYAREA, accent: "#C4622D", bg: "from-orange-50 to-rose-50",
   },
   {
-    year: "August 2025", city: "Bay Area, California", title: "Yes, Forever",
-    desc: "In August 2025, under the California sky, they got engaged. After three years, two coasts, and a thousand miles of love — they said yes to forever. The rest, as they say, is history. Now Chennai awaits.",
+    year: "August 2025", city: "Bay Area, California", title: "Engaged",
+    desc: "Got engaged under the California sky. Now heading to Chennai for the celebration.",
     img: IMG_ENGAGED, accent: "#D4A853", bg: "from-rose-50 to-pink-50",
   },
 ];
@@ -288,7 +288,6 @@ function StorySection() {
   return (
     <section id="story" className="bg-white py-20 md:py-28">
       <div className="text-center mb-16 md:mb-20 reveal px-6">
-        <p className="font-body text-saffron tracking-[0.4em] uppercase text-xs mb-4">A Love Story</p>
         <h2 className="font-display text-5xl md:text-6xl text-ink font-light mb-4">Our Story</h2>
         <div className="flex items-center justify-center gap-3 mb-6">
           <div className="h-px w-16 bg-champagne" />
@@ -296,7 +295,7 @@ function StorySection() {
           <div className="h-px w-16 bg-champagne" />
         </div>
         <p className="font-body text-taupe max-w-xl mx-auto text-sm leading-relaxed">
-          From the Tempe heat to the Bay Area fog — a love story written across time zones, red-eye flights, and a thousand “see you soon”s.
+          How we got here.
         </p>
       </div>
       <div className="max-w-4xl mx-auto px-6 md:px-8">
@@ -311,24 +310,24 @@ function StorySection() {
 // ─── Events Section ────────────────────────────────────────────────────────────
 const events = [
   {
-    day: "Day 1", date: "January 23, 2027", name: "Haldi Ceremony", time: "10:30 AM",
-    desc: "A joyful celebration of turmeric and blessings. Join us as we paint the couple in golden hues — a cherished ritual that marks the beginning of the wedding festivities.",
-    dressCode: "Radiant in Yellow & Orange",
-    dressNote: "Embrace the golden hues of turmeric. Think marigold sarees, mustard kurtas, and vibrant orange dupattas. The brighter, the better!",
+    day: "Day 1", date: "January 23, 2027", name: "Haldi Ceremony", time: "10:00 AM",
+    desc: "Turmeric, blessings, and golden vibes. The start of the festivities.",
+    dressCode: "Yellow & Orange",
+    dressNote: "Wear yellow or orange. The brighter, the better.",
     img: IMG_HALDI, accent: "#E8A020", textAccent: "text-amber-600",
   },
   {
     day: "Day 1", date: "January 23, 2027", name: "Sangeet & Reception", time: "6:30 PM",
-    desc: "An evening of music, dance, and pure celebration under the stars. The DJ will keep the dance floor alive all night — come ready to dance your heart out.",
-    dressCode: "Dress to Impress",
-    dressNote: "Elegant lehengas, sherwanis, gowns, or cocktail wear — the evening calls for your most glamorous self. Shine bright!",
+    desc: "Music, dance, and celebration. DJ all night.",
+    dressCode: "Formal Wear",
+    dressNote: "Lehengas, sherwanis, gowns, or cocktail wear.",
     img: IMG_SANGEET, accent: "#7A6552", textAccent: "text-stone-600",
   },
   {
-    day: "Day 2", date: "January 24, 2027", name: "Wedding Ceremony", time: "11:00 AM",
-    desc: "The sacred union of Arut and Viba on the lush lawns of MGM Beach Resorts, with the Bay of Bengal as witness. A ceremony of fire, flowers, and forever.",
-    dressCode: "Classic Indian Traditional",
-    dressNote: "Honor the sacred ceremony in traditional Indian attire. Silk sarees, dhotis, sherwanis, and traditional jewellery are warmly encouraged.",
+    day: "Day 2", date: "January 24, 2027", name: "Wedding Ceremony", time: "10:30 AM",
+    desc: "The ceremony on the lawns of MGM Beach Resorts, overlooking the Bay of Bengal.",
+    dressCode: "Indian Traditional",
+    dressNote: "Silk sarees, dhotis, sherwanis, and traditional jewellery.",
     img: IMG_WEDDING, accent: "#C4622D", textAccent: "text-orange-700",
   },
 ];
