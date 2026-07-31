@@ -162,28 +162,28 @@ function HeroSection() {
 // ─── Story Chapter Data ────────────────────────────────────────────────────────
 const storyChapters = [
   {
-    year: "2022", city: "Tempe, Arizona", title: "ASU",
-    desc: "Met at Arizona State University. Started as friends, became inseparable.",
+    year: "2022", city: "Tempe, Arizona", title: "Where It All Began",
+    desc: "",
     img: IMG_ASU, accent: "#E8A020", bg: "from-amber-50 to-orange-50",
   },
   {
-    year: "2022 – 2023", city: "San Francisco & Tempe", title: "Long Distance",
-    desc: "One moved to San Francisco, the other stayed in Tempe. Made it work across the miles.",
+    year: "2022 – 2023", city: "San Francisco & Tempe", title: "Different Cities",
+    desc: "",
     img: IMG_LONGDIST, accent: "#4a9eca", bg: "from-sky-50 to-blue-50",
   },
   {
-    year: "January 2024", city: "New York City", title: "New York",
-    desc: "A new job brought a new city. Still managing the distance, still committed.",
+    year: "January 2024", city: "New York City", title: "Coast to Coast",
+    desc: "",
     img: IMG_NYC, accent: "#7A6552", bg: "from-stone-50 to-slate-50",
   },
   {
-    year: "April 2025", city: "Bay Area, California", title: "Bay Area",
-    desc: "Finally in the same city. No more red-eyes, no more time zones.",
+    year: "April 2025", city: "Bay Area, California", title: "Finally Together",
+    desc: "",
     img: IMG_BAYAREA, accent: "#C4622D", bg: "from-orange-50 to-rose-50",
   },
   {
-    year: "August 2025", city: "Bay Area, California", title: "Engaged",
-    desc: "Got engaged under the California sky. Now heading to Chennai for the celebration.",
+    year: "August 2025", city: "Bay Area, California", title: "Yes, Forever",
+    desc: "",
     img: IMG_ENGAGED, accent: "#D4A853", bg: "from-rose-50 to-pink-50",
   },
 ];
